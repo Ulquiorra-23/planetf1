@@ -1,0 +1,49 @@
+id,circuit_x,city_x,country_x,continent,latitude,longitude,existing,months_to_avoid,traditional_months,notes
+1,Silverstone,Silverstone,United Kingdom,Europe,52.0786,-1.0169,1,"[11, 12, 1, 2]",[7],UK winters are cold/rainy; race usually mid-season (July)
+2,Budapest,Mogyoród,Hungary,Europe,47.5789,19.2486,1,[],"[7, 8]","Good summer weather, scheduled pre-summer break"
+3,Monza,Monza,Italy,Europe,45.6156,9.2811,1,"[11, 12, 1, 2]",[9],Held in September post-summer break
+4,São Paulo,São Paulo,Brazil,South America,-23.7036,-46.6997,1,[],[11],"Rainy season possible, usually a late-season race"
+5,Sakhir,Sakhir,Bahrain,Asia,26.0325,50.5106,1,"[6, 7, 8, 9]",[3],Avoid summer heat; often season opener
+6,Melbourne,Melbourne,Australia,Oceania,-37.8497,144.968,1,"[6, 7, 8]",[3],Avoid southern hemisphere winter; race opens the calendar
+7,Suzuka,Suzuka,Japan,Asia,34.8431,136.5419,1,"[9, 10]",[10],Typhoon risk; traditionally in October
+8,Shanghai,Shanghai,China,Asia,31.3303,121.2246,1,"[7, 8]",[4],Avoid humidity/heat; typically early season
+9,Kuala Lumpur,Sepang,Malaysia,Asia,2.7608,101.7386,1,"[3, 4, 5, 9, 10, 11]","[3, 10]",Monsoon seasons; race retired from calendar but held in these months
+10,Catalunya,Montmeló,Spain,Europe,41.57,2.2611,1,"[12, 1, 2]",[5],Held in spring/early summer
+11,Spielberg,Spielberg,Austria,Europe,47.2196,14.7649,1,"[12, 1, 2]",[7],Typical mid-season race
+12,Montreal,Montreal,Canada,North America,45.5,-73.5228,1,"[11, 12, 1, 2, 3]",[6],Avoid snow; June weather ideal
+13,Hockenheim,Hockenheim,Germany,Europe,49.3249,8.5694,1,"[11, 12, 1, 2]",[7],Held mid-year; not on recent calendars
+14,Marina Bay,Singapore,Singapore,Asia,1.2914,103.8645,1,[],[9],Hot & humid all year; held at night to reduce weather impact
+15,Austin,Austin,United States,North America,30.1328,-97.6411,1,"[7, 8]",[10],Very hot summers; October is cooler and favored
+16,Imola,Imola,Italy,Europe,44.3439,11.7167,1,"[11, 12, 1, 2]","[4, 5]",Spring race return; avoid winter
+17,Mexico City,Mexico City,Mexico,North America,19.4042,-99.0907,1,"[6, 7, 8]",[10],Avoid rainy season (Jun–Sep); October race common
+18,Baku,Baku,Azerbaijan,Asia,40.3725,49.8533,1,"[12, 1, 2]",[6],"Cool spring, race held early summer"
+19,Istanbul,Istanbul,Turkey,Asia,40.9517,29.405,1,"[12, 1, 2]",[10],Temperate climate; usually held in fall
+20,Magny Cours,Magny-Cours,France,Europe,46.8642,3.1633,1,"[11, 12, 1, 2]",[7],Historic summer slot
+21,Spa-Francorchamps,Stavelot,Belgium,Europe,50.4455,5.9708,1,"[11, 12, 1, 2]","[7, 8]","Mountain weather, summer slot preferred"
+22,Sochi,Sochi,Russia,Europe,43.4057,39.9578,1,"[12, 1, 2]",[9],Held in September before being removed
+23,Indianapolis,Indianapolis,United States,North America,39.7876,-86.2392,1,"[12, 1, 2]",[6],Former early summer US GP
+24,Jeddah,Jeddah,Saudi Arabia,Asia,21.6319,39.1044,1,"[6, 7, 8, 9]",[3],High heat; early season night race
+25,Zandvoort,Zandvoort,Netherlands,Europe,52.3888,4.5409,1,"[12, 1, 2]","[8, 9]",Popular late summer race
+26,Valencia,Valencia,Spain,Europe,39.4589,-0.3317,1,"[12, 1, 2]",[6],"Summer race, now off calendar"
+27,Le Castellet,Le Castellet,France,Europe,43.25,5.7917,1,"[11, 12, 1, 2]",[6],Traditional summer race
+28,Lusail,Lusail,Qatar,Asia,25.4914,51.4542,1,"[6, 7, 8]",[11],Moved to November due to heat
+29,Yeongam County,Yeongam,South Korea,Asia,34.7333,126.417,1,"[12, 1, 2]",[10],Race was in October (cooler season)
+30,Miami,Miami,United States,North America,25.9581,-80.2389,1,"[6, 7, 8, 9]",[5],Avoid hurricane season; race in May
+31,Uttar Pradesh,Greater Noida,India,Asia,28.35,77.535,1,"[6, 7, 8, 9]",[10],Avoid monsoon; race in autumn
+32,Monte Carlo,Monte Carlo,Monaco,Europe,43.7347,7.4206,1,"[11, 12, 1, 2]",[5],Historic late May race
+33,Las Vegas,Las Vegas,United States,North America,36.1699,-115.1398,1,"[6, 7, 8]",[11],Night race to beat heat; mid-November
+34,Portimão,Portimão,Portugal,Europe,37.2278,-8.6267,1,"[12, 1, 2]",[5],Added during pandemic; spring race
+35,Oyama,Oyama,Japan,Asia,35.3711,138.9278,1,"[9, 10]",[10],Suzuka region – typhoon risk in Oct
+36,Nürburgring,Nürburg,Germany,Europe,50.3356,6.9475,1,"[11, 12, 1, 2, 3]",[10],Cold/rainy; race held in fall
+37,Yas Marina,Abu Dhabi,United Arab Emirates,Asia,24.4672,54.6031,1,"[6, 7, 8]","[11, 12]",Night race; season finale
+38,Mugello,Scarperia e San Piero,Italy,Europe,43.99,11.3702,1,"[11, 12, 1, 2]",[9],Pandemic-era stand-in; warm fall climate
+39,Cape Town,Cape Town,South Africa,Africa,-33.918,18.4233,0,"[6, 7, 8, 9]","[2, 3]",Southern Hemisphere: best in late summer/early fall
+40,Seoul,Seoul,South Korea,Asia,37.5665,126.978,0,"[12, 1, 2]",[10],Similar to Yeongam; race cancelled post-pandemic
+41,Buenos Aires,Buenos Aires,Argentina,South America,-34.6037,-58.3816,0,"[6, 7, 8]","[3, 4]",Southern Hemisphere; spring race
+42,Chicago,Chicago,United States,North America,41.8781,-87.6298,0,"[11, 12, 1, 2]",[6],Urban potential; summers preferred
+43,Auckland,Auckland,New Zealand,Oceania,-36.8485,174.7633,0,"[6, 7, 8]","[2, 3]",Southern Hemisphere; avoid winter
+44,Riyadh,Riyadh,Saudi Arabia,Asia,24.7136,46.6753,0,"[5, 6, 7, 8]",[3],Same as Jeddah; avoid summer
+45,Lagos,Lagos,Nigeria,Africa,6.5244,3.3792,0,"[5, 6, 7, 8]","[1, 2, 12]",Equatorial; best racing in dry season
+46,Oslo,Oslo,Norway,Europe,59.9139,10.7522,0,"[10, 11, 12, 1, 2, 3]","[7, 8]",Far north; only viable in summer
+47,Kuala Terengganu,Kuala Terengganu,Malaysia,Asia,5.329,103.1408,0,"[11, 12, 1, 2, 3]","[6, 7]",Coastal; dry season race months
+48,Vancouver,Vancouver,Canada,North America,49.2827,-123.1207,0,"[11, 12, 1, 2]","[6, 7]",Wet/cold winters; summer months best
