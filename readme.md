@@ -85,8 +85,7 @@ Currently, the project primarily consists of Jupyter notebooks for data processi
     ├── sql.py                  # SQL database utilities
     ├── utilities.py            # Generic utility functions
     └── __init__.py
-'''
-
+```
 ## Data
 
 The primary data source is the SQLite database `planet_fone.db`, which is created and populated by the `data_collection.ipynb` and `data_prep.ipynb` notebooks. Additional raw or intermediate data files, as well as potential constraint definitions, are located in the `data/` directory.
