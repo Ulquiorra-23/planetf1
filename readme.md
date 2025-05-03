@@ -2,18 +2,14 @@
 
 ## Description
 
-This project analyzes Formula 1 logistics data to develop actionable recommendations for reducing the sport's environmental impact. By leveraging data science techniques, including clustering, regression analysis, and genetic algorithms, we aim to optimize the F1 race calendar, specifically targeting the 2026 season, to minimize travel-related emissions.
+This project analyzes Formula 1 logistics data to develop actionable recommendations for reducing the sport's environmental impact. By leveraging data science techniques, including clustering, regression analysis, and genetic algorithms, we aim to optimize the F1 race calendar, to minimize travel-related emissions for cars and equipments.
 
-The core of the optimization uses a Genetic Algorithm (built with the DEAP library) to find near-optimal sequences of race locations, minimizing a fitness function based on travel distance (as a proxy for emissions) between consecutive events, while potentially considering other logistical constraints.
-
-## Project Goal
-
-To provide data-driven insights and a computationally optimized race calendar proposal for the 2026 Formula 1 season, demonstrably reducing the carbon footprint associated with logistics and travel compared to traditional scheduling approaches.
+The core of the optimization uses a Genetic Algorithm (built with the DEAP library) to find near-optimal sequences of race locations, minimizing a fitness function based on travel distance or estimated CO2 Emsissions between consecutive events, while potentially considering other logistical constraints. The Genetic Algorithm fitness function relies on a Clustering K-Means model that find clusters for the set of circuits provided, and on a Regression model (**(WIP)**) that estimates the emissions generated per leg.
 
 ## Features
 
 * **Data Collection & Preparation:** Scripts and notebooks to gather F1 circuit, geographical, and logistical data, culminating in the `planet_fone.db` database.
-* **Data Analysis:** Jupyter notebooks exploring the data using techniques like clustering (`clustering.py`) and regression **(WIP)**.
+* **Data Analysis:** Jupyter notebooks exploring the data using techniques like clustering (`clustering.py`) and regression (**(WIP)**).
 * **Genetic Algorithm Optimization:** Implementation of a custom Genetic Algorithm (`run_ga.py`, `genetic_ops.py`) using DEAP to find optimized race sequences based on minimizing travel distances or emissions if regression is enabled.
 * **Modular Structure:** Code organized into utilities (`utils/`), models/operators (`models/`), and analysis notebooks.
 
@@ -69,6 +65,12 @@ To provide data-driven insights and a computationally optimized race calendar pr
 ├── requirements.txt            # Python package dependencies
 ├── run_ga.py                   # Main script to execute the Genetic Algorithm
 │
+├── app/                       # Streamlit App files
+│   ├── app.py                  # Streamlit App
+│   ├── __init__.py
+│  
+├── media/                      # folder with numbered images
+├
 ├── data/                       # Data files, backups, constraints
 │   ├── calendar.csv
 │   ├── Costraints.xlsx         # Constraints for scheduling

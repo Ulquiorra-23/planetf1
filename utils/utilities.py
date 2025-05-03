@@ -1,6 +1,9 @@
 # Standard library imports
 import json
 import datetime
+import sys
+import os
+from pathlib import Path
 
 # Third-party library imports
 import pandas as pd
@@ -10,6 +13,9 @@ import sqlite3
 # Local application/library imports
 from utils.sql import get_table
 from models import clustering
+
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+DB_PATH = os.path.join(PROJECT_ROOT, 'data', 'planet_fone.db') # Construct absolute path to DB
 
 def get_historical_seq(verbose = False):
     """
@@ -71,6 +77,7 @@ def get_historical_seq(verbose = False):
 
     return historical_seq
 
+
 def get_historical_cities(year: int, verbose: bool = False, info: bool = False) -> pd.DataFrame:
     """
     Retrieves the DataFrame of cities for the given year from dfs_by_year_dict.
@@ -82,36 +89,73 @@ def get_historical_cities(year: int, verbose: bool = False, info: bool = False) 
 
     Returns:
         pandas.DataFrame: DataFrame containing city, latitude, and longitude for the given year.
+
+    Raises:
+        ConnectionError: If connection to the database fails.
+        ValueError: If no data is found for the specified year.
     """
-    if verbose:
-        print("Connecting to the database...")
-    # Connect to the database
-    connection = sqlite3.connect(r'data\planet_fone.db')
+    connection = None # Initialize connection to None
+    try:
+        if verbose:
+            print(f"Connecting to the database at: {DB_PATH}")
+        # Connect to the database using the absolute path
+        connection = sqlite3.connect(DB_PATH)
+    except sqlite3.Error as e:
+        # Add the path to the error message for easier debugging
+        raise ConnectionError(f"Failed to connect to the database at '{DB_PATH}': {e}")
 
-    # Create a cursor object to execute SQL queries
-    cursor = connection.cursor()
+    try:
+        # Create a cursor object to execute SQL queries
+        cursor = connection.cursor()
 
-    # Execute the query to fetch city_x, latitude, and longitude from fone_geography
-    cursor.execute("SELECT  fc.geo_id, fg.code_6 ,fg.circuit_x, fg.city_x, fg.country_x, fg.latitude, fg.longitude \
-                    ,fg.first_gp_probability, fg.last_gp_probability\
-                    FROM fone_calendar fc \
-                    LEFT JOIN fone_geography fg ON fc.geo_id = fg.id \
-                    WHERE fc.year = ?", (year,))
+        # Execute the query to fetch city_x, latitude, and longitude from fone_geography
+        # Added aliases for clarity
+        sql_query = """
+            SELECT
+                fc.geo_id,
+                fg.code_6,
+                fg.circuit_x,
+                fg.city_x,
+                fg.country_x,
+                fg.latitude,
+                fg.longitude,
+                fg.first_gp_probability,
+                fg.last_gp_probability
+            FROM fone_calendar fc
+            LEFT JOIN fone_geography fg ON fc.geo_id = fg.id
+            WHERE fc.year = ?
+        """
+        cursor.execute(sql_query, (year,))
 
-    # Fetch all results
-    city_data = cursor.fetchall()
+        # Fetch all results
+        city_data = cursor.fetchall()
 
-    # Close the connection
-    connection.close()
-    if verbose:
-        print("Database connection closed.")
-    
+        # --- This is where the ValueError originates ---
+        if not city_data:
+            # Raise the error if the query returned nothing for that year
+            raise ValueError(f"No data found for the year {year} in the database '{DB_PATH}'. Query: {sql_query}")
+        # ----------------------------------------------
+
+    except sqlite3.Error as e:
+        # Handle potential SQL errors during query execution
+        raise RuntimeError(f"Database query failed: {e}")
+    finally:
+        # Ensure the connection is closed even if errors occur
+        if connection:
+            connection.close()
+            if verbose:
+                print("Database connection closed.")
+
     # Convert the list of city data to a DataFrame
-    if info:
-        city_data_df = pd.DataFrame(city_data, columns=['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude','first_gp_probability','last_gp_probability'])
-    else:
-        # Extract only the city_x, latitude, and longitude columns
-        city_data_df = pd.DataFrame(city_data, columns=['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude','first_gp_probability','last_gp_probability'])[['city', 'latitude', 'longitude']]
+    column_names = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude','first_gp_probability','last_gp_probability']
+    city_data_df = pd.DataFrame(city_data, columns=column_names)
+
+    # --- Logic for 'info' parameter ---
+    # Select columns based on the 'info' flag AFTER creating the full DataFrame
+    if not info:
+         # Keep only specific columns if info is False
+         city_data_df = city_data_df[['city', 'latitude', 'longitude']]
+    # ------------------------------------
 
     # Remove duplicates and print what is being removed
     duplicates = city_data_df[city_data_df.duplicated()]
@@ -119,14 +163,17 @@ def get_historical_cities(year: int, verbose: bool = False, info: bool = False) 
         print("Removing duplicates:")
         print(duplicates)
 
-    city_data_df = city_data_df.drop_duplicates()
+    city_data_df = city_data_df.drop_duplicates().reset_index(drop=True) # Reset index after dropping
 
-    # Print the DataFrame
+    # Print the DataFrame info if verbose
     if verbose:
-        print("Extracted city data from year", year, "with info:")
-        print(city_data_df.info())
-        
+        print(f"Extracted city data from year {year} (info={info}):")
+        # Use head() for brevity in verbose output, info() can be long
+        print(city_data_df.head())
+        print(f"Total rows: {len(city_data_df)}")
+
     return city_data_df
+
 
 def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
     assert 2026 <= year <= 2030, "Year must be between 2026 and 2030"
@@ -314,7 +361,7 @@ def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, c
         
         clustersized_circuits = prereq_custom[['city_x', 'latitude', 'longitude']].copy()
         clustersized_circuits.rename(columns={'city_x': 'city'}, inplace=True)
-        clustersized_circuits = clustering.clusterize_circuits(df=clustersized_circuits, verbose=verbose)
+        clustersized_circuits = clustering.clusterize_circuits(df=clustersized_circuits, verbose=verbose)[0]
         prereq_custom = pd.merge(prereq_custom, clustersized_circuits[['city', 'cluster_id']], left_on='city_x',right_on='city', how='left')
         prereq_custom = prereq_custom[['id', 'code_6', 'circuit_x', 'city_x', 'country_x', 'latitude', 'longitude',
                                     'first_gp_probability', 'last_gp_probability', 'cluster_id']]
@@ -330,8 +377,8 @@ def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, c
             print(f"Generating circuits for population with seed={seed} and n={n}.")
         circuit_names_random = get_random_sample(n, seed=seed, info=True, verbose=verbose)
         circuits_random = get_random_sample(n, seed=seed, info=False, verbose=verbose)
-        clustersized_circuits_random = clustering.clusterize_circuits(df=circuits_random, verbose=verbose)
-        prereq_random = pd.merge(circuit_names_random, clustersized_circuits_random[['city', 'cluster_id']], on='city', how='left')
+        clustersized_circuits = clustering.clusterize_circuits(df=circuits_random, verbose=verbose)[0]
+        prereq_random = pd.merge(circuit_names_random, clustersized_circuits[['city', 'cluster_id']], on='city', how='left')
         prereq_random.columns = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
                                  'first_gp_probability', 'last_gp_probability', 'cluster_id']
         if verbose:
@@ -343,7 +390,7 @@ def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, c
         if verbose:
             print(f"Generating circuits for population for season={season}.")
         circuit_names = get_historical_cities(season, info=True, verbose=verbose)
-        clustersized_circuits = clustering.clusterize_circuits(df=circuit_names[['city', 'latitude', 'longitude']], verbose=verbose)
+        clustersized_circuits = clustering.clusterize_circuits(df=circuit_names[['city', 'latitude', 'longitude']], verbose=verbose)[0]
         prereq = pd.merge(circuit_names, clustersized_circuits[['city', 'cluster_id']], on='city', how='left')
         if verbose:
             print("Generated DataFrame for historical circuits:")

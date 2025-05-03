@@ -66,6 +66,7 @@ def set_default_params(params: dict) -> dict:
         "SEASON_YEAR": 2026, # For fitness calculation context
         "REGRESSION": False,  # Set to True for regression estimates
         "CLUSTERS": True,  # Set to True for clustering
+        "VERBOSE": False,  # Set to True for detailed output
     }
     # Update params with defaults if not already set
     for key, value in defaults.items():
@@ -300,5 +301,5 @@ if __name__ == "__main__":
                 print(e)
 
     # Run the genetic algorithm
-    toolbox, stats, hof = deap_toolbox(circuits_df_scenario, genetic_ops.calculate_fitness, params, seed=params['RANDOM_SEED'], verbose=True)
-    pop, log, best_ind, best_fitness = run_genetic_algorithm(toolbox, stats, hof, params, verbose=True)
+    toolbox, stats, hof = deap_toolbox(circuits_df_scenario, genetic_ops.calculate_fitness, params, seed=params['RANDOM_SEED'], verbose=params['VERBOSE'])
+    pop, log, best_ind, best_fitness = run_genetic_algorithm(toolbox, stats, hof, params, verbose=params['VERBOSE'])

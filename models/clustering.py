@@ -53,7 +53,7 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
         verbose (bool): If True, print debug information. Default is False.
 
     Returns:
-        int: optimal_k, the elbow point determined by kneed.
+        tuple: (optimal_k, fig), where optimal_k is the elbow point determined by kneed, and fig is the matplotlib figure.
     """
     if not isinstance(coord, np.ndarray):
         raise ValueError("Input 'coord' must be a numpy array.")
@@ -74,15 +74,16 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
         print("\nInertia values for each k:")
         print(inertia)
 
+    fig = None
     if img_verbose:
-        plt.figure(figsize=(12, 8))
+        fig, ax = plt.subplots(figsize=(12, 8))
 
         # Plot inertia
-        plt.plot(k_range, inertia, marker='o', linestyle='-', color='b', label='Inertia')
+        ax.plot(k_range, inertia, marker='o', linestyle='-', color='b', label='Inertia')
 
         # Calculate and plot the absolute change in inertia
         abs_change_inertia = [inertia[i - 1] - inertia[i] for i in range(1, len(inertia))]
-        plt.plot(k_range[1:], abs_change_inertia, marker='o', linestyle='--', color='g', label='Absolute Change in Inertia')
+        ax.plot(k_range[1:], abs_change_inertia, marker='o', linestyle='--', color='g', label='Absolute Change in Inertia')
 
     # --- Using kneed library to find elbow ---
     if verbose:
@@ -106,8 +107,7 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
             chosen_k = optimal_k_kneed
             if img_verbose:
                 # Add kneed's result to the plot
-                plt.vlines(optimal_k_kneed, plt.ylim()[0], plt.ylim()[1], 
-                           linestyles='--', color='r', label=f'Elbow (k={optimal_k_kneed})')
+                ax.axvline(optimal_k_kneed, linestyle='--', color='r', label=f'Elbow (k={optimal_k_kneed})')
         else:
             if verbose:
                 print("kneed could not find a distinct elbow point.")
@@ -125,17 +125,17 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
     if img_verbose:
         # Highlight the area ±1 around the chosen_k
         if chosen_k:
-            plt.axvspan(max(chosen_k - 1, min_clusters), min(chosen_k + 1, max_clusters), color='yellow', alpha=0.3, label='±1 Around Chosen k')
+            ax.axvspan(max(chosen_k - 1, min_clusters), min(chosen_k + 1, max_clusters), color='yellow', alpha=0.3, label='±1 Around Chosen k')
 
         # Add labels, title, and legend
-        plt.xlabel('Number of Clusters (k)', fontsize=12)
-        plt.ylabel('Value', fontsize=12)
-        plt.title('Elbow Method with Absolute Change in Inertia', fontsize=14)
-        plt.grid(True)
-        plt.legend()
-        plt.show()
+        ax.set_xlabel('Number of Clusters (k)', fontsize=12)
+        ax.set_ylabel('Value', fontsize=12)
+        ax.set_title('Elbow Method with Absolute Change in Inertia', fontsize=14)
+        ax.grid(True)
+        ax.legend()
 
-    return chosen_k
+    return chosen_k, fig
+
 def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=False):
     """
     Clusterize circuits based on their geographical coordinates.
@@ -147,7 +147,7 @@ def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=
         fig_verbose (bool, optional): Whether to display the final cluster visualization. Default is False.
 
     Returns:
-        pd.DataFrame: DataFrame with an additional 'cluster_id' column.
+        tuple: (pd.DataFrame, fig), where the DataFrame has an additional 'cluster_id' column, and fig is the Plotly figure.
     """
     if verbose:
         print("Starting clusterization process...")
@@ -168,7 +168,7 @@ def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=
     max_clusters = len(df)
     if verbose:
         print(f"Determining optimal number of clusters (max_clusters={max_clusters})...")
-    optimal_k = kmeans_plot_elbow(coords, max_clusters=max_clusters, random_state=23, verbose=verbose, img_verbose=opt_k_img_verbose)
+    optimal_k, _ = kmeans_plot_elbow(coords, max_clusters=max_clusters, random_state=23, verbose=verbose, img_verbose=opt_k_img_verbose)
     
     # Perform K-Means clustering
     if verbose:
@@ -187,6 +187,7 @@ def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=
         print("Cluster IDs assigned successfully.")
     
     # Generate visualization if fig_verbose is True
+    fig = None
     if fig_verbose:
         if verbose:
             print("\n--- Generating Enhanced Plotly Map ---")
@@ -230,12 +231,11 @@ def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=
                 cities = cluster_cities[cluster_id].split(', ')
                 wrapped_cities = '<br>'.join([', '.join(cities[i:i+3]) for i in range(0, len(cities), 3)])
                 trace.name = f"Cluster {cluster_id}:<br>{wrapped_cities}"
-        fig.show()
         if verbose:
             print("\nEnhanced Plotly figure object 'fig' created.")
     if verbose:
         print("Clusterization process completed.")
     
-    return clustered_df
+    return clustered_df, fig
 
 
