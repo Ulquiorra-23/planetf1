@@ -1,7 +1,4 @@
 # Standard library imports
-import sqlite3
-import json
-import datetime
 import random
 from collections import defaultdict
 
@@ -10,7 +7,6 @@ import pandas as pd
 import numpy as np
 
 # Local application/library imports
-from models import clustering
 from utils.sql import get_table
 from utils.utilities import generate_f1_calendar
 
@@ -43,37 +39,6 @@ def fragmentation_score(lst: list[int], non_linear_power: float = 2.0) -> float:
     # Non-linear scaling: square or higher power makes low scores harder to reach
     scaled_score = normalized_score ** (1 / non_linear_power)
     return scaled_score
-
-def get_circuits_for_population(n=None, seed=None, season=None):
-    """
-    Generate a DataFrame based on the provided seed and n or season.
-
-    Args:
-        n (int, optional): Number of circuits to sample.
-        seed (int, optional): Seed value for random operations.
-        season (int, optional): Season year for filtering or processing.
-
-    Returns:
-        pd.DataFrame: ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
-       'first_gp_probability', 'last_gp_probability', 'cluster_id'] 
-    """
-    if (seed is not None and season is not None) or (seed is None and season is None):
-        raise ValueError("Exactly one of 'seed' or 'season' must be provided.")
-
-    if seed is not None:
-        circuit_names_random = clustering.get_random_sample(n, seed=seed, info=True)
-        circuits_random = clustering.get_random_sample(n, seed=seed, info=False)
-        clustersized_circuits_random = clustering.clusterize_circuits(df=circuits_random, verbose=False)
-        prereq_random = pd.merge(circuit_names_random, clustersized_circuits_random[['city', 'cluster_id']], on='city', how='left')
-        prereq_random.columns = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
-                                 'first_gp_probability', 'last_gp_probability', 'cluster_id']
-        return prereq_random
-    if season is not None:
-        circuit_names = clustering.get_historical_cities(season, info=True)
-        circuits = clustering.get_historical_cities(season, info=False)
-        clustersized_circuits = clustering.clusterize_circuits(year=season)
-        prereq = pd.merge(circuit_names, clustersized_circuits[['city', 'cluster_id']], on='city', how='left')
-        return prereq
     
 def shuffle_respecting_clusters(circuits_to_shuffle, cluster_assignments, seed=None, verbose=False):
     """
@@ -349,8 +314,8 @@ def calculate_fitness(circuits_seq: list, circuits_df, season=2026, regression=F
             month_assigned = int(date[-2:].lstrip("0"))
             months_to_avoid = fone_geography_df.loc[fone_geography_df['code_6'] == circuit, 'months_to_avoid'].values
             
-            if months_to_avoid and isinstance(months_to_avoid.item(), str) and months_to_avoid.item().strip():
-                months_to_avoid = [int(x) for x in months_to_avoid.item().strip('[]').split(',') if x.strip().isdigit()]
+            if isinstance(months_to_avoid, list) and all(isinstance(x, int) for x in months_to_avoid):
+                pass  # months_to_avoid is valid
             else:
                 months_to_avoid = []
             if month_assigned in months_to_avoid:

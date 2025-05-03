@@ -1,6 +1,3 @@
-# Standard library imports
-import sqlite3
-
 # Third-party library imports
 import pandas as pd
 import numpy as np
@@ -10,62 +7,6 @@ import matplotlib.pyplot as plt
 from kneed import KneeLocator
 import plotly.express as px
 
-def get_historical_cities(year: int, verbose: bool = False, info: bool = False) -> pd.DataFrame:
-    """
-    Retrieves the DataFrame of cities for the given year from dfs_by_year_dict.
-
-    Args:
-        year (int): The year for which to retrieve the city data.
-        verbose (bool): If True, print debug information. Default is False.
-        info (bool): If True, include the 'geo_id' and the 'circuit' in the DataFrame. Default is False.
-
-    Returns:
-        pandas.DataFrame: DataFrame containing city, latitude, and longitude for the given year.
-    """
-    if verbose:
-        print("Connecting to the database...")
-    # Connect to the database
-    connection = sqlite3.connect('planet_fone.db')
-
-    # Create a cursor object to execute SQL queries
-    cursor = connection.cursor()
-
-    # Execute the query to fetch city_x, latitude, and longitude from fone_geography
-    cursor.execute("SELECT  fc.geo_id, fg.code_6 ,fg.circuit_x, fg.city_x, fg.country_x, fg.latitude, fg.longitude \
-                    ,fg.first_gp_probability, fg.last_gp_probability\
-                    FROM fone_calendar fc \
-                    LEFT JOIN fone_geography fg ON fc.geo_id = fg.id \
-                    WHERE fc.year = ?", (year,))
-
-    # Fetch all results
-    city_data = cursor.fetchall()
-
-    # Close the connection
-    connection.close()
-    if verbose:
-        print("Database connection closed.")
-    
-    # Convert the list of city data to a DataFrame
-    if info:
-        city_data_df = pd.DataFrame(city_data, columns=['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude','first_gp_probability','last_gp_probability'])
-    else:
-        # Extract only the city_x, latitude, and longitude columns
-        city_data_df = pd.DataFrame(city_data, columns=['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude','first_gp_probability','last_gp_probability'])[['city', 'latitude', 'longitude']]
-
-    # Remove duplicates and print what is being removed
-    duplicates = city_data_df[city_data_df.duplicated()]
-    if verbose and not duplicates.empty:
-        print("Removing duplicates:")
-        print(duplicates)
-
-    city_data_df = city_data_df.drop_duplicates()
-
-    # Print the DataFrame
-    if verbose:
-        print("Extracted city data from year", year, "with info:")
-        print(city_data_df.info())
-        
-    return city_data_df
 
 def scale_coords(data: pd.DataFrame, verbose: bool = False):
     """
@@ -195,14 +136,12 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
         plt.show()
 
     return chosen_k
-
-def clusterize_circuits(year=None, df=None, verbose=False, opt_k_img_verbose=False, fig_verbose=False):
+def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=False):
     """
     Clusterize circuits based on their geographical coordinates.
 
     Args:
-        year (int, optional): The year to fetch historical cities data. Required if df is not provided.
-        df (pd.DataFrame, optional): DataFrame containing 'city', 'latitude', and 'longitude'. Required if year is not provided.
+        df (pd.DataFrame): DataFrame containing 'city', 'latitude', and 'longitude'.
         verbose (bool, optional): Whether to print debug information. Default is False.
         img_verbose (bool, optional): Whether to display the elbow plot. Default is False.
         fig_verbose (bool, optional): Whether to display the final cluster visualization. Default is False.
@@ -213,15 +152,8 @@ def clusterize_circuits(year=None, df=None, verbose=False, opt_k_img_verbose=Fal
     if verbose:
         print("Starting clusterization process...")
 
-    if df is None and year is None:
-        raise ValueError("Either 'year' or 'df' must be provided.")
-    
-    # Fetch data if year is provided
-    if year is not None:
-        if verbose:
-            print(f"Fetching historical cities data for year {year}...")
-        df = get_historical_cities(year, verbose=verbose)
-    
+    if df is None:
+        raise ValueError("DataFrame containing 'city', 'latitude', and 'longitude' must be provided.")
     # Ensure the DataFrame has the required columns
     required_columns = {'city', 'latitude', 'longitude'}
     if not required_columns.issubset(df.columns):
@@ -306,46 +238,4 @@ def clusterize_circuits(year=None, df=None, verbose=False, opt_k_img_verbose=Fal
     
     return clustered_df
 
-def get_random_sample(n, info: bool, verbose=False, seed=None):
-    """
-    Fetches a random n-sized sample of city_x, latitude, and longitude from the fone_geography table.
 
-    Args:
-        n (int): The number of random rows to fetch.
-        info (bool): If True, includes additional columns in the DataFrame.
-        verbose (bool): If True, prints debug information.
-        seed (int, optional): Seed for randomization to ensure reproducibility.
-
-    Returns:
-        pandas.DataFrame: A DataFrame containing the random sample.
-    """
-    if verbose:
-        print(f"Fetching a random sample of {n} rows from the database...")
-
-    # Connect to the database
-    connection = sqlite3.connect('planet_fone.db')
-
-    # SQL query to fetch all rows
-    query = """
-    SELECT fg.id, fg.code_6, fg.circuit_x, fg.city_x, fg.country_x, fg.latitude, fg.longitude,fg.first_gp_probability, fg.last_gp_probability
-    FROM fone_geography fg;
-    """
-
-    # Load the results into a DataFrame
-    full_df = pd.read_sql_query(query, connection)
-
-    # Close the connection
-    connection.close()
-
-    # Apply random sampling in pandas
-    sample_df = full_df.sample(n=n, random_state=seed)
-
-    if not info:
-        # Extract only the city_x, latitude, and longitude columns
-        sample_df = sample_df[['city_x', 'latitude', 'longitude']]
-        # Rename city_x to city
-    sample_df.rename(columns={'city_x': 'city'}, inplace=True)
-
-    if verbose:
-        print(f"Random sample of {n} rows fetched successfully.")
-    return sample_df

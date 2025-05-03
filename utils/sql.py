@@ -12,7 +12,7 @@ def get_table(table_name: str, verbose: bool = False) -> pd.DataFrame:
     Returns:
         pd.DataFrame: A DataFrame containing the table's data.
     """
-    db_path = "planet_fone.db"  # Path to the database file
+    db_path = r"data\planet_fone.db"  # Path to the database file
     try:
         if verbose:
             print(f"Connecting to database at {db_path}...")

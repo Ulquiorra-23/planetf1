@@ -1,14 +1,15 @@
 # Standard library imports
 import json
 import datetime
-import random
 
 # Third-party library imports
 import pandas as pd
 import numpy as np
+import sqlite3
 
 # Local application/library imports
 from utils.sql import get_table
+from models import clustering
 
 def get_historical_seq(verbose = False):
     """
@@ -70,6 +71,62 @@ def get_historical_seq(verbose = False):
 
     return historical_seq
 
+def get_historical_cities(year: int, verbose: bool = False, info: bool = False) -> pd.DataFrame:
+    """
+    Retrieves the DataFrame of cities for the given year from dfs_by_year_dict.
+
+    Args:
+        year (int): The year for which to retrieve the city data.
+        verbose (bool): If True, print debug information. Default is False.
+        info (bool): If True, include the 'geo_id' and the 'circuit' in the DataFrame. Default is False.
+
+    Returns:
+        pandas.DataFrame: DataFrame containing city, latitude, and longitude for the given year.
+    """
+    if verbose:
+        print("Connecting to the database...")
+    # Connect to the database
+    connection = sqlite3.connect(r'data\planet_fone.db')
+
+    # Create a cursor object to execute SQL queries
+    cursor = connection.cursor()
+
+    # Execute the query to fetch city_x, latitude, and longitude from fone_geography
+    cursor.execute("SELECT  fc.geo_id, fg.code_6 ,fg.circuit_x, fg.city_x, fg.country_x, fg.latitude, fg.longitude \
+                    ,fg.first_gp_probability, fg.last_gp_probability\
+                    FROM fone_calendar fc \
+                    LEFT JOIN fone_geography fg ON fc.geo_id = fg.id \
+                    WHERE fc.year = ?", (year,))
+
+    # Fetch all results
+    city_data = cursor.fetchall()
+
+    # Close the connection
+    connection.close()
+    if verbose:
+        print("Database connection closed.")
+    
+    # Convert the list of city data to a DataFrame
+    if info:
+        city_data_df = pd.DataFrame(city_data, columns=['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude','first_gp_probability','last_gp_probability'])
+    else:
+        # Extract only the city_x, latitude, and longitude columns
+        city_data_df = pd.DataFrame(city_data, columns=['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude','first_gp_probability','last_gp_probability'])[['city', 'latitude', 'longitude']]
+
+    # Remove duplicates and print what is being removed
+    duplicates = city_data_df[city_data_df.duplicated()]
+    if verbose and not duplicates.empty:
+        print("Removing duplicates:")
+        print(duplicates)
+
+    city_data_df = city_data_df.drop_duplicates()
+
+    # Print the DataFrame
+    if verbose:
+        print("Extracted city data from year", year, "with info:")
+        print(city_data_df.info())
+        
+    return city_data_df
 
 def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
     assert 2026 <= year <= 2030, "Year must be between 2026 and 2030"
@@ -169,6 +226,49 @@ def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
 
     return [d.strftime("%d-%m") for d in race_days]
 
+def get_random_sample(n, info: bool, verbose=False, seed=None):
+    """
+    Fetches a random n-sized sample of city_x, latitude, and longitude from the fone_geography table.
+
+    Args:
+        n (int): The number of random rows to fetch.
+        info (bool): If True, includes additional columns in the DataFrame.
+        verbose (bool): If True, prints debug information.
+        seed (int, optional): Seed for randomization to ensure reproducibility.
+
+    Returns:
+        pandas.DataFrame: A DataFrame containing the random sample.
+    """
+    if verbose:
+        print(f"Fetching a random sample of {n} rows from the database...")
+
+    # Connect to the database
+    connection = sqlite3.connect(r"data\planet_fone.db")
+
+    # SQL query to fetch all rows
+    query = """
+    SELECT fg.id, fg.code_6, fg.circuit_x, fg.city_x, fg.country_x, fg.latitude, fg.longitude,fg.first_gp_probability, fg.last_gp_probability
+    FROM fone_geography fg;
+    """
+
+    # Load the results into a DataFrame
+    full_df = pd.read_sql_query(query, connection)
+
+    # Close the connection
+    connection.close()
+
+    # Apply random sampling in pandas
+    sample_df = full_df.sample(n=n, random_state=seed)
+
+    if not info:
+        # Extract only the city_x, latitude, and longitude columns
+        sample_df = sample_df[['city_x', 'latitude', 'longitude']]
+        # Rename city_x to city
+    sample_df.rename(columns={'city_x': 'city'}, inplace=True)
+
+    if verbose:
+        print(f"Random sample of {n} rows fetched successfully.")
+    return sample_df
 
 def get_circuit_for_pop(id: int, verbose: bool = False):
     """
@@ -181,3 +281,71 @@ def get_circuit_for_pop(id: int, verbose: bool = False):
     if verbose:
         print(f"Fetched circuit details for ID {id}: {circuit}.")
     return circuit
+
+
+def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, custom:list = None,verbose=False):
+    """
+    Generate a DataFrame based on the provided seed and n or season.
+
+    Args:
+        n (int, optional): Number of circuits to sample.
+        seed (int, optional): Seed value for random operations.
+        season (int, optional): Season year for filtering or processing.
+        verbose (bool, optional): If True, print debug information. Default is False.
+
+    Returns:
+        pd.DataFrame: ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
+       'first_gp_probability', 'last_gp_probability', 'cluster_id'] 
+    """
+    if sum([season is not None, custom is not None, (n is not None and seed is not None)]) != 1:
+        raise ValueError("Exactly one of 'season', 'custom', or both 'n' and 'seed' must be provided.")
+
+    if custom is not None:
+        if verbose:
+            print(f"Generating circuits for custom population with n = {len(custom)}.")
+        prereq_custom = pd.DataFrame()
+        for id in custom:
+            if verbose:
+                print(f"Fetching circuit details for ID {id}...")
+            circuit = get_circuit_for_pop(id, verbose=verbose)
+            prereq_custom = pd.concat([prereq_custom, circuit], ignore_index=True)
+        if verbose:
+            print(f"Fetched {prereq_custom['circuit_x'].tolist()} circuits for custom population.")
+        
+        clustersized_circuits = prereq_custom[['city_x', 'latitude', 'longitude']].copy()
+        clustersized_circuits.rename(columns={'city_x': 'city'}, inplace=True)
+        clustersized_circuits = clustering.clusterize_circuits(df=clustersized_circuits, verbose=verbose)
+        prereq_custom = pd.merge(prereq_custom, clustersized_circuits[['city', 'cluster_id']], left_on='city_x',right_on='city', how='left')
+        prereq_custom = prereq_custom[['id', 'code_6', 'circuit_x', 'city_x', 'country_x', 'latitude', 'longitude',
+                                    'first_gp_probability', 'last_gp_probability', 'cluster_id']]
+        prereq_custom.columns = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
+                                    'first_gp_probability', 'last_gp_probability', 'cluster_id']
+        if verbose:
+            print("Generated DataFrame for custom circuits:")
+            print(prereq_custom['circuit'].tolist())
+        return prereq_custom    
+
+    if seed is not None:
+        if verbose:
+            print(f"Generating circuits for population with seed={seed} and n={n}.")
+        circuit_names_random = get_random_sample(n, seed=seed, info=True, verbose=verbose)
+        circuits_random = get_random_sample(n, seed=seed, info=False, verbose=verbose)
+        clustersized_circuits_random = clustering.clusterize_circuits(df=circuits_random, verbose=verbose)
+        prereq_random = pd.merge(circuit_names_random, clustersized_circuits_random[['city', 'cluster_id']], on='city', how='left')
+        prereq_random.columns = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
+                                 'first_gp_probability', 'last_gp_probability', 'cluster_id']
+        if verbose:
+            print("Generated DataFrame for random circuits:")
+            print(prereq_random['circuit'].tolist())
+        return prereq_random
+
+    if season is not None:
+        if verbose:
+            print(f"Generating circuits for population for season={season}.")
+        circuit_names = get_historical_cities(season, info=True, verbose=verbose)
+        clustersized_circuits = clustering.clusterize_circuits(df=circuit_names[['city', 'latitude', 'longitude']], verbose=verbose)
+        prereq = pd.merge(circuit_names, clustersized_circuits[['city', 'cluster_id']], on='city', how='left')
+        if verbose:
+            print("Generated DataFrame for historical circuits:")
+            print(prereq['circuit'].tolist())
+        return prereq
