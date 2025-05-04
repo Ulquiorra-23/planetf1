@@ -9,24 +9,29 @@ import os
 import subprocess
 import re # For parsing results
 
-import pandas as pd  
+import pandas as pd
 import pydeck as pdk
-import numpy as np  
+import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import plotly.express as px
 
 # Add the parent directory to the system path to import utils
+# Ensure this path logic correctly points to your project root from app.py's location
+# If app.py is in 'src/', this should work. Adjust if structure is different.
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from utils.sql import get_table
+# Make sure utilities and models are importable
 from utils.utilities import get_random_sample, get_historical_cities
-from models.clustering import kmeans_plot_elbow, scale_coords, clusterize_circuits
-from data.app_data import F1_LOCATION_DESCRIPTIONS
+from models.clustering import kmeans_plot_elbow, scale_coords, clusterize_circuits # Import clustering functions
+from data.app_data import F1_LOCATION_DESCRIPTIONS # Import descriptions
 
 import functools # Needed for deap_toolbox registration if not already imported
 from models import genetic_ops # Import your genetic operators module
 # Import functions from run_ga.py (or their original modules)
+# It's generally better to import directly from the modules where they are defined
+# Assuming these functions are accessible via run_ga for now
 from run_ga import (
     prepare_scenario,
     set_default_params,
@@ -38,13 +43,14 @@ from run_ga import (
 try:
     from deap import base, creator, tools, algorithms
 except ImportError:
-    st.error("DEAP library not found. Please install it (`pip install deap`) and restart.")
+    st.error("❌ DEAP library not found. Please install it (`pip install deap`) and restart.")
     st.stop() # Stop execution if DEAP is missing
 # --- End of added imports ---
 
-SEED = 42  # Set a random seed for reproducibility  
+SEED = 42  # Set a random seed for reproducibility
 random.seed(SEED)  # Set the random seed for reproducibility
 np.random.seed(SEED)  # Set the random seed for reproducibility
+
 
 # --- Page Configuration (Must be the first Streamlit command) ---
 st.set_page_config(
@@ -54,176 +60,178 @@ st.set_page_config(
     initial_sidebar_state="expanded" # Keep sidebar open initially
 )
 
-# --- Custom CSS (Optional - for more advanced styling) ---
+# --- Custom CSS ---
+# (Keep your existing CSS here - it defines the F1 style)
 st.markdown("""
-<style>
-    /* Import Google Font */
-    @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap');
+    <style>
+        /* Import Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap');
 
-    /* General Page Styling */
-    body {
-        color: #E0E0E0; /* Light grey text for dark background */
-        background-color: #1E1E1E; /* Dark background */
-        font-family: 'Titillium Web', sans-serif; /* F1-style font */
-    }
+        /* General Page Styling */
+        body {
+            color: #E0E0E0; /* Light grey text for dark background */
+            background-color: #1E1E1E; /* Dark background */
+            font-family: 'Titillium Web', sans-serif; /* F1-style font */
+        }
 
-    /* Main container adjustments (optional, might need tweaking) */
-    .main .block-container {
-         padding-top: 2rem; /* Adjust top padding */
-         padding-bottom: 2rem;
-    }
+        /* Main container adjustments (optional, might need tweaking) */
+        .main .block-container {
+            padding-top: 2rem; /* Adjust top padding */
+            padding-bottom: 2rem;
+        }
 
-    /* --- Title and Headers --- */
-    h1, h2, h3, h4, h5, h6 {
-        color: #FFFFFF; /* White headers */
-        font-weight: 700; /* Bolder font weight */
-    }
+        /* --- Title and Headers --- */
+        h1, h2, h3, h4, h5, h6 {
+            color: #FFFFFF; /* White headers */
+            font-weight: 700; /* Bolder font weight */
+        }
 
-    /* Specifically target Streamlit's title element if needed */
-    /* Use browser dev tools to find the exact class if h1 isn't enough */
-    h1 {
-        color: #FF1801; /* F1 Red for main title */
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-        text-transform: uppercase; /* Uppercase for impact */
-    }
+        /* Specifically target Streamlit's title element if needed */
+        /* Use browser dev tools to find the exact class if h1 isn't enough */
+        h1 {
+            color: #FF1801; /* F1 Red for main title */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase; /* Uppercase for impact */
+        }
 
-    /* --- Sidebar Styling --- */
-    /* Target the sidebar's inner container */
-    [data-testid="stSidebar"] > div:first-child {
-        background-color: #2a2a2a; /* Slightly lighter dark for sidebar */
-        border-right: 2px solid #FF1801; /* Red accent border */
-    }
-    /* Sidebar header */
-    [data-testid="stSidebar"] h1,
-    [data-testid="stSidebar"] h2,
-    [data-testid="stSidebar"] h3 {
-         color: #FFFFFF; /* White headers in sidebar */
-    }
-    /* Sidebar text */
-    [data-testid="stSidebar"] .stMarkdown,
-    [data-testid="stSidebar"] .stRadio,
-    [data-testid="stSidebar"] .stSelectbox {
-         color: #E0E0E0;
-    }
-    /* Sidebar info box */
-    [data-testid="stSidebar"] .stAlert {
-        background-color: rgba(255, 24, 1, 0.1); /* Red tint for info box */
-        border: 1px solid rgba(255, 24, 1, 0.5);
-    }
+        /* --- Sidebar Styling --- */
+        /* Target the sidebar's inner container */
+        [data-testid="stSidebar"] > div:first-child {
+            background-color: #2a2a2a; /* Slightly lighter dark for sidebar */
+            border-right: 2px solid #FF1801; /* Red accent border */
+        }
+        /* Sidebar header */
+        [data-testid="stSidebar"] h1,
+        [data-testid="stSidebar"] h2,
+        [data-testid="stSidebar"] h3 {
+            color: #FFFFFF; /* White headers in sidebar */
+        }
+        /* Sidebar text */
+        [data-testid="stSidebar"] .stMarkdown,
+        [data-testid="stSidebar"] .stRadio,
+        [data-testid="stSidebar"] .stSelectbox {
+            color: #E0E0E0;
+        }
+        /* Sidebar info box */
+        [data-testid="stSidebar"] .stAlert {
+            background-color: rgba(255, 24, 1, 0.1); /* Red tint for info box */
+            border: 1px solid rgba(255, 24, 1, 0.5);
+        }
 
 
-    /* --- Tabs Styling --- */
-    /* Unselected tab */
-    .stTabs [data-baseweb="tab"] {
-        background-color: #333333; /* Dark grey for inactive tabs */
-        color: #E0E0E0;
-        border-radius: 5px 5px 0 0; /* Rounded top corners */
-        margin: 0 3px;
-        padding: 10px 15px;
-        font-weight: 600;
-        border-bottom: 3px solid transparent; /* Space for selected indicator */
-        transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-    /* Hover effect for unselected tab */
-    .stTabs [data-baseweb="tab"]:hover {
-        background-color: #444444;
-        color: #FFFFFF;
-    }
-    /* Selected tab */
-    .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        background-color: #2a2a2a; /* Match sidebar bg */
-        color: #FFFFFF; /* White text for selected */
-        font-weight: 700;
-        border-bottom: 3px solid #FF1801; /* Red underline indicator */
-    }
-    /* Tab content panel */
-    .stTabs [data-testid="stVerticalBlock"] {
-         background-color: #2a2a2a; /* Match selected tab bg for content area */
-         border: 1px solid #444444;
-         border-top: none; /* Remove top border as tab provides it */
-         border-radius: 0 0 5px 5px;
-         padding: 1rem;
-    }
+        /* --- Tabs Styling --- */
+        /* Unselected tab */
+        .stTabs [data-baseweb="tab"] {
+            background-color: #333333; /* Dark grey for inactive tabs */
+            color: #E0E0E0;
+            border-radius: 5px 5px 0 0; /* Rounded top corners */
+            margin: 0 3px;
+            padding: 10px 15px;
+            font-weight: 600;
+            border-bottom: 3px solid transparent; /* Space for selected indicator */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        /* Hover effect for unselected tab */
+        .stTabs [data-baseweb="tab"]:hover {
+            background-color: #444444;
+            color: #FFFFFF;
+        }
+        /* Selected tab */
+        .stTabs [data-baseweb="tab"][aria-selected="true"] {
+            background-color: #2a2a2a; /* Match sidebar bg */
+            color: #FFFFFF; /* White text for selected */
+            font-weight: 700;
+            border-bottom: 3px solid #FF1801; /* Red underline indicator */
+        }
+        /* Tab content panel */
+        .stTabs [data-testid="stVerticalBlock"] {
+            background-color: #2a2a2a; /* Match selected tab bg for content area */
+            border: 1px solid #444444;
+            border-top: none; /* Remove top border as tab provides it */
+            border-radius: 0 0 5px 5px;
+            padding: 1rem;
+        }
 
-    /* --- DataFrame Styling --- */
-    .stDataFrame {
-        border: 1px solid #444444; /* Darker border */
-        border-radius: 5px;
-        background-color: #2a2a2a; /* Dark background for table */
-    }
-    /* Header */
-    .stDataFrame thead th {
-        background-color: #333333;
-        color: #FFFFFF;
-        font-weight: 600;
-    }
-    /* Body cells */
-     .stDataFrame tbody td {
-        color: #E0E0E0;
-    }
+        /* --- DataFrame Styling --- */
+        .stDataFrame {
+            border: 1px solid #444444; /* Darker border */
+            border-radius: 5px;
+            background-color: #2a2a2a; /* Dark background for table */
+        }
+        /* Header */
+        .stDataFrame thead th {
+            background-color: #333333;
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+        /* Body cells */
+        .stDataFrame tbody td {
+            color: #E0E0E0;
+        }
 
-    /* --- Button Styling --- */
-    .stButton button {
-        background-color: transparent; /* Transparent background */
-        color: #FF1801; /* Red text */
-        border: 2px solid #FF1801; /* Red border */
-        border-radius: 5px;
-        font-weight: 700; /* Bold text */
-        padding: 8px 15px;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        text-transform: uppercase;
-    }
+        /* --- Button Styling --- */
+        .stButton button {
+            background-color: transparent; /* Transparent background */
+            color: #FF1801; /* Red text */
+            border: 2px solid #FF1801; /* Red border */
+            border-radius: 5px;
+            font-weight: 700; /* Bold text */
+            padding: 8px 15px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-transform: uppercase;
+        }
 
-    .stButton button:hover {
-        background-color: #FF1801; /* Red background on hover */
-        color: white; /* White text on hover */
-    }
-     .stButton button:focus { /* Keep focus style consistent */
-        background-color: #FF1801;
-        color: white;
-        box-shadow: none; /* Remove default focus shadow if desired */
-        outline: none;
-    }
-     .stButton button:disabled {
-        background-color: transparent;
-        color: #555555;
-        border-color: #555555;
-        opacity: 0.5;
-    }
+        .stButton button:hover {
+            background-color: #FF1801; /* Red background on hover */
+            color: white; /* White text on hover */
+        }
+        .stButton button:focus { /* Keep focus style consistent */
+            background-color: #FF1801;
+            color: white;
+            box-shadow: none; /* Remove default focus shadow if desired */
+            outline: none;
+        }
+        .stButton button:disabled {
+            background-color: transparent;
+            color: #555555;
+            border-color: #555555;
+            opacity: 0.5;
+        }
 
-    /* --- Expander Styling --- */
-    .stExpander {
-        background-color: #2a2a2a; /* Dark background */
-        border: 1px solid #444444; /* Darker border */
-        border-radius: 5px;
-    }
-    .stExpander header { /* Target the header part */
-        font-weight: 600;
-        color: #FFFFFF; /* White header text */
-    }
+        /* --- Expander Styling --- */
+        .stExpander {
+            background-color: #2a2a2a; /* Dark background */
+            border: 1px solid #444444; /* Darker border */
+            border-radius: 5px;
+        }
+        .stExpander header { /* Target the header part */
+            font-weight: 600;
+            color: #FFFFFF; /* White header text */
+        }
 
-    /* --- Other Widget Styling (Examples) --- */
-    .stRadio [role="radiogroup"],
-    .stSelectbox > div {
-        /* Add subtle styling if needed */
-    }
+        /* --- Other Widget Styling (Examples) --- */
+        .stRadio [role="radiogroup"],
+        .stSelectbox > div {
+            /* Add subtle styling if needed */
+        }
 
-    /* --- Footer Styling --- */
-    footer {
-        color: #888888; /* Lighter grey for footer */
-        font-size: 12px;
-        text-align: center;
-    }
+        /* --- Footer Styling --- */
+        footer {
+            color: #888888; /* Lighter grey for footer */
+            font-size: 12px;
+            text-align: center;
+        }
 
-    /* --- Dividers --- */
-    hr {
-        border-top: 1px solid #444444; /* Darker divider */
-    }
+        /* --- Dividers --- */
+        hr {
+            border-top: 1px solid #444444; /* Darker divider */
+        }
 
-</style>
+    </style>
 
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
+# --- Helper Function for Capturing Output ---
 def execute_and_capture( func, *args, **kwargs):
     """
     Executes a function with the given arguments and captures its stdout.
@@ -235,566 +243,507 @@ def execute_and_capture( func, *args, **kwargs):
 
     Returns:
         tuple: A tuple containing the function's return value and the captured stdout as a string.
+               Returns (None, error_message_string) if an exception occurs.
     """
-    # Create a StringIO buffer to capture stdout
     string_io = io.StringIO()
-
-    # Redirect stdout to the buffer
-    with redirect_stdout(string_io):
-        try:
+    result = None # Initialize result to None
+    captured_string = ""
+    try:
+        # Redirect stdout to the buffer
+        with redirect_stdout(string_io):
             # Execute the function and capture its return value
             result = func(*args, **kwargs)
-        except Exception as e:
-            # Capture any exceptions that occur within the block
-            captured_string = string_io.getvalue()
-            error_message = f"An error occurred during execution: {e}"
-            return None, f"{captured_string}\n!!! {error_message} !!!"
-
-    # Get the captured output from the buffer
-    captured_string = string_io.getvalue()
-
-    # Update the captured output in the sidebar
+        captured_string = string_io.getvalue()
+    except Exception as e:
+        # Capture any exceptions that occur within the block
+        # Append error to any existing captured output
+        captured_string += f"\n!!! ERROR during execution: {e} !!!"
+        print(f"Error in execute_and_capture: {e}") # Also print to terminal for debugging
+        return None, captured_string # Return None for result on error
 
     return result, captured_string
 
 # --- Header ---
 with st.container():
     st.title("🏎️ F1 Green Flag: Sustainable Calendar Optimization")
-    st.caption("Analyzing F1 logistics using Clustering, Regression (WIP), and Genetic Algorithms to propose a greener race calendar.")
+    st.caption("🍃 Analyzing F1 logistics using Clustering, Regression (WIP), and Genetic Algorithms to propose a greener race calendar.")
     st.divider()
 
-    # --- Navigation Tabs ---
-page1,page2,page3,page4,page5 = st.tabs(
-        ["🏠 Overview", "📊 Data Explorer", "📈 Regression Analysis", "📈 Clustering Analysis", "⚙️ GA Optimization & Results"]
-    )
+# --- Navigation Tabs ---
+# Added emojis to tab labels
+page1, page2, page3, page4, page5 = st.tabs(
+    ["🏠 Overview", "📊 Data Explorer", "📈 Regression Analysis", "🧩 Clustering Analysis", "⚙️ GA Optimization"]
+)
 
-# --- Main Content Area ---
-
+# --- Page 1: Overview ---
 with page1:
-    st.header("Project Overview")
+    st.header("ℹ️ Project Overview")
     st.markdown("""
     Welcome to the **F1 Green Flag** dashboard!
 
     This project analyzes Formula 1 logistics data to develop actionable recommendations for reducing the sport's environmental impact. By leveraging data science techniques, including **clustering**, **regression analysis (WIP)**, and **genetic algorithms**, we aim to optimize the F1 race calendar to minimize travel-related emissions for cars and equipment.
 
     **Core Components:**
-    - **Data Collection & Preparation:** Consolidating circuit, geographical, and logistical data into the `planet_fone.db` database.
-    - **Clustering Analysis:** Identifying potential geographical groupings of races using K-Means (`models/clustering.py`).
-    - **Regression Modeling (WIP):** Developing models to estimate emissions per travel leg.
-    - **Genetic Algorithm Optimization:** Utilizing DEAP (`models/genetic_ops.py`, `run_ga.py`) to find near-optimal race sequences minimizing travel distance or estimated emissions, considering clustering insights.
+    - 📊 **Data Collection & Preparation:** Consolidating circuit, geographical, and logistical data into the `planet_fone.db` database.
+    - 🧩 **Clustering Analysis:** Identifying potential geographical groupings of races using K-Means (`models/clustering.py`).
+    - 📈 **Regression Modeling (WIP):** Developing models to estimate emissions per travel leg.
+    - ⚙️ **Genetic Algorithm Optimization:** Utilizing DEAP (`models/genetic_ops.py`, `run_ga.py`) to find near-optimal race sequences minimizing travel distance or estimated emissions, considering clustering insights.
 
-    Use the sidebar to navigate through the different sections of our analysis and results.
+    Use the tabs above to navigate through the different sections of our analysis and results.
     """)
-    st.image("https://placehold.co/800x300/228B22/FFFFFF?text=F1+Track+Map+Placeholder", caption="Placeholder for a relevant F1 image or map")
+    # Consider a more dynamic or relevant image if possible
+    # st.image("path/to/your/f1_overview_image.png", caption="Visualizing the F1 Calendar Challenge")
 
 
+# --- Page 2: Data Explorer ---
 with page2:
-    st.header("Explore the F1 Data")
+    st.header("📊 Explore the F1 Data")
     st.markdown("""
     Dive into the datasets used for this analysis, primarily sourced from `planet_fone.db` and files within the `/data` directory.
     You can view raw data, summary statistics, and filter information.
     """)
 
     # --- Data Loading and Display ---
-    st.subheader("Circuit Geography Data")
-    geo_df = get_table("fone_geography")  # Fetch data using get_table
-    calendar_df = get_table("fone_calendar")  # Fetch data using get_table
-    logistics_df = get_table("travel_logistic")  # Fetch data using get_table
-    regression_df = get_table("training_regression_calendar")  # Fetch data using get_table
-    
+    st.subheader("🗺️ Circuit Geography Data")
+    geo_df = get_table("fone_geography")
+    calendar_df = get_table("fone_calendar")
+    logistics_df = get_table("travel_logistic")
+    regression_df = get_table("training_regression_calendar")
+
     if not geo_df.empty:
         st.dataframe(geo_df.head())
-        st.write(f"Loaded {len(geo_df)} Locations.")
-        with st.expander("Show Full Geography Data"):
+        st.write(f"Loaded **{len(geo_df)}** Locations.")
+        with st.expander("📂 Show Full Geography Data"):
             st.dataframe(geo_df)
     else:
-        st.warning("Could not load geography data.")
-        st.subheader("Map of Circuit Locations")
+        st.warning("⚠️ Could not load geography data.")
+
+    st.subheader("📍 Map of Circuit Locations")
     if not geo_df.empty:
-        # Ensure the DataFrame has latitude and longitude columns
         if 'latitude' in geo_df.columns and 'longitude' in geo_df.columns:
-            # Add a selector for season
             seasons = sorted(calendar_df['year'].unique(), reverse=True) if not calendar_df.empty else []
-            selected_season = st.selectbox("Select a Season to Highlight Circuits:", options=["New"] + list(seasons), index=0,key="season_selector")
-            if selected_season == "New" and not calendar_df.empty:
-                # Highlight circuits never visited
+            # Improved label for selectbox
+            selected_season = st.selectbox("🗓️ Select Season to Highlight Circuits:", options=["✨ New Potential"] + list(seasons), index=0, key="season_selector")
+
+            if selected_season == "✨ New Potential" and not calendar_df.empty:
                 visited_circuits = calendar_df['geo_id'].unique()
                 map_data = geo_df[~geo_df['id'].isin(visited_circuits)]
-            elif selected_season != "New" and not calendar_df.empty:
-                # Get circuits for the selected season
+                map_title = "Potential New Circuits"
+            elif selected_season != "✨ New Potential" and not calendar_df.empty:
                 season_circuits = calendar_df[calendar_df['year'] == selected_season]['geo_id'].unique()
                 map_data = geo_df[geo_df['id'].isin(season_circuits)]
+                map_title = f"Circuits in {selected_season} Season"
             else:
-                map_data = pd.DataFrame()  # Empty DataFrame if no valid data
+                map_data = pd.DataFrame()
+                map_title = "No Circuits to Display"
 
+            st.write(f"**{map_title}**") # Display title above map
             if not map_data.empty:
-                # Create a PyDeck layer for better customization
                 layer = pdk.Layer(
                     "ScatterplotLayer",
                     data=map_data,
                     get_position=["longitude", "latitude"],
-                    get_radius=100000,  # Increased marker size (in meters)
-                    get_fill_color=[0, 128, 0, 200],  # Green color with transparency
+                    get_radius=100000,
+                    get_fill_color=[255, 24, 1, 180],  # Use F1 Red with transparency
                     pickable=True,
                 )
-
-                # Add tooltips for labels
                 tooltip = {
-                    "html": "<b>City:</b> {city_x}<br><b>Circuit:</b> {circuit_x}<br><b>Country:</b> {country_x}<br><b>Continent:</b> {continent}",
-                    "style": {"backgroundColor": "steelblue", "color": "white"},
+                    "html": "<b>📍 {circuit_x}</b><br><b>City:</b> {city_x}<br><b>Country:</b> {country_x}<br><b>Continent:</b> {continent}",
+                    "style": {"backgroundColor": "rgba(30, 30, 30, 0.85)", "color": "white", "border": "1px solid #FF1801"} # Style tooltip
                 }
-
-                # Render the map
                 st.pydeck_chart(
                     pdk.Deck(
+                        map_style='mapbox://styles/mapbox/dark-v10', # Use a dark map style
                         layers=[layer],
                         initial_view_state=pdk.ViewState(
                             latitude=map_data["latitude"].mean(),
                             longitude=map_data["longitude"].mean(),
-                            zoom=2,
-                            pitch=0,
+                            zoom=1.5, # Slightly adjusted zoom
+                            pitch=30, # Add some pitch
                         ),
                         tooltip=tooltip,
                     )
                 )
             else:
-                st.warning("No data available to display on the map.")
-                
+                st.info("ℹ️ No map data available for the selected option.")
+
         else:
-            st.warning("Geography data does not contain latitude and longitude columns.")
+            st.warning("⚠️ Geography data does not contain required latitude and longitude columns.")
     else:
-        st.warning("Could not load geography data to display the map.")
-        
-    st.subheader(f"Select a {selected_season} City to View Details")
+        st.warning("⚠️ Could not load geography data to display the map.")
+
+    st.subheader(f"🏙️ City Details: {selected_season if selected_season != '✨ New Potential' else 'Potential New'}")
     if not map_data.empty:
-        city_list = map_data['city_x'].unique()
-        col1, col2, col3, col4, col5 = st.columns([1, 1, 2, 2, 2])
+        city_list = sorted(map_data['city_x'].unique()) # Sort city list
+        col_select, col_details = st.columns([1, 3]) # Adjust column ratio
 
-        if len(city_list) > 12:
-            half = len(city_list) // 2
-            with col1:
-                selected_city = st.selectbox("Select a City:", options=city_list, key="city_selector", index=0 )
-        else:
-            with col1:
-                selected_city = st.radio("Select a City:", options=city_list)
+        with col_select:
+             # Use selectbox for longer lists, radio for shorter
+            if len(city_list) > 10:
+                 selected_city = st.selectbox("Select City:", options=city_list, key="city_selector", index=0 )
+            elif city_list: # Check if list is not empty
+                 selected_city = st.radio("Select City:", options=city_list, key="city_radio")
+            else:
+                 selected_city = None
+                 st.write("No cities in selection.")
 
-        city_details = map_data[map_data['city_x'] == selected_city]
-        city_details['mmm_to_avoid'] = city_details['months_to_avoid'].apply(
-            lambda months: ', '.join(
-                pd.to_datetime(str(month), format='%m').strftime('%b') for month in months.strip("[]").split(", ") if months.strip("[]") # Handle empty or invalid values
-        ))
-        
-        if not city_details.empty:
-            for _, row in city_details.iterrows():
-                with col5:
-                    st.markdown(f"""
-                    **City:** {row['city_x']}  
-                    **Circuit:** {row['circuit_x']}  
-                    **Country:** {row['country_x']}  
-                    **Continent:** {row['continent']}  
-                    **Latitude:** {row['latitude']}  
-                    **Longitude:** {row['longitude']}  
-                    **Months to Avoid:** {row['mmm_to_avoid']}  
-                    **Notes:** {row['notes'] if 'notes' in row else 'No additional notes available.'}
-                    """)
+        with col_details:
+            if selected_city:
+                city_details_row = map_data[map_data['city_x'] == selected_city].iloc[0] # Get the first row for the city
 
-                with col4:
-                    # Retrieve the image path from F1_LOCATION_DESCRIPTIONS
-                    image_path = next((img for loc_id, _, _, _, img in F1_LOCATION_DESCRIPTIONS if loc_id == row['id']), None)
-                    if image_path:
-                        st.image(image_path, caption=f"{row['city_x']} Image")
+                # Format months to avoid
+                try:
+                    months_str = city_details_row.get('months_to_avoid', '[]') # Default to empty list string
+                    if isinstance(months_str, str) and months_str.strip("[]"):
+                        months_list = [int(m.strip()) for m in months_str.strip("[]").split(',') if m.strip()]
+                        mmm_to_avoid = ', '.join(pd.to_datetime(str(month), format='%m').strftime('%b') for month in months_list)
                     else:
-                        st.image("https://placehold.co/150x150/cccccc/FFFFFF?text=No+Image", caption=f"No image available for {row['city_x']}")
-                
-                with col3:
-                    if not map_data.empty and 'id' in map_data.columns:
-                        location_id = row['id']
-                        description = next((desc for loc_id, _, _, desc, _ in F1_LOCATION_DESCRIPTIONS if loc_id == location_id), "No description available.")
-                        st.markdown(f"**Description:** {description}")
-        else:
-            st.warning(f"No details available for {selected_city}.")
+                        mmm_to_avoid = "None"
+                except:
+                    mmm_to_avoid = "Error parsing months" # Handle potential errors
+
+                # Get description and image
+                location_id = city_details_row['id']
+                description = next((desc for loc_id, _, _, desc, _ in F1_LOCATION_DESCRIPTIONS if loc_id == location_id), "No description available.")
+                image_path = next((img for loc_id, _, _, _, img in F1_LOCATION_DESCRIPTIONS if loc_id == location_id), None)
+
+                # Display details in two sub-columns
+                sub_col1, sub_col2 = st.columns(2)
+                with sub_col1:
+                    st.image(image_path if image_path else "https://placehold.co/300x200/2a2a2a/444444?text=No+Image",
+                             caption=f"{city_details_row['circuit_x']} Circuit Area" if image_path else "Image not available")
+                with sub_col2:
+                     st.markdown(f"""
+                        **Circuit:** {city_details_row['circuit_x']}
+                        ({city_details_row['country_x']})
+                        **Continent:** {city_details_row['continent']}
+                        **Lat/Lon:** {city_details_row['latitude']:.3f}, {city_details_row['longitude']:.3f}
+                        **🗓️ Months to Avoid:** {mmm_to_avoid}
+                        **Notes:** {city_details_row.get('notes', 'N/A')}
+                        """) # Use get for notes
+                st.markdown(f"**📝 Description:** {description}") # Description below image/details
+            else:
+                 st.write("Select a city to see details.")
     else:
-        st.warning("No geography data available to display city details.")
-        
-    st.subheader("Race Calendar Data")
+        st.info("ℹ️ Select a season with circuits to view city details.")
+
+    st.divider() # Add divider
+
+    # --- Other Data Tables ---
+    st.subheader("🗓️ Race Calendar Data")
     if not calendar_df.empty:
-        st.dataframe(calendar_df.head())
-        st.write(f"Loaded {len(calendar_df)} calendar entries.")
-        with st.expander("Show Full Calendar Data"):
+        with st.expander("📂 Show Race Calendar Data"):
             st.dataframe(calendar_df)
     else:
-        st.warning("Could not load calendar data.")
+        st.warning("⚠️ Could not load calendar data.")
 
-    st.subheader("Travel Logistics Data")
+    st.subheader("🚚 Travel Logistics Data")
     if not logistics_df.empty:
-        st.dataframe(logistics_df.head())
-        st.write(f"Loaded {len(logistics_df)} logistics entries.")
-        with st.expander("Show Full Logistics Data"):
+        with st.expander("📂 Show Travel Logistics Data"):
             st.dataframe(logistics_df)
     else:
-        st.warning("Could not load logistics data.")
+        st.warning("⚠️ Could not load logistics data.")
 
-    st.subheader("Training Regression Calendar Data")
+    st.subheader("⚙️ Training Regression Calendar Data")
     if not regression_df.empty:
-        st.dataframe(regression_df.head())
-        st.write(f"Loaded {len(regression_df)} regression calendar entries.")
-        with st.expander("Show Full Regression Calendar Data"):
+        with st.expander("📂 Show Regression Training Data"):
             st.dataframe(regression_df)
     else:
-        st.warning("Could not load regression calendar data.")
-
-    # Add more data exploration sections (e.g., for calendar.csv, constraints)
+        st.warning("⚠️ Could not load regression calendar data.")
 
 
+# --- Page 3: Regression Analysis ---
 with page3:
-    st.header("Regression Analysis (WIP)")
+    st.header("📈 Regression Analysis (WIP)")
     st.markdown("""
-    This section showcases insights derived from regression models. These models aim to estimate emissions
-    or other key metrics based on travel distances and other factors.
+    Analyze estimated emissions or other metrics based on travel distances and factors.
+    *(Note: This section relies on ongoing regression model development.)*
     """)
 
-    # --- Load Data ---
     calendar_df = get_table("fone_calendar")
     logistics_df = get_table("travel_logistic")
 
     if not calendar_df.empty and not logistics_df.empty:
-        # Merge calendar and logistics data on outbound route (foreign key)
-        merged_df = calendar_df.merge(
-            logistics_df,
-            left_on="outbound_route",
-            right_on="id",
-            how="inner"
-        )
-
-        # Add a selector for the season
+        merged_df = calendar_df.merge(logistics_df, left_on="outbound_route", right_on="id", how="inner")
         seasons = sorted(merged_df['year'].unique(), reverse=True)
-        selected_season = st.selectbox("Select a Season:", options=seasons, key="season_selector_2")
+        selected_season_reg = st.selectbox("🗓️ Select Season:", options=seasons, key="season_selector_reg") # Unique key
+        season_data = merged_df[merged_df['year'] == selected_season_reg]
 
-        # Filter data for the selected season
-        season_data = merged_df[merged_df['year'] == selected_season]
-
-        # Calculate top 5 distances for the selected season
         if "from_circuit" in season_data.columns and "to_circuit" in season_data.columns:
-            top_air_distances = (
-                season_data.nlargest(5, "distance_km")[["codes", "from_circuit", "to_circuit", "distance_km"]]
-                .sort_values(by="distance_km", ascending=False)
-            )
-
-            top_truck_distances = (
-                season_data.nlargest(5, "truck_distance_km")[["codes", "from_circuit", "to_circuit", "truck_distance_km"]]
-                .sort_values(by="truck_distance_km", ascending=False)
-            )
+            top_air_distances = season_data.nlargest(5, "distance_km")[["codes", "from_circuit", "to_circuit", "distance_km"]].sort_values(by="distance_km", ascending=False)
+            top_truck_distances = season_data.nlargest(5, "truck_distance_km")[["codes", "from_circuit", "to_circuit", "truck_distance_km"]].sort_values(by="truck_distance_km", ascending=False)
         else:
             top_air_distances = pd.DataFrame()
             top_truck_distances = pd.DataFrame()
 
-        # --- Visualization ---
-        st.subheader(f"Top Distances for {selected_season}")
+        st.subheader(f"✈️ Top Air vs. 🚚 Truck Distances ({selected_season_reg})")
         col1, col2 = st.columns(2)
-
         with col1:
-            st.subheader("Top 5 Air Distances")
+            st.write("**Top 5 Air Distances (km)**")
             if not top_air_distances.empty:
-                st.bar_chart(
-                    top_air_distances.set_index(["codes"])["distance_km"]
-                )
+                st.dataframe(top_air_distances.set_index("codes")) # Show table for detail
+                # Optional: Bar chart
+                # st.bar_chart(top_air_distances.set_index("codes")["distance_km"])
             else:
-                st.warning("No air distance data available for the selected season.")
-
+                st.info("ℹ️ No air distance data available.")
         with col2:
-            st.subheader("Top 5 Truck Distances")
+            st.write("**Top 5 Truck Distances (km)**")
             if not top_truck_distances.empty:
-                st.bar_chart(
-                    top_truck_distances.set_index(["codes"])["truck_distance_km"]
-                )
+                 st.dataframe(top_truck_distances.set_index("codes")) # Show table for detail
+                 # Optional: Bar chart
+                 # st.bar_chart(top_truck_distances.set_index("codes")["truck_distance_km"])
             else:
-                st.warning("No truck distance data available for the selected season.")
+                st.info("ℹ️ No truck distance data available.")
     else:
-        st.warning("Could not load calendar or logistics data.")
+        st.warning("⚠️ Could not load calendar or logistics data for analysis.")
 
-    # --- Placeholder for Regression Analysis ---
-    st.subheader("Regression Model Insights")
-    st.image("https://placehold.co/800x300/cccccc/FFFFFF?text=Regression+Results+Placeholder", caption="Placeholder: Regression model results and insights")
+    st.divider()
+    st.subheader("🔬 Regression Model Insights (Placeholder)")
+    st.info("🚧 Regression model integration is currently work in progress.")
+    # st.image("https://placehold.co/800x300/2a2a2a/444444?text=Regression+Results+Placeholder", caption="Placeholder: Regression model results and insights")
 
+
+# --- Page 4: Clustering Analysis ---
 with page4:
-    st.header("Clustering Analysis")
+    st.header("🧩 Clustering Analysis")
     st.markdown("""
-    This section presents insights from clustering analysis, such as grouping races geographically
-    to minimize travel distances and emissions.
+    Perform K-Means clustering on selected circuits to identify geographical groups.
+    This involves building a circuit list, normalizing coordinates, finding the optimal 'K' (number of clusters),
+    and finally performing the clusterization.
     """)
 
+    # --- Initialize Session State for Clustering Steps ---
+    cluster_step_keys = {
+        "normalize_step_done": False, "normalized_coords": None, "scale_coords_verbose": "",
+        "evaluate_step_done": False, "optimal_k": None, "chosen_k_verbose": "", "elbow_plot_fig": None,
+        "clusterization_step_done": False, "clustered_data": None, "clusterization_verbose": "", "cluster_plot_fig": None,
+        "builder_circuit_list_ids": [], "builder_geo_df_to_cluster": pd.DataFrame()
+    }
+    for key, default in cluster_step_keys.items():
+        if key not in st.session_state:
+            st.session_state[key] = default
+
     # --- Calendar Circuit Builder ---
-    st.subheader("Calendar Circuit Builder")
+    st.subheader("🛠️ Calendar Circuit Builder")
+    st.write("Select or build the list of circuits to be clustered.")
 
-    # Load data
-    calendar_df = get_table("fone_calendar")
-    geo_df = get_table("fone_geography")
+    calendar_df_clust = get_table("fone_calendar") # Use different var names if needed
+    geo_df_clust = get_table("fone_geography")
 
-    if not calendar_df.empty and not geo_df.empty:
-        # Merge calendar and geography data
-        merged_df = calendar_df.merge(geo_df, left_on="geo_id", right_on="id", how="inner")
-        col1, col2, col3 = st.columns([1,2,2])
+    if not calendar_df_clust.empty and not geo_df_clust.empty:
+        col_build1, col_build2 = st.columns([1, 2]) # Adjust layout
 
-        with col1:
-            st.markdown("**Build your Calendar**")
-            
-            # Step 1: Select starting list type
+        with col_build1:
+            st.markdown("**1. Choose Starting Point**")
             start_type = st.radio(
-                "",
-                ["From Past Calendar", "Random Selection", "Empty List"],
+                "Start with:",
+                ["Past Calendar", "Random Selection", "Empty List"],
+                key="clust_start_type", # Unique key
                 horizontal=False,
             )
 
-            if start_type == "From Past Calendar":
-                # Select season
-                seasons = sorted(calendar_df['year'].unique(), reverse=True)
-                selected_season = st.selectbox("Select a Season:", options=seasons, key="season_selector_3")
-                starting_list, captured_output_text = execute_and_capture(get_historical_cities, year=int(selected_season), info=True, verbose=True)
+            starting_list_ids = [] # List to hold IDs
+            if start_type == "Past Calendar":
+                seasons = sorted(calendar_df_clust['year'].unique(), reverse=True)
+                selected_season_clust = st.selectbox("Select Season:", options=seasons, key="clust_season_select")
+                # Fetch IDs directly
+                starting_list_df_temp, _ = execute_and_capture(get_historical_cities, year=int(selected_season_clust), info=True, verbose=False) # Don't need verbose here
+                if starting_list_df_temp is not None:
+                     starting_list_ids = starting_list_df_temp['geo_id'].tolist()
             elif start_type == "Random Selection":
-                # Random selection
-                size = st.number_input("Enter number of cities to select:", min_value=15, max_value=len(geo_df), value=15, step=1)
-                seed = st.number_input("Enter random seed:", value=42, step=1)
-                starting_list, captured_output_text = execute_and_capture(get_random_sample, size, info=True,seed=seed, verbose=True)
-                starting_list = starting_list.rename(columns={
-                    'id': 'geo_id',
-                    'code_6': 'code',
-                    'circuit_x': 'circuit',
-                    'city_x': 'city',
-                    'country_x': 'country',
-                    'latitude': 'latitude',
-                    'longitude': 'longitude',
-                    'first_gp_probability': 'first_gp_probability',
-                    'last_gp_probability': 'last_gp_probability'
-                })
-            else:
-                # Empty list
-                starting_list = pd.DataFrame( columns=['geo_id', 'code', 'circuit',
-                                                    'city', 'country', 'latitude', 
-                                                    'longitude','first_gp_probability',
-                                                    'last_gp_probability'])
+                size = st.number_input("Number of circuits:", min_value=15, max_value=len(geo_df_clust), value=15, step=1, key="clust_random_size")
+                seed_clust = st.number_input("Random seed:", value=SEED, step=1, key="clust_random_seed")
+                starting_list_df_temp, _ = execute_and_capture(get_random_sample, n=size, info=True, seed=seed_clust, verbose=False)
+                if starting_list_df_temp is not None:
+                     starting_list_ids = starting_list_df_temp['geo_id'].tolist()
+            else: # Empty List
+                starting_list_ids = []
 
-            # Step 2: Edit the list
-            remaining_cities = geo_df[~geo_df['id'].isin(starting_list['geo_id'])][['city_x', 'id']]
-            all_cities = geo_df[['city_x', 'id']]
-        
+        with col_build2:
+            st.markdown("**2. Edit Selection**")
+            circuit_options_clust = geo_df_clust.set_index('id')['circuit_x'].to_dict()
+            selected_ids_clust = st.multiselect(
+                "Selected Circuits (IDs):",
+                options=list(circuit_options_clust.keys()),
+                format_func=lambda x: f"{x}: {circuit_options_clust.get(x, 'Unknown')}",
+                default=starting_list_ids, # Use the list of IDs determined above
+                key="clust_multiselect"
+            )
 
-        with col2:
-            st.markdown("**Edit Cities**")
-            if start_type in ["From Past Calendar", "Random Selection"]:
-                cities_to_add = st.multiselect(
-                    "Select cities to add:",
-                    options=all_cities['city_x'],
-                    default=starting_list['city']
-                )
-            else:
-                cities_to_add = st.multiselect("Select cities to add:", options=all_cities['city_x'])
+        # --- Finalize Builder ---
+        finalize_builder_clicked = st.button("Confirm Circuit List for Clustering", key="finalize_builder_button", disabled=(len(selected_ids_clust) < 15))
 
-            if st.button("Update Selected Cities", key="update_cities"):
-                cities_rows = geo_df[geo_df['id'].isin(cities_to_add)]
-                st.success(f"Added {len(cities_to_add)} cities to the calendar.")
-                with col3:  
-                    # Create and show updated list of IDs after updating selected cities
-                    cities_rows = geo_df[geo_df['city_x'].isin(cities_to_add)]
-                    updated_ids = cities_rows['id'].tolist()  # Extract updated list of IDs
-                    st.write("Updated List of IDs:", updated_ids)
-            else:
-                updated_ids = starting_list['geo_id'].tolist()
+        if finalize_builder_clicked:
+             if len(selected_ids_clust) >= 15:
+                 st.session_state.builder_circuit_list_ids = selected_ids_clust
+                 # Prepare the specific DataFrame needed for clustering steps
+                 geo_df_to_cluster_temp = geo_df_clust[geo_df_clust['id'].isin(selected_ids_clust)][['id', 'city_x', 'latitude', 'longitude']].copy()
+                 geo_df_to_cluster_temp = geo_df_to_cluster_temp.rename(columns={'city_x': 'city', 'id': 'geo_id'})
+                 st.session_state.builder_geo_df_to_cluster = geo_df_to_cluster_temp
+                 st.success(f"✅ Circuit list confirmed with {len(selected_ids_clust)} circuits.")
+                 # Reset clustering steps when list is confirmed
+                 st.session_state.normalize_step_done = False
+                 st.session_state.evaluate_step_done = False
+                 st.session_state.clusterization_step_done = False
+             else:
+                 st.error("❌ Please select at least 15 circuits.")
 
-    with st.expander("💻 Console Output"):
-        st.code(captured_output_text, language='text')  # Display captured output in the expander
-    
-    # --- Normalization Section ---
-    st.markdown("### 1. Normalize coordinates")
-    normalize_clicked = st.button("Normalize", key="normalize_button")
+        # Display the currently confirmed list
+        if not st.session_state.builder_geo_df_to_cluster.empty:
+             st.write("**Current List for Clustering:**")
+             st.dataframe(st.session_state.builder_geo_df_to_cluster[['geo_id', 'city']].reset_index(drop=True))
+        else:
+             st.info("ℹ️ Confirm a circuit list (min 15) to proceed.")
 
-    
-    geo_df_to_cluster = geo_df[geo_df['id'].isin(updated_ids)][['city_x', 'latitude', 'longitude']]
-    geo_df_to_cluster = geo_df_to_cluster.rename(columns={
-        'city_x': 'city',
-        'latitude': 'latitude',
-        'longitude': 'longitude'
-    })
-    
-    # --- Initialize Session State ---
-    if "normalize_step_done" not in st.session_state:
-        st.session_state.normalize_step_done = False
-        st.session_state.normalized_coords = None
-        st.session_state.scale_coords_verbose = ""
-
-    if "evaluate_step_done" not in st.session_state:
-        st.session_state.evaluate_step_done = False
-        st.session_state.optimal_k = None
-        st.session_state.chosen_k_verbose = ""
-        st.session_state.elbow_plot_fig = None # Store the figure object
-
-    if "clusterization_step_done" not in st.session_state:
-        st.session_state.clusterization_step_done = False
-        st.session_state.clustered_data = None
-        st.session_state.clusterization_verbose = ""
-
-    if normalize_clicked:
-        st.write("Normalizing coordinates...") # Provide immediate feedback
-        # Execute the normalization function
-        coords, scale_coords_verbose_output = execute_and_capture(
-            scale_coords,
-            geo_df_to_cluster, # Ensure this DataFrame is available
-            verbose=True
-        )
-
-        # Store results and status in session state
-        st.session_state.normalized_coords = coords
-        st.session_state.scale_coords_verbose = scale_coords_verbose_output
-        st.session_state.normalize_step_done = True
-
-        # Reset the subsequent step states if normalization is re-run
-        st.session_state.evaluate_step_done = False
-        st.session_state.optimal_k = None
-        st.session_state.chosen_k_verbose = ""
-        st.session_state.elbow_plot_fig = None
-        st.session_state.clusterization_step_done = False
-        st.session_state.clustered_data = None
-        st.session_state.clusterization_verbose = ""
-
-        st.success("Coordinates normalized successfully.")
-        # st.rerun() # Optional rerun
-
-    # Display normalization results if the step is marked as done
-    # Use the session state flag to control expansion persistence
-    if st.session_state.normalize_step_done:
-        st.success("Normalization Complete.") # Indicate status clearly
-        with st.expander("💻 Normalize Console Output", expanded=st.session_state.normalize_step_done): # <-- CHANGE HERE
-            st.code(st.session_state.scale_coords_verbose, language='text')
     else:
-        st.info("Click 'Normalize' to process coordinates.")
+        st.warning("⚠️ Could not load calendar or geography data for the builder.")
+
+    st.divider()
+
+    # --- Clustering Steps ---
+    st.subheader("🔄 Clustering Workflow")
+
+    # Get the DataFrame prepared by the builder
+    geo_df_to_cluster = st.session_state.builder_geo_df_to_cluster
+
+    # --- 1. Normalization ---
+    st.markdown("**Step 1: Normalize Coordinates**")
+    normalize_clicked = st.button("Normalize", key="normalize_button", disabled=geo_df_to_cluster.empty)
+
+    if normalize_clicked and not geo_df_to_cluster.empty:
+        st.write("⏳ Normalizing coordinates...")
+        coords, scale_coords_verbose_output = execute_and_capture(scale_coords, geo_df_to_cluster[['latitude', 'longitude']], verbose=True) # Pass only relevant columns
+
+        if coords is not None:
+            st.session_state.normalized_coords = coords
+            st.session_state.scale_coords_verbose = scale_coords_verbose_output
+            st.session_state.normalize_step_done = True
+            # Reset subsequent steps
+            st.session_state.evaluate_step_done = False
+            st.session_state.clusterization_step_done = False
+            st.success("✅ Coordinates normalized successfully.")
+        else:
+             st.error("❌ Normalization failed.")
+             st.session_state.normalize_step_done = False
+             st.session_state.scale_coords_verbose = scale_coords_verbose_output # Show error output
 
 
-    # --- Evaluation Section ---
-    st.markdown("### 2. Evaluate number of clusters")
+    if st.session_state.normalize_step_done:
+        st.success("✅ Normalization Complete.")
+        with st.expander("💻 Normalize Console Output", expanded=st.session_state.normalize_step_done):
+            st.code(st.session_state.scale_coords_verbose, language='text')
+    elif not geo_df_to_cluster.empty:
+        st.info("ℹ️ Click 'Normalize' to process coordinates for the confirmed list.")
 
-    # Disable the button if the prerequisite step (normalization) isn't done
-    evaluate_clicked = st.button(
-        "Evaluate Number of Clusters",
-        key="evaluate_clusters_button",
-        disabled=not st.session_state.normalize_step_done # Disable if coords aren't ready
-    )
+    # --- 2. Evaluation (Elbow Method) ---
+    st.markdown("**Step 2: Evaluate Number of Clusters (Elbow Method)**")
+    evaluate_clicked = st.button("Find Optimal K", key="evaluate_clusters_button", disabled=not st.session_state.normalize_step_done)
 
     if evaluate_clicked:
-        # Ensure we proceed only if normalization is actually done
         if st.session_state.normalize_step_done and st.session_state.normalized_coords is not None:
-            st.write("Evaluating Optimal K...") # Provide immediate feedback
-            # Execute the evaluation function using stored coordinates
+            st.write("⏳ Evaluating Optimal K...")
             # Assuming kmeans_plot_elbow returns (optimal_k, fig, verbose_output)
-            optimal_k_result, chosen_k_verbose_output = execute_and_capture(
+            eval_results, chosen_k_verbose_output = execute_and_capture(
                 kmeans_plot_elbow,
-                st.session_state.normalized_coords, # Use stored coords
-                max_clusters=len(geo_df_to_cluster), # Ensure this is available
-                random_state=SEED, # Ensure SEED is available
+                st.session_state.normalized_coords,
+                max_clusters=min(len(geo_df_to_cluster), 15), # Limit max clusters reasonable amount
+                random_state=SEED,
                 verbose=True,
-                img_verbose=True # Assuming this controls figure return
+                img_verbose=True
             )
 
-            # Store results and status in session state
-            st.session_state.optimal_k = optimal_k_result
-            st.session_state.elbow_plot_fig = optimal_k_result[1] # Store the figure
-            st.session_state.chosen_k_verbose = chosen_k_verbose_output
-            st.session_state.evaluate_step_done = True
-
-            # Reset the clusterization step state if evaluation is re-run
-            st.session_state.clusterization_step_done = False
-            st.session_state.clustered_data = None
-            st.session_state.clusterization_verbose = ""
-
-            st.success(f"Optimal number of clusters determined: {st.session_state.optimal_k[0]}.")
-            # st.rerun() # Optional rerun
-        elif not st.session_state.normalize_step_done:
-            st.error("Please run the 'Normalize' step first.")
+            if eval_results:
+                optimal_k_result, elbow_fig = eval_results # Unpack
+                st.session_state.optimal_k = optimal_k_result
+                st.session_state.elbow_plot_fig = elbow_fig
+                st.session_state.chosen_k_verbose = chosen_k_verbose_output
+                st.session_state.evaluate_step_done = True
+                # Reset clusterization step
+                st.session_state.clusterization_step_done = False
+                st.success(f"✅ Optimal number of clusters determined: **{st.session_state.optimal_k}**.")
+            else:
+                 st.error("❌ Failed to evaluate optimal K.")
+                 st.session_state.evaluate_step_done = False
+                 st.session_state.chosen_k_verbose = chosen_k_verbose_output # Show error output
         else:
-            st.error("Normalized coordinates are missing. Please re-run 'Normalize'.")
+            st.error("❌ Normalization must be completed first.")
 
 
-    # Display evaluation results if the step is marked as done
-    # Use the session state flag to control expansion persistence
     if st.session_state.evaluate_step_done:
-        st.success(f"Evaluation Complete. Optimal K = {st.session_state.optimal_k[0]}") # Indicate status
-        # Display the stored elbow plot
+        st.success(f"✅ Evaluation Complete. Optimal K = **{st.session_state.optimal_k}**")
         if st.session_state.elbow_plot_fig:
-            col1, col2, col3 = st.columns([1, 2, 1])
-            with col2:
-                st.pyplot(st.session_state.elbow_plot_fig)
-        with st.expander("💻 Evaluate Console Output", expanded=st.session_state.evaluate_step_done): # <-- CHANGE HERE
+             col_elbow1, col_elbow2, col_elbow3 = st.columns([1, 2, 1]) # Center the plot
+             with col_elbow2:
+                 st.pyplot(st.session_state.elbow_plot_fig)
+        with st.expander("💻 Evaluate Console Output", expanded=st.session_state.evaluate_step_done):
             st.code(st.session_state.chosen_k_verbose, language='text')
     elif st.session_state.normalize_step_done:
-        st.info("Click 'Evaluate Number of Clusters' to determine optimal K.")
+        st.info("ℹ️ Click 'Find Optimal K' to run the elbow method.")
 
-    # --- Clusterization Section ---
-    st.markdown("### 3. Perform Clusterization")
-
-    # Disable the button if the prerequisite step (evaluation) isn't done
-    clusterize_clicked = st.button(
-        "Perform Clusterization",
-        key="perform_clusterization_button",
-        disabled=not st.session_state.evaluate_step_done # Disable if optimal K isn't determined
-    )
+    # --- 3. Clusterization ---
+    st.markdown("**Step 3: Perform Clusterization**")
+    clusterize_clicked = st.button("Cluster Circuits", key="perform_clusterization_button", disabled=not st.session_state.evaluate_step_done)
 
     if clusterize_clicked:
-        # Ensure we proceed only if evaluation is actually done
         if st.session_state.evaluate_step_done and st.session_state.optimal_k is not None and st.session_state.normalized_coords is not None:
-            st.write("Performing clusterization...") # Provide immediate feedback
-            # Execute the clusterization function using stored coordinates and optimal K
-            clustered_data_result, clusterization_verbose_output = execute_and_capture(
+            st.write("⏳ Performing clusterization...")
+            # Assuming clusterize_circuits returns (df_with_clusters, fig, verbose_output)
+            cluster_results, clusterization_verbose_output = execute_and_capture(
                 clusterize_circuits,
-                df = geo_df_to_cluster,
+                df=geo_df_to_cluster.copy(), # Pass a copy to avoid modifying state df
+                n_clusters=st.session_state.optimal_k, # Use determined optimal K
+                coords_normalized=st.session_state.normalized_coords, # Pass normalized coords
+                random_state=SEED,
                 verbose=True,
-                opt_k_img_verbose=True,
-                fig_verbose=True,
+                opt_k_img_verbose=False, # Already done
+                fig_verbose=True # Get the cluster plot
             )
 
-            # Store results and status in session state
-            st.session_state.clustered_data = clustered_data_result
-            st.session_state.clusterization_verbose = clusterization_verbose_output
-            st.session_state.clusterization_step_done = True
-
-            st.success(f"Clusterization completed successfully. We have {len(clustered_data_result)} clusters.")
-            col1, col2, col3 = st.columns([1, 2, 1])
-            with col2:
-                st.plotly_chart(clustered_data_result[1])
-            st.rerun() # Optional rerun
-        elif not st.session_state.evaluate_step_done:
-            st.error("Please run the 'Evaluate' step first.")
+            if cluster_results:
+                clustered_data_result, cluster_plot_fig = cluster_results # Unpack
+                st.session_state.clustered_data = clustered_data_result
+                st.session_state.cluster_plot_fig = cluster_plot_fig
+                st.session_state.clusterization_verbose = clusterization_verbose_output
+                st.session_state.clusterization_step_done = True
+                st.success(f"✅ Clusterization completed successfully into **{st.session_state.optimal_k}** clusters.")
+            else:
+                 st.error("❌ Clusterization failed.")
+                 st.session_state.clusterization_step_done = False
+                 st.session_state.clusterization_verbose = clusterization_verbose_output # Show error output
         else:
-            st.error("Required data (Optimal K or Coordinates) is missing. Please re-run previous steps.")
+            st.error("❌ Evaluation step must be completed first.")
 
 
-    # Display clusterization results if the step is marked as done
-    # Use the session state flag to control expansion persistence
     if st.session_state.clusterization_step_done:
-        st.success("Clusterization Complete.") # Indicate status
-        # Display clustered data (example)
+        st.success("✅ Clusterization Complete.")
+        if st.session_state.cluster_plot_fig:
+             st.plotly_chart(st.session_state.cluster_plot_fig, use_container_width=True) # Display cluster plot
         if st.session_state.clustered_data is not None:
-            st.write("Clustered Data :")
-            st.dataframe(st.session_state.clustered_data[0]) # Display head or summary
-        with st.expander("💻 Clusterization Console Output", expanded=st.session_state.clusterization_step_done): # <-- CHANGE HERE
+             st.write("**Clustered Data Sample:**")
+             st.dataframe(st.session_state.clustered_data.head())
+        with st.expander("💻 Clusterization Console Output", expanded=st.session_state.clusterization_step_done):
             st.code(st.session_state.clusterization_verbose, language='text')
     elif st.session_state.evaluate_step_done:
-        st.info("Click 'Perform Clusterization' to clusterize the data.")
+        st.info("ℹ️ Click 'Cluster Circuits' to perform the final clustering.")
 
-# Assuming page5 corresponds to this tab in your st.tabs setup
+
+# --- Page 5: GA Optimization ---
 with page5:
-    st.header("Genetic Algorithm Optimization & Results")
+    st.header("⚙️ Genetic Algorithm Optimization")
     st.markdown("""
-    Configure and run the Genetic Algorithm step-by-step.
+    Configure and run the Genetic Algorithm step-by-step using the selected circuits and parameters.
     View the results, including the proposed optimized calendar sequence and its fitness value.
     """)
 
     # --- Initialize Session State for GA Steps ---
-    default_ga_keys = {
+    ga_step_keys = {
         "scenario_prepared": False, "circuits_df_scenario": None, "prepare_scenario_verbose": "",
-        "params_set": False, "ga_params": None, "set_params_verbose": "", # verbose might not be needed here
+        "params_set": False, "ga_params": None, "set_params_verbose": "",
         "toolbox_setup": False, "toolbox": None, "stats": None, "hof": None, "deap_toolbox_verbose": "",
         "ga_run_complete": False, "final_population": None, "logbook": None,
-        "best_individual": None, "best_fitness": None, "run_ga_verbose": ""
+        "best_individual": None, "best_fitness": None, "run_ga_verbose": "", "ga_fitness_plot_fig": None
     }
-    for key, default_value in default_ga_keys.items():
+    for key, default_value in ga_step_keys.items():
         if key not in st.session_state:
             st.session_state[key] = default_value
 
@@ -802,324 +751,295 @@ with page5:
     st.markdown("### 1. Prepare Scenario")
     st.write("Select the source for the list of circuits to optimize.")
 
-    # --- Scenario Configuration UI ---
-    run_type = st.radio(
-        "Select Scenario Source:",
-        ["Optimize Historical Season", "Optimize Random Sample", "Optimize Custom List"],
-        key="ga_run_type", # Use a unique key
-        horizontal=True,
-    )
+    col_scen1, col_scen2 = st.columns([1, 2]) # Layout columns
 
-    scenario_input_valid = False
-    prepare_args = {} # Dictionary to hold arguments for prepare_scenario
-
-    if run_type == "Optimize Historical Season":
-        season_year = st.number_input("Enter Season Year (2000-2025):", min_value=2000, max_value=2025, value=2024, step=1, key="ga_season_year")
-        prepare_args = {"from_season": int(season_year), "verbose": True}
-        scenario_input_valid = True
-    elif run_type == "Optimize Random Sample":
-        sample_size = st.number_input("Enter Sample Size (min 15):", min_value=15, value=20, step=1, key="ga_sample_size")
-        prepare_args = {"from_sample": int(sample_size), "verbose": True}
-        scenario_input_valid = True
-    elif run_type == "Optimize Custom List":
-        # Fetch all available circuits for multiselect
-        all_geo_df = get_table("fone_geography") # Assuming get_table is efficient or cached
-        if not all_geo_df.empty:
-            circuit_options = all_geo_df.set_index('id')['circuit_x'].to_dict() # Map ID to Name
-            selected_ids = st.multiselect(
-                "Select at least 15 Circuit IDs:",
-                options=list(circuit_options.keys()),
-                format_func=lambda x: f"{x}: {circuit_options.get(x, 'Unknown')}", # Show ID and Name
-                key="ga_custom_ids"
-            )
-            if len(selected_ids) >= 15:
-                prepare_args = {"from_input": selected_ids, "verbose": True}
-                scenario_input_valid = True
-            else:
-                st.warning("Please select at least 15 circuits.")
-        else:
-            st.error("Could not load geography data to populate custom list.")
-
-
-    prepare_clicked = st.button("Prepare Scenario", key="prepare_scenario_button", disabled=not scenario_input_valid)
-
-    if prepare_clicked and scenario_input_valid:
-        st.write("Preparing scenario...")
-        # prepare_scenario returns only the DataFrame according to run_ga.py
-        circuits_df, verbose_output = execute_and_capture(
-            prepare_scenario,
-            **prepare_args # Unpack arguments
+    with col_scen1:
+        run_type = st.radio(
+            "Select Scenario Source:",
+            ["Historical Season", "Random Sample", "Custom List"], # Simplified names
+            key="ga_run_type",
+            horizontal=False, # Vertical might be better here
         )
 
-        if circuits_df is not None and not circuits_df.empty:
-            st.session_state.circuits_df_scenario = circuits_df
-            st.session_state.prepare_scenario_verbose = verbose_output
-            st.session_state.scenario_prepared = True
-            # Reset subsequent steps
-            st.session_state.params_set = False
-            st.session_state.toolbox_setup = False
-            st.session_state.ga_run_complete = False
-            st.success("Scenario prepared successfully.")
-        else:
-            st.error("Failed to prepare scenario. Check console output.")
-            st.session_state.scenario_prepared = False
-            st.session_state.prepare_scenario_verbose = verbose_output # Show error output
+        scenario_input_valid = False
+        prepare_args = {}
 
-        # st.rerun() # Optional
+        if run_type == "Historical Season":
+            season_year = st.number_input("Season Year (2000-2025):", min_value=2000, max_value=2025, value=2024, step=1, key="ga_season_year")
+            prepare_args = {"from_season": int(season_year), "verbose": True}
+            scenario_input_valid = True
+        elif run_type == "Random Sample":
+            sample_size = st.number_input("Sample Size (min 15):", min_value=15, value=20, step=1, key="ga_sample_size")
+            prepare_args = {"from_sample": int(sample_size), "verbose": True}
+            scenario_input_valid = True
+        elif run_type == "Custom List":
+            all_geo_df_ga = get_table("fone_geography")
+            if not all_geo_df_ga.empty:
+                circuit_options_ga = all_geo_df_ga.set_index('id')['circuit_x'].to_dict()
+                # Use text area for easier pasting, then parse
+                id_list_str_ga = st.text_area("Enter Circuit IDs (comma-separated, min 15):", "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15", key="ga_custom_ids_text", height=100)
+                try:
+                    selected_ids_ga = [int(x.strip()) for x in id_list_str_ga.split(',') if x.strip()]
+                    if len(selected_ids_ga) >= 15:
+                        prepare_args = {"from_input": selected_ids_ga, "verbose": True}
+                        scenario_input_valid = True
+                    else:
+                        st.warning("⚠️ Please enter at least 15 circuit IDs.")
+                except ValueError:
+                    st.error("❌ Invalid input. Please enter comma-separated numbers.")
+            else:
+                st.error("❌ Could not load geography data for custom list.")
+
+    with col_scen2:
+        st.write(" ") # Spacer
+        st.write(" ") # Spacer
+        prepare_clicked = st.button("✅ Prepare Scenario", key="prepare_scenario_button", disabled=not scenario_input_valid, use_container_width=True)
+
+        if prepare_clicked and scenario_input_valid:
+            st.write("⏳ Preparing scenario...")
+            circuits_df, verbose_output = execute_and_capture(prepare_scenario, **prepare_args)
+
+            if circuits_df is not None and not circuits_df.empty:
+                st.session_state.circuits_df_scenario = circuits_df
+                st.session_state.prepare_scenario_verbose = verbose_output
+                st.session_state.scenario_prepared = True
+                # Reset subsequent steps
+                st.session_state.params_set = False
+                st.session_state.toolbox_setup = False
+                st.session_state.ga_run_complete = False
+                st.success("✅ Scenario prepared successfully.")
+            else:
+                st.error("❌ Failed to prepare scenario.")
+                st.session_state.scenario_prepared = False
+                st.session_state.prepare_scenario_verbose = verbose_output
 
     if st.session_state.scenario_prepared:
-        st.success("Scenario Prepared.")
-        st.write("Circuit List for Optimization:")
-        st.dataframe(st.session_state.circuits_df_scenario[['circuit_name']].reset_index(drop=True)) # Show just names
-        with st.expander("💻 Prepare Scenario Console Output", expanded=st.session_state.scenario_prepared):
+        st.success("✅ Scenario Prepared.")
+        st.write("**Circuit List for Optimization:**")
+        st.dataframe(st.session_state.circuits_df_scenario[['circuit_name']].reset_index(drop=True), height=200) # Limit height
+        with st.expander("💻 Prepare Scenario Console Output", expanded=False): # Keep collapsed by default
             st.code(st.session_state.prepare_scenario_verbose, language='text')
     elif scenario_input_valid:
-         st.info("Click 'Prepare Scenario' to load circuit data.")
+         st.info("ℹ️ Click 'Prepare Scenario' to load circuit data.")
 
+    st.divider()
 
     # --- 2. Set Parameters ---
     st.markdown("### 2. Set Genetic Algorithm Parameters")
 
-    # Button to load defaults
-    load_defaults_clicked = st.button("Load Default Parameters", key="load_defaults_button")
-    if load_defaults_clicked:
-         st.session_state.ga_params = set_default_params({}) # Start with empty dict
-         st.session_state.params_set = True
-         # Reset subsequent steps
-         st.session_state.toolbox_setup = False
-         st.session_state.ga_run_complete = False
-         st.success("Default parameters loaded.")
-         # st.rerun()
+    col_param1, col_param2 = st.columns(2)
+
+    with col_param1:
+        load_defaults_clicked = st.button("⚙️ Load Default Parameters", key="load_defaults_button", use_container_width=True)
+        if load_defaults_clicked:
+             st.session_state.ga_params = set_default_params({})
+             st.session_state.params_set = True
+             st.session_state.toolbox_setup = False
+             st.session_state.ga_run_complete = False
+             st.success("✅ Default parameters loaded.")
 
     if st.session_state.params_set:
-        st.success("Parameters Loaded/Set.")
-        st.write("Current Parameters (Editable below):")
-        # Display current params (non-editable view)
-        st.json(st.session_state.ga_params)
+        with col_param2:
+             st.success("✅ Parameters Loaded/Set.")
 
-        st.write("Modify Parameters:")
-        # --- Parameter Editing UI ---
-        # Use columns for better layout
-        col_p1, col_p2 = st.columns(2)
-        current_params = st.session_state.ga_params.copy() # Work on a copy
+        st.write("**Current Parameters (Editable below):**")
+        with st.expander("Show/Edit Parameters", expanded=False): # Keep collapsed by default
+            current_params = st.session_state.ga_params.copy()
+            col_p1, col_p2 = st.columns(2)
+            with col_p1:
+                current_params["POPULATION_SIZE"] = st.number_input("Population Size", min_value=10, max_value=1000, value=current_params["POPULATION_SIZE"], step=10, key="pop_size")
+                current_params["NUM_GENERATIONS"] = st.number_input("Number of Generations", min_value=5, max_value=1000, value=current_params["NUM_GENERATIONS"], step=5, key="num_gen")
+                current_params["CROSSOVER_PROB"] = st.slider("Crossover Probability (cxpb)", min_value=0.0, max_value=1.0, value=current_params["CROSSOVER_PROB"], step=0.05, key="cxpb")
+                current_params["REGRESSION"] = st.checkbox("📈 Use Regression for Fitness", value=current_params["REGRESSION"], key="use_regr")
 
-        with col_p1:
-            current_params["POPULATION_SIZE"] = st.number_input(
-                "Population Size", min_value=10, max_value=1000,
-                value=current_params["POPULATION_SIZE"], step=10, key="pop_size"
-            )
-            current_params["NUM_GENERATIONS"] = st.number_input(
-                "Number of Generations", min_value=5, max_value=1000,
-                value=current_params["NUM_GENERATIONS"], step=5, key="num_gen"
-            )
-            current_params["CROSSOVER_PROB"] = st.slider(
-                "Crossover Probability (cxpb)", min_value=0.0, max_value=1.0,
-                value=current_params["CROSSOVER_PROB"], step=0.05, key="cxpb"
-            )
+            with col_p2:
+                 current_params["MUTATION_PROB"] = st.slider("Mutation Probability (mutpb)", min_value=0.0, max_value=1.0, value=current_params["MUTATION_PROB"], step=0.05, key="mutpb")
+                 current_params["TOURNAMENT_SIZE"] = st.number_input("Tournament Size (Selection)", min_value=2, max_value=20, value=current_params["TOURNAMENT_SIZE"], step=1, key="tourn_size")
+                 current_params["CLUSTERS"] = st.checkbox("🧩 Use Clusters in Fitness", value=current_params["CLUSTERS"], key="use_clust")
 
-        with col_p2:
-             current_params["MUTATION_PROB"] = st.slider(
-                "Mutation Probability (mutpb)", min_value=0.0, max_value=1.0,
-                value=current_params["MUTATION_PROB"], step=0.05, key="mutpb"
-            )
-             current_params["TOURNAMENT_SIZE"] = st.number_input(
-                 "Tournament Size (Selection)", min_value=2, max_value=20,
-                 value=current_params["TOURNAMENT_SIZE"], step=1, key="tourn_size"
-             )
-             # Add toggles for boolean flags if needed
-             current_params["REGRESSION"] = st.checkbox("Use Regression for Fitness", value=current_params["REGRESSION"], key="use_regr")
-             current_params["CLUSTERS"] = st.checkbox("Use Clusters in Fitness", value=current_params["CLUSTERS"], key="use_clust")
-
-
-        update_params_clicked = st.button("Update Parameters", key="update_params_button")
-        if update_params_clicked:
-            st.session_state.ga_params = current_params # Update state with modified values
-            # Reset subsequent steps
-            st.session_state.toolbox_setup = False
-            st.session_state.ga_run_complete = False
-            st.success("Parameters updated.")
-            # st.rerun() # Rerun to reflect changes immediately if needed
+            update_params_clicked = st.button("💾 Update Parameters", key="update_params_button")
+            if update_params_clicked:
+                st.session_state.ga_params = current_params
+                st.session_state.toolbox_setup = False
+                st.session_state.ga_run_complete = False
+                st.success("✅ Parameters updated.")
 
     else:
-        st.info("Click 'Load Default Parameters' to initialize.")
+        st.info("ℹ️ Click 'Load Default Parameters' to initialize.")
 
+    st.divider()
 
     # --- 3. Setup DEAP Toolbox ---
     st.markdown("### 3. Setup DEAP Toolbox")
     setup_toolbox_clicked = st.button(
-        "Setup DEAP Toolbox",
+        "🛠️ Setup DEAP Toolbox",
         key="setup_toolbox_button",
         disabled=not (st.session_state.scenario_prepared and st.session_state.params_set)
     )
 
     if setup_toolbox_clicked:
         if st.session_state.scenario_prepared and st.session_state.params_set:
-            st.write("Setting up DEAP toolbox...")
-            # Ensure the fitness function is available
+            st.write("⏳ Setting up DEAP toolbox...")
             fitness_func = genetic_ops.calculate_fitness
-
-            # Call deap_toolbox and capture output
             toolbox_results, verbose_output = execute_and_capture(
                 deap_toolbox,
                 circuits_df_scenario=st.session_state.circuits_df_scenario,
                 fitness_function=fitness_func,
                 params=st.session_state.ga_params,
-                seed=st.session_state.ga_params.get("RANDOM_SEED", SEED), # Use seed from params or default
-                verbose=True # Capture verbose output
+                seed=st.session_state.ga_params.get("RANDOM_SEED", SEED),
+                verbose=True
             )
 
             if toolbox_results:
-                toolbox, stats, hof = toolbox_results # Unpack results
+                toolbox, stats, hof = toolbox_results
                 st.session_state.toolbox = toolbox
                 st.session_state.stats = stats
                 st.session_state.hof = hof
                 st.session_state.deap_toolbox_verbose = verbose_output
                 st.session_state.toolbox_setup = True
-                # Reset GA run step
                 st.session_state.ga_run_complete = False
-                st.success("DEAP Toolbox setup complete.")
+                st.success("✅ DEAP Toolbox setup complete.")
             else:
-                 st.error("Failed to set up DEAP toolbox.")
+                 st.error("❌ Failed to set up DEAP toolbox.")
                  st.session_state.toolbox_setup = False
-                 st.session_state.deap_toolbox_verbose = verbose_output # Show error output
+                 st.session_state.deap_toolbox_verbose = verbose_output
 
-            # st.rerun() # Optional
         else:
-            st.error("Scenario must be prepared and parameters set before setting up the toolbox.")
+            st.error("❌ Scenario must be prepared and parameters set first.")
 
     if st.session_state.toolbox_setup:
-        st.success("DEAP Toolbox Ready.")
-        with st.expander("💻 DEAP Toolbox Setup Console Output", expanded=st.session_state.toolbox_setup):
+        st.success("✅ DEAP Toolbox Ready.")
+        with st.expander("💻 DEAP Toolbox Setup Console Output", expanded=False): # Keep collapsed
             st.code(st.session_state.deap_toolbox_verbose, language='text')
     elif st.session_state.scenario_prepared and st.session_state.params_set:
-         st.info("Click 'Setup DEAP Toolbox' to initialize.")
+         st.info("ℹ️ Click 'Setup DEAP Toolbox' to initialize.")
 
+    st.divider()
 
     # --- 4. Run Genetic Algorithm ---
     st.markdown("### 4. Run Genetic Algorithm")
     run_ga_clicked = st.button(
-        "Run Genetic Algorithm",
+        "🚀 Run Genetic Algorithm",
         key="run_ga_streamlit_button",
         disabled=not st.session_state.toolbox_setup
     )
 
     if run_ga_clicked:
         if st.session_state.toolbox_setup:
-            st.write("Running Genetic Algorithm... Please wait.")
-            with st.spinner('GA is evolving... This might take a while!'):
-                # Call run_genetic_algorithm and capture output
+            st.write("⏳ Running Genetic Algorithm... Please wait.")
+            with st.spinner('🧬 GA is evolving... This might take a while!'):
                 ga_results, verbose_output = execute_and_capture(
                     run_genetic_algorithm,
                     toolbox=st.session_state.toolbox,
                     stats=st.session_state.stats,
                     hof=st.session_state.hof,
                     params=st.session_state.ga_params,
-                    verbose=True # Capture verbose output
+                    verbose=True
                 )
 
             if ga_results:
-                pop, log, best_ind, best_fit = ga_results # Unpack
+                pop, log, best_ind, best_fit = ga_results
                 st.session_state.final_population = pop
                 st.session_state.logbook = log
                 st.session_state.best_individual = best_ind
                 st.session_state.best_fitness = best_fit
                 st.session_state.run_ga_verbose = verbose_output
                 st.session_state.ga_run_complete = True
-                st.success("Genetic Algorithm finished successfully!")
-            else:
-                st.error("Genetic Algorithm execution failed.")
-                st.session_state.ga_run_complete = False
-                st.session_state.run_ga_verbose = verbose_output # Show error output
+                st.success("🏁 Genetic Algorithm finished successfully!")
 
-            # st.rerun() # Optional
+                # --- Generate Plot Figure ---
+                try:
+                    logbook = st.session_state.logbook
+                    gen = logbook.select("gen")
+                    min_fitness = logbook.select("min")
+                    avg_fitness = logbook.select("avg")
+                    fig, ax1 = plt.subplots(figsize=(10, 5))
+                    # Use F1 colors
+                    line1 = ax1.plot(gen, min_fitness, color='#FF1801', linestyle='-', marker='o', markersize=4, label="Minimum Fitness (Best)")
+                    line2 = ax1.plot(gen, avg_fitness, color='#888888', linestyle='--', label="Average Fitness")
+                    ax1.set_xlabel("Generation", fontsize=12)
+                    ax1.set_ylabel("Fitness Score", color="white", fontsize=12)
+                    ax1.tick_params(axis='y', labelcolor="white")
+                    ax1.tick_params(axis='x', labelcolor="white")
+                    ax1.grid(True, linestyle='--', alpha=0.3)
+                    ax1.set_facecolor('#2a2a2a') # Match background
+                    fig.patch.set_facecolor('#1E1E1E') # Match body background
+                    ax1.spines['top'].set_visible(False)
+                    ax1.spines['right'].set_visible(False)
+                    ax1.spines['bottom'].set_color('#555555')
+                    ax1.spines['left'].set_color('#555555')
+                    lns = line1 + line2
+                    labs = [l.get_label() for l in lns]
+                    ax1.legend(lns, labs, loc="upper right", facecolor='#333333', edgecolor='#555555', labelcolor='white')
+                    plt.title("Fitness over Generations", color='white', fontsize=14, fontweight='bold')
+                    st.session_state.ga_fitness_plot_fig = fig # Store the figure
+                except Exception as plot_err:
+                     st.warning(f"⚠️ Could not generate fitness logbook plot: {plot_err}")
+                     st.session_state.ga_fitness_plot_fig = None
+                # --- End Plot Generation ---
+
+            else:
+                st.error("❌ Genetic Algorithm execution failed.")
+                st.session_state.ga_run_complete = False
+                st.session_state.run_ga_verbose = verbose_output
+
         else:
-            st.error("DEAP Toolbox must be set up before running the algorithm.")
+            st.error("❌ DEAP Toolbox must be set up before running the algorithm.")
 
     # --- Display Final GA Results ---
     st.divider()
-    st.subheader("Genetic Algorithm Final Results")
+    st.subheader("🏆 Genetic Algorithm Final Results")
 
     if st.session_state.ga_run_complete:
-        st.success("Optimization Complete!")
-        # Display captured output
-        with st.expander("💻 Full GA Run Console Output (stdout/stderr)", expanded=False):
+        st.success("🏁 Optimization Complete!")
+
+        col_res1, col_res2 = st.columns([1, 2]) # Layout for results
+
+        with col_res1:
+            if st.session_state.best_fitness is not None:
+                 fitness_type = "Est. Emissions (Units)" if st.session_state.ga_params.get("REGRESSION", False) else "Distance (km)"
+                 st.metric(label=f"🏆 Best Fitness ({fitness_type})", value=f"{st.session_state.best_fitness:,.2f}")
+
+            if st.session_state.best_individual is not None:
+                st.write("**📅 Optimized Sequence:**")
+                scenario_df = st.session_state.circuits_df_scenario
+                # Attempt to map codes back to full names
+                name_map = {}
+                if scenario_df is not None and 'circuit_name' in scenario_df.columns and 'circuit' in scenario_df.columns:
+                     # Assuming 'circuit_name' holds the codes/IDs and 'circuit' holds the full name
+                     name_map = scenario_df.set_index('circuit_name')['circuit'].to_dict()
+
+                sequence_df = pd.DataFrame({
+                    'Order': range(1, len(st.session_state.best_individual) + 1),
+                    'Circuit Code': st.session_state.best_individual
+                })
+                # Add mapped names if available
+                if name_map:
+                     sequence_df['Circuit Name'] = sequence_df['Circuit Code'].map(name_map).fillna("N/A")
+                     st.dataframe(sequence_df[['Order', 'Circuit Name', 'Circuit Code']], use_container_width=True, height=400) # Limit height
+                else:
+                     st.dataframe(sequence_df, use_container_width=True, height=400) # Limit height
+            else:
+                 st.warning("⚠️ Best sequence data not available.")
+
+        with col_res2:
+             st.write("**📉 Fitness Evolution:**")
+             if st.session_state.ga_fitness_plot_fig is not None:
+                  st.pyplot(st.session_state.ga_fitness_plot_fig)
+             else:
+                  st.info("ℹ️ Fitness plot not available.")
+
+        # Display console output collapsed by default
+        with st.expander("💻 Full GA Run Console Output", expanded=False):
             st.code(st.session_state.run_ga_verbose, language='text')
 
-        # Display parsed results
-        if st.session_state.best_fitness is not None:
-             # Determine fitness type based on params
-             fitness_type = "Estimated Emissions (Units)" if st.session_state.ga_params.get("REGRESSION", False) else "Distance (km)"
-             st.metric(label=f"Best Fitness ({fitness_type})", value=f"{st.session_state.best_fitness:,.2f}") # Format fitness
-
-        if st.session_state.best_individual is not None:
-            st.write("**Optimized Sequence (Circuit Codes/IDs):**")
-            # Map circuit codes/IDs back to names using the scenario DataFrame
-            scenario_df = st.session_state.circuits_df_scenario
-            if scenario_df is not None and 'circuit_name' in scenario_df.columns:
-                 # Assuming best_individual contains the codes/IDs that are in scenario_df['circuit_name']
-                 # Create a mapping if needed, or just display the codes/IDs
-                 sequence_df = pd.DataFrame({
-                     'Order': range(1, len(st.session_state.best_individual) + 1),
-                     'Circuit Code/ID': st.session_state.best_individual
-                 })
-                 # Optional: Add circuit names if mapping is easy
-                 # name_map = scenario_df.set_index('circuit_name')['Actual_Name_Column_If_Available'].to_dict()
-                 # sequence_df['Circuit Name'] = sequence_df['Circuit Code/ID'].map(name_map)
-                 st.dataframe(sequence_df, use_container_width=True)
-            else:
-                 st.warning("Could not map sequence to circuit names (scenario data missing). Displaying raw sequence.")
-                 st.write(st.session_state.best_individual)
-
-
-            # Plot Logbook statistics
-            if st.session_state.logbook is not None:
-                 try:
-                     logbook = st.session_state.logbook
-                     gen = logbook.select("gen")
-                     min_fitness = logbook.select("min")
-                     avg_fitness = logbook.select("avg")
-                     # max_fitness = logbook.select("max") # Max might not be interesting for minimization
-
-                     fig, ax1 = plt.subplots(figsize=(10, 5))
-
-                     line1 = ax1.plot(gen, min_fitness, "b-", label="Minimum Fitness")
-                     line2 = ax1.plot(gen, avg_fitness, "r-", label="Average Fitness")
-                     ax1.set_xlabel("Generation")
-                     ax1.set_ylabel("Fitness", color="black")
-                     ax1.tick_params(axis='y', labelcolor="black")
-
-                     # Add Std Dev if needed
-                     # std_fitness = logbook.select("std")
-                     # ax2 = ax1.twinx()
-                     # line3 = ax2.plot(gen, std_fitness, "g-", label="Standard Deviation")
-                     # ax2.set_ylabel("Standard Deviation", color="g")
-                     # ax2.tick_params(axis='y', labelcolor="g")
-
-                     lns = line1 + line2 # + line3
-                     labs = [l.get_label() for l in lns]
-                     ax1.legend(lns, labs, loc="best")
-
-                     plt.title("Fitness over Generations")
-                     st.pyplot(fig)
-                 except Exception as plot_err:
-                     st.warning(f"Could not plot fitness logbook: {plot_err}")
-
-
-        elif st.session_state.run_ga_verbose: # Show message if run finished but no results parsed
-             st.warning("Could not display parsed results. Check script output above.")
 
     elif st.session_state.toolbox_setup:
-         st.info("Click 'Run Genetic Algorithm' to start the optimization.")
-
-
-# ... (keep existing footer) ...
+         st.info("ℹ️ Click 'Run Genetic Algorithm' to start the optimization.")
 
 
 # --- Footer ---
 st.divider()
-
-
-st.caption("Footer text below the expander")
 st.markdown("---")
 st.caption("F1 Green Flag | Developed by Jakob Spranger, Juan Jose Montesinos, Maximilian von Braun, Massimiliano Napolitano")
 # Link to GitHub repo if available
