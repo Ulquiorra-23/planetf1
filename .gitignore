@@ -42,3 +42,4 @@ jspm_packages/
 *.pid.lock
 *.zip
 *.docx
+*.pyc
