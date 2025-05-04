@@ -21,7 +21,7 @@ import plotly.express as px
 # If app.py is in 'src/', this should work. Adjust if structure is different.
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from utils.sql import get_table
+from utils.sql import get_table, get_circuits_by
 # Make sure utilities and models are importable
 from utils.utilities import get_random_sample, get_historical_cities
 from models.clustering import kmeans_plot_elbow, scale_coords, clusterize_circuits # Import clustering functions
@@ -63,173 +63,183 @@ st.set_page_config(
 # --- Custom CSS ---
 # (Keep your existing CSS here - it defines the F1 style)
 st.markdown("""
-    <style>
-        /* Import Google Font */
-        @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap');
+            <style>
+            /* Import Google Font */
+            @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap');
 
-        /* General Page Styling */
-        body {
-            color: #E0E0E0; /* Light grey text for dark background */
-            background-color: #1E1E1E; /* Dark background */
-            font-family: 'Titillium Web', sans-serif; /* F1-style font */
-        }
+            /* === General Styling === */
+            body {
+                color: #E0E0E0;
+                background-color: #1E1E1E;
+                font-family: 'Titillium Web', sans-serif;
+                line-height: 1.6;
+            }
 
-        /* Main container adjustments (optional, might need tweaking) */
-        .main .block-container {
-            padding-top: 2rem; /* Adjust top padding */
-            padding-bottom: 2rem;
-        }
+            /* Container Padding */
+            .main .block-container {
+                padding: 2rem 1rem;
+            }
 
-        /* --- Title and Headers --- */
-        h1, h2, h3, h4, h5, h6 {
-            color: #FFFFFF; /* White headers */
-            font-weight: 700; /* Bolder font weight */
-        }
+            /* === Typography === */
+            h1, h2, h3, h4, h5, h6 {
+                color: #FFFFFF;
+                font-weight: 700;
+                margin-top: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
 
-        /* Specifically target Streamlit's title element if needed */
-        /* Use browser dev tools to find the exact class if h1 isn't enough */
-        h1 {
-            color: #FF1801; /* F1 Red for main title */
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-            text-transform: uppercase; /* Uppercase for impact */
-        }
+            h1 {
+                color: #FF1801;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+                text-transform: uppercase;
+                font-size: 2.5rem;
+            }
 
-        /* --- Sidebar Styling --- */
-        /* Target the sidebar's inner container */
-        [data-testid="stSidebar"] > div:first-child {
-            background-color: #2a2a2a; /* Slightly lighter dark for sidebar */
-            border-right: 2px solid #FF1801; /* Red accent border */
-        }
-        /* Sidebar header */
-        [data-testid="stSidebar"] h1,
-        [data-testid="stSidebar"] h2,
-        [data-testid="stSidebar"] h3 {
-            color: #FFFFFF; /* White headers in sidebar */
-        }
-        /* Sidebar text */
-        [data-testid="stSidebar"] .stMarkdown,
-        [data-testid="stSidebar"] .stRadio,
-        [data-testid="stSidebar"] .stSelectbox {
-            color: #E0E0E0;
-        }
-        /* Sidebar info box */
-        [data-testid="stSidebar"] .stAlert {
-            background-color: rgba(255, 24, 1, 0.1); /* Red tint for info box */
-            border: 1px solid rgba(255, 24, 1, 0.5);
-        }
+            /* === Sidebar Styling === */
+            [data-testid="stSidebar"] > div:first-child {
+                background-color: #2a2a2a;
+                border-right: 2px solid #FF1801;
+            }
 
+            [data-testid="stSidebar"] h1,
+            [data-testid="stSidebar"] h2,
+            [data-testid="stSidebar"] h3 {
+                color: #FFFFFF;
+            }
 
-        /* --- Tabs Styling --- */
-        /* Unselected tab */
-        .stTabs [data-baseweb="tab"] {
-            background-color: #333333; /* Dark grey for inactive tabs */
-            color: #E0E0E0;
-            border-radius: 5px 5px 0 0; /* Rounded top corners */
-            margin: 0 3px;
-            padding: 10px 15px;
-            font-weight: 600;
-            border-bottom: 3px solid transparent; /* Space for selected indicator */
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        /* Hover effect for unselected tab */
-        .stTabs [data-baseweb="tab"]:hover {
-            background-color: #444444;
-            color: #FFFFFF;
-        }
-        /* Selected tab */
-        .stTabs [data-baseweb="tab"][aria-selected="true"] {
-            background-color: #2a2a2a; /* Match sidebar bg */
-            color: #FFFFFF; /* White text for selected */
-            font-weight: 700;
-            border-bottom: 3px solid #FF1801; /* Red underline indicator */
-        }
-        /* Tab content panel */
-        .stTabs [data-testid="stVerticalBlock"] {
-            background-color: #2a2a2a; /* Match selected tab bg for content area */
-            border: 1px solid #444444;
-            border-top: none; /* Remove top border as tab provides it */
-            border-radius: 0 0 5px 5px;
-            padding: 1rem;
-        }
+            [data-testid="stSidebar"] .stMarkdown,
+            [data-testid="stSidebar"] .stRadio,
+            [data-testid="stSidebar"] .stSelectbox {
+                color: #E0E0E0;
+            }
 
-        /* --- DataFrame Styling --- */
-        .stDataFrame {
-            border: 1px solid #444444; /* Darker border */
-            border-radius: 5px;
-            background-color: #2a2a2a; /* Dark background for table */
-        }
-        /* Header */
-        .stDataFrame thead th {
-            background-color: #333333;
-            color: #FFFFFF;
-            font-weight: 600;
-        }
-        /* Body cells */
-        .stDataFrame tbody td {
-            color: #E0E0E0;
-        }
+            [data-testid="stSidebar"] .stAlert {
+                background-color: rgba(255, 24, 1, 0.1);
+                border: 1px solid rgba(255, 24, 1, 0.5);
+                border-radius: 5px;
+            }
 
-        /* --- Button Styling --- */
-        .stButton button {
-            background-color: transparent; /* Transparent background */
-            color: #FF1801; /* Red text */
-            border: 2px solid #FF1801; /* Red border */
-            border-radius: 5px;
-            font-weight: 700; /* Bold text */
-            padding: 8px 15px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            text-transform: uppercase;
-        }
+            /* === Tabs Styling === */
+            .stTabs [data-baseweb="tab"] {
+                background-color: #333333;
+                color: #E0E0E0;
+                border-radius: 5px 5px 0 0;
+                margin: 0 5px;
+                padding: 10px 16px;
+                font-weight: 600;
+                border-bottom: 3px solid transparent;
+                transition: all 0.3s ease;
+            }
 
-        .stButton button:hover {
-            background-color: #FF1801; /* Red background on hover */
-            color: white; /* White text on hover */
-        }
-        .stButton button:focus { /* Keep focus style consistent */
-            background-color: #FF1801;
-            color: white;
-            box-shadow: none; /* Remove default focus shadow if desired */
-            outline: none;
-        }
-        .stButton button:disabled {
-            background-color: transparent;
-            color: #555555;
-            border-color: #555555;
-            opacity: 0.5;
-        }
+            .stTabs [data-baseweb="tab"]:hover {
+                background-color: #444444;
+                color: #FFFFFF;
+            }
 
-        /* --- Expander Styling --- */
-        .stExpander {
-            background-color: #2a2a2a; /* Dark background */
-            border: 1px solid #444444; /* Darker border */
-            border-radius: 5px;
-        }
-        .stExpander header { /* Target the header part */
-            font-weight: 600;
-            color: #FFFFFF; /* White header text */
-        }
+            .stTabs [data-baseweb="tab"][aria-selected="true"] {
+                background-color: #2a2a2a;
+                color: #FFFFFF;
+                font-weight: 700;
+                border-bottom: 3px solid #FF1801;
+            }
 
-        /* --- Other Widget Styling (Examples) --- */
-        .stRadio [role="radiogroup"],
-        .stSelectbox > div {
-            /* Add subtle styling if needed */
-        }
+            .stTabs [data-testid="stVerticalBlock"] {
+                background-color: none;
+                border: none;
+                border-top: none;
+                border-radius: 0 0 5px 5px;
+                padding: 1.5rem;
+            }
 
-        /* --- Footer Styling --- */
-        footer {
-            color: #888888; /* Lighter grey for footer */
-            font-size: 12px;
-            text-align: center;
-        }
+            /* === DataFrame Styling === */
+            .stDataFrame {
+                border: 1px solid #444444;
+                border-radius: 5px;
+                background-color: #2a2a2a;
+            }
 
-        /* --- Dividers --- */
-        hr {
-            border-top: 1px solid #444444; /* Darker divider */
-        }
+            .stDataFrame thead th {
+                background-color: #333333;
+                color: #FFFFFF;
+                font-weight: 600;
+                padding: 10px;
+            }
 
-    </style>
+            .stDataFrame tbody td {
+                color: #E0E0E0;
+                padding: 8px;
+            }
 
-    """, unsafe_allow_html=True)
+            /* === Button Styling === */
+            .stButton button {
+                background-color: transparent;
+                color: #FF1801;
+                border: 2px solid #FF1801;
+                border-radius: 5px;
+                font-weight: 700;
+                padding: 10px 20px;
+                text-transform: uppercase;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+
+            .stButton button:hover,
+            .stButton button:focus {
+                background-color: #FF1801;
+                color: white;
+                outline: none;
+                box-shadow: none;
+            }
+
+            .stButton button:disabled {
+                color: #555555;
+                border-color: #555555;
+                background-color: transparent;
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            /* === Expander Styling === */
+            .stExpander {
+                background-color: #2a2a2a;
+                border: 1px solid #444444;
+                border-radius: 5px;
+                margin-bottom: 1rem;
+            }
+
+            .stExpander header {
+                font-weight: 600;
+                color: #FFFFFF;
+            }
+
+            /* === Footer & Divider === */
+            footer {
+                color: #888888;
+                font-size: 12px;
+                text-align: center;
+                padding-top: 2rem;
+            }
+
+            hr {
+                border: none;
+                border-top: 1px solid #444444;
+                margin: 2rem 0;
+            }
+            
+            [data-testid="column"] {
+                background-color: transparent !important; /* Removes any white background */
+                border: none !important;                 /* Removes borders */
+                padding: 0 !important;                   /* Removes internal spacing */
+                margin: 0 !important;
+            }
+            [data-testid="column"] > div {
+                background-color: transparent !important;
+                border: none !important;
+            }
+            
+            </style>
+
+            """, unsafe_allow_html=True)
 
 # --- Helper Function for Capturing Output ---
 def execute_and_capture( func, *args, **kwargs):
@@ -304,17 +314,17 @@ with page2:
     """)
 
     # --- Data Loading and Display ---
-    st.subheader("🗺️ Circuit Geography Data")
+    st.subheader("🗺️ Circuit Geography Data Sample")
     geo_df = get_table("fone_geography")
     calendar_df = get_table("fone_calendar")
     logistics_df = get_table("travel_logistic")
     regression_df = get_table("training_regression_calendar")
 
     if not geo_df.empty:
-        st.dataframe(geo_df.head())
+        st.dataframe(geo_df.head(), use_container_width=False) # Show a sample of the geography data
         st.write(f"Loaded **{len(geo_df)}** Locations.")
         with st.expander("📂 Show Full Geography Data"):
-            st.dataframe(geo_df)
+            st.dataframe(geo_df, use_container_width=False)
     else:
         st.warning("⚠️ Could not load geography data.")
 
@@ -363,6 +373,7 @@ with page2:
                         ),
                         tooltip=tooltip,
                     )
+                    , use_container_width=False
                 )
             else:
                 st.info("ℹ️ No map data available for the selected option.")
@@ -375,7 +386,7 @@ with page2:
     st.subheader(f"🏙️ City Details: {selected_season if selected_season != '✨ New Potential' else 'Potential New'}")
     if not map_data.empty:
         city_list = sorted(map_data['city_x'].unique()) # Sort city list
-        col_select, col_details = st.columns([1, 3]) # Adjust column ratio
+        col_select, col_details = st.columns([1, 6]) # Adjust column ratio
 
         with col_select:
              # Use selectbox for longer lists, radio for shorter
@@ -408,20 +419,25 @@ with page2:
                 image_path = next((img for loc_id, _, _, _, img in F1_LOCATION_DESCRIPTIONS if loc_id == location_id), None)
 
                 # Display details in two sub-columns
-                sub_col1, sub_col2 = st.columns(2)
+                sub_col1, sub_col2 = st.columns(2,)
                 with sub_col1:
                     st.image(image_path if image_path else "https://placehold.co/300x200/2a2a2a/444444?text=No+Image",
-                             caption=f"{city_details_row['circuit_x']} Circuit Area" if image_path else "Image not available")
+                             caption=f"{city_details_row['circuit_x']} Circuit Area" if image_path else "Image not available", 
+                             use_container_width=False,width=800) # Adjust width for better fit
                 with sub_col2:
-                     st.markdown(f"""
+                    st.markdown(f"""
                         **Circuit:** {city_details_row['circuit_x']}
                         ({city_details_row['country_x']})
+                        
                         **Continent:** {city_details_row['continent']}
+                        
                         **Lat/Lon:** {city_details_row['latitude']:.3f}, {city_details_row['longitude']:.3f}
+                        
                         **🗓️ Months to Avoid:** {mmm_to_avoid}
+                        
                         **Notes:** {city_details_row.get('notes', 'N/A')}
                         """) # Use get for notes
-                st.markdown(f"**📝 Description:** {description}") # Description below image/details
+                    st.markdown(f"**📝 Description:** {description}") # Description below image/details
             else:
                  st.write("Select a city to see details.")
     else:
@@ -433,21 +449,21 @@ with page2:
     st.subheader("🗓️ Race Calendar Data")
     if not calendar_df.empty:
         with st.expander("📂 Show Race Calendar Data"):
-            st.dataframe(calendar_df)
+            st.dataframe(calendar_df, use_container_width=False)
     else:
         st.warning("⚠️ Could not load calendar data.")
 
     st.subheader("🚚 Travel Logistics Data")
     if not logistics_df.empty:
         with st.expander("📂 Show Travel Logistics Data"):
-            st.dataframe(logistics_df)
+            st.dataframe(logistics_df, use_container_width=False)
     else:
         st.warning("⚠️ Could not load logistics data.")
 
     st.subheader("⚙️ Training Regression Calendar Data")
     if not regression_df.empty:
         with st.expander("📂 Show Regression Training Data"):
-            st.dataframe(regression_df)
+            st.dataframe(regression_df, use_container_width=False)
     else:
         st.warning("⚠️ Could not load regression calendar data.")
 
@@ -477,11 +493,11 @@ with page3:
             top_truck_distances = pd.DataFrame()
 
         st.subheader(f"✈️ Top Air vs. 🚚 Truck Distances ({selected_season_reg})")
-        col1, col2 = st.columns(2)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.write("**Top 5 Air Distances (km)**")
             if not top_air_distances.empty:
-                st.dataframe(top_air_distances.set_index("codes")) # Show table for detail
+                st.dataframe(top_air_distances.set_index("codes"), use_container_width=False) # Show table for detail
                 # Optional: Bar chart
                 # st.bar_chart(top_air_distances.set_index("codes")["distance_km"])
             else:
@@ -489,7 +505,7 @@ with page3:
         with col2:
             st.write("**Top 5 Truck Distances (km)**")
             if not top_truck_distances.empty:
-                 st.dataframe(top_truck_distances.set_index("codes")) # Show table for detail
+                 st.dataframe(top_truck_distances.set_index("codes"), use_container_width=False) # Show table for detail
                  # Optional: Bar chart
                  # st.bar_chart(top_truck_distances.set_index("codes")["truck_distance_km"])
             else:
@@ -591,7 +607,7 @@ with page4:
         # Display the currently confirmed list
         if not st.session_state.builder_geo_df_to_cluster.empty:
              st.write("**Current List for Clustering:**")
-             st.dataframe(st.session_state.builder_geo_df_to_cluster[['geo_id', 'city']].reset_index(drop=True))
+             st.dataframe(st.session_state.builder_geo_df_to_cluster[['geo_id', 'city']].reset_index(drop=True), use_container_width=False)
         else:
              st.info("ℹ️ Confirm a circuit list (min 15) to proceed.")
 
@@ -674,7 +690,7 @@ with page4:
         if st.session_state.elbow_plot_fig:
              col_elbow1, col_elbow2, col_elbow3 = st.columns([1, 2, 1]) # Center the plot
              with col_elbow2:
-                 st.pyplot(st.session_state.elbow_plot_fig)
+                 st.pyplot(st.session_state.elbow_plot_fig, use_container_width=False)
         with st.expander("💻 Evaluate Console Output", expanded=st.session_state.evaluate_step_done):
             st.code(st.session_state.chosen_k_verbose, language='text')
     elif st.session_state.normalize_step_done:
@@ -691,9 +707,6 @@ with page4:
             cluster_results, clusterization_verbose_output = execute_and_capture(
                 clusterize_circuits,
                 df=geo_df_to_cluster.copy(), # Pass a copy to avoid modifying state df
-                n_clusters=st.session_state.optimal_k, # Use determined optimal K
-                coords_normalized=st.session_state.normalized_coords, # Pass normalized coords
-                random_state=SEED,
                 verbose=True,
                 opt_k_img_verbose=False, # Already done
                 fig_verbose=True # Get the cluster plot
@@ -708,7 +721,7 @@ with page4:
                 st.success(f"✅ Clusterization completed successfully into **{st.session_state.optimal_k}** clusters.")
             else:
                  st.error("❌ Clusterization failed.")
-                 st.session_state.clusterization_step_done = False
+                 st.session_state.clusterization_step_done = True
                  st.session_state.clusterization_verbose = clusterization_verbose_output # Show error output
         else:
             st.error("❌ Evaluation step must be completed first.")
@@ -716,11 +729,14 @@ with page4:
 
     if st.session_state.clusterization_step_done:
         st.success("✅ Clusterization Complete.")
-        if st.session_state.cluster_plot_fig:
-             st.plotly_chart(st.session_state.cluster_plot_fig, use_container_width=True) # Display cluster plot
-        if st.session_state.clustered_data is not None:
-             st.write("**Clustered Data Sample:**")
-             st.dataframe(st.session_state.clustered_data.head())
+        col1, col2, col3 = st.columns([1, 2, 1]) # Center the plot
+        with col2:
+            if st.session_state.cluster_plot_fig:
+                st.plotly_chart(st.session_state.cluster_plot_fig, use_container_width=True) # Display cluster plot
+        with col1:
+            if st.session_state.clustered_data is not None:
+                st.markdown("**Clustered Data:**")
+                st.dataframe(st.session_state.clustered_data, use_container_width=False, height=400) # Show a sample of the clustered data
         with st.expander("💻 Clusterization Console Output", expanded=st.session_state.clusterization_step_done):
             st.code(st.session_state.clusterization_verbose, language='text')
     elif st.session_state.evaluate_step_done:
@@ -797,10 +813,15 @@ with page5:
 
         if prepare_clicked and scenario_input_valid:
             st.write("⏳ Preparing scenario...")
-            circuits_df, verbose_output = execute_and_capture(prepare_scenario, **prepare_args)
-
+            circuits_df_pack, verbose_output = execute_and_capture(prepare_scenario, **prepare_args)
+            circuits_df, fig = circuits_df_pack
+            code_list = circuits_df['circuit_name'].to_list() if circuits_df is not None else [] # Get the list of circuit IDs
+            code_names = get_circuits_by('code_6', code_list, 'circuit_x') # Call to ensure the function is executed
+            
             if circuits_df is not None and not circuits_df.empty:
                 st.session_state.circuits_df_scenario = circuits_df
+                st.session_state.code_names = code_names # Store the circuit names
+                st.session_state.prepare_scenario_fig = fig # Store the figure
                 st.session_state.prepare_scenario_verbose = verbose_output
                 st.session_state.scenario_prepared = True
                 # Reset subsequent steps
@@ -812,11 +833,22 @@ with page5:
                 st.error("❌ Failed to prepare scenario.")
                 st.session_state.scenario_prepared = False
                 st.session_state.prepare_scenario_verbose = verbose_output
-
+                st.code(st.session_state.prepare_scenario_verbose, language='text')
     if st.session_state.scenario_prepared:
         st.success("✅ Scenario Prepared.")
         st.write("**Circuit List for Optimization:**")
-        st.dataframe(st.session_state.circuits_df_scenario[['circuit_name']].reset_index(drop=True), height=200) # Limit height
+        col1, col2, col3 = st.columns([2,3,13]) # Adjust layout
+        with col1:
+            st.markdown("**Circuit Codes:**")
+            st.write(st.session_state.code_names.get("code_6", "No data available"))
+        with col2:
+            st.markdown("**Circuit Names:**")
+            st.write(st.session_state.code_names.get("circuit_x", "No data available"))
+        with col3:
+            st.markdown("**Circuit Clusters:**")
+            if st.session_state.prepare_scenario_fig:
+                st.plotly_chart(st.session_state.prepare_scenario_fig, use_container_width=True)
+
         with st.expander("💻 Prepare Scenario Console Output", expanded=False): # Keep collapsed by default
             st.code(st.session_state.prepare_scenario_verbose, language='text')
     elif scenario_input_valid:
@@ -1042,5 +1074,4 @@ with page5:
 st.divider()
 st.markdown("---")
 st.caption("F1 Green Flag | Developed by Jakob Spranger, Juan Jose Montesinos, Maximilian von Braun, Massimiliano Napolitano")
-# Link to GitHub repo if available
-# st.caption("Find the project on [GitHub](your-repo-link)")
+st.caption("Find the project on [GitHub](https://github.com/Ulquiorra-23/planetf1)")

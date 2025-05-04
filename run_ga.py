@@ -104,20 +104,21 @@ def prepare_scenario(from_season: int = None, from_sample: int = None, from_inpu
 
     # Fetch and prepare the scenario data
     if from_season is not None:
-        circuits_df_scenario = get_circuits_for_population(season=from_season, verbose=verbose)[['code', 'cluster_id', 'first_gp_probability', 'last_gp_probability']]
+        circuits_df_scenario, fig = get_circuits_for_population(season=from_season, verbose=verbose)
         if verbose:
             print(f"Scenario prepared using season: {from_season}")
     
     if from_sample is not None:
-        circuits_df_scenario = get_circuits_for_population(n=from_sample, seed=params["RANDOM_SEED"], verbose=verbose)[['code', 'cluster_id', 'first_gp_probability', 'last_gp_probability']]
+        circuits_df_scenario, fig = get_circuits_for_population(n=from_sample, seed=params["RANDOM_SEED"], verbose=verbose)
         if verbose:
             print(f"Scenario prepared using sample size: {from_sample}")
         
     if from_input is not None:
-        circuits_df_scenario = get_circuits_for_population(custom=from_input, verbose=verbose)[['code', 'cluster_id', 'first_gp_probability', 'last_gp_probability']]
+        circuits_df_scenario, fig = get_circuits_for_population(custom=from_input, verbose=verbose)
         if verbose:
             print(f"Scenario prepared using custom input: {from_input}")
-        
+    
+    circuits_df_scenario = circuits_df_scenario[['code', 'cluster_id', 'first_gp_probability', 'last_gp_probability']]    
     circuits_df_scenario.columns = ['circuit_name', 'cluster_id', 'start_freq_prob', 'end_freq_prob']
     circuit_list_scenario = circuits_df_scenario['circuit_name'].tolist()
     
@@ -126,7 +127,7 @@ def prepare_scenario(from_season: int = None, from_sample: int = None, from_inpu
         print(f"Optimizing for {len(circuit_list_scenario)} circuits.")
         print(f"circuit_list_scenario: {circuit_list_scenario}")
     
-    return circuits_df_scenario
+    return circuits_df_scenario, fig
 
 # --- DEAP Setup ---
 # Create Fitness and Individual types
@@ -165,7 +166,7 @@ def deap_toolbox(circuits_df_scenario: pd.DataFrame, fitness_function: callable,
                      season=params['SEASON_YEAR'], 
                      regression=params['REGRESSION'],
                      clusters=params['CLUSTERS'], 
-                     verbose=verbose)
+                     verbose=False)
     toolbox.register("mate", functools.partial(genetic_ops.order_crossover_deap, toolbox))
     toolbox.register("mutate", functools.partial(genetic_ops.swap_mutation_deap, toolbox))
     toolbox.register("select", tools.selTournament, tournsize=params['TOURNAMENT_SIZE'])

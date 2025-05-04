@@ -361,7 +361,7 @@ def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, c
         
         clustersized_circuits = prereq_custom[['city_x', 'latitude', 'longitude']].copy()
         clustersized_circuits.rename(columns={'city_x': 'city'}, inplace=True)
-        clustersized_circuits = clustering.clusterize_circuits(df=clustersized_circuits, verbose=verbose)[0]
+        clustersized_circuits, fig = clustering.clusterize_circuits(df=clustersized_circuits, verbose=verbose, fig_verbose=True)
         prereq_custom = pd.merge(prereq_custom, clustersized_circuits[['city', 'cluster_id']], left_on='city_x',right_on='city', how='left')
         prereq_custom = prereq_custom[['id', 'code_6', 'circuit_x', 'city_x', 'country_x', 'latitude', 'longitude',
                                     'first_gp_probability', 'last_gp_probability', 'cluster_id']]
@@ -370,29 +370,29 @@ def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, c
         if verbose:
             print("Generated DataFrame for custom circuits:")
             print(prereq_custom['circuit'].tolist())
-        return prereq_custom    
+        return prereq_custom, fig 
 
     if seed is not None:
         if verbose:
             print(f"Generating circuits for population with seed={seed} and n={n}.")
         circuit_names_random = get_random_sample(n, seed=seed, info=True, verbose=verbose)
         circuits_random = get_random_sample(n, seed=seed, info=False, verbose=verbose)
-        clustersized_circuits = clustering.clusterize_circuits(df=circuits_random, verbose=verbose)[0]
+        clustersized_circuits, fig = clustering.clusterize_circuits(df=circuits_random, verbose=verbose, fig_verbose=True)
         prereq_random = pd.merge(circuit_names_random, clustersized_circuits[['city', 'cluster_id']], on='city', how='left')
         prereq_random.columns = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
                                  'first_gp_probability', 'last_gp_probability', 'cluster_id']
         if verbose:
             print("Generated DataFrame for random circuits:")
             print(prereq_random['circuit'].tolist())
-        return prereq_random
+        return prereq_random, fig
 
     if season is not None:
         if verbose:
             print(f"Generating circuits for population for season={season}.")
         circuit_names = get_historical_cities(season, info=True, verbose=verbose)
-        clustersized_circuits = clustering.clusterize_circuits(df=circuit_names[['city', 'latitude', 'longitude']], verbose=verbose)[0]
+        clustersized_circuits, fig = clustering.clusterize_circuits(df=circuit_names[['city', 'latitude', 'longitude']], verbose=verbose, fig_verbose=True)
         prereq = pd.merge(circuit_names, clustersized_circuits[['city', 'cluster_id']], on='city', how='left')
         if verbose:
             print("Generated DataFrame for historical circuits:")
             print(prereq['circuit'].tolist())
-        return prereq
+        return prereq, fig
