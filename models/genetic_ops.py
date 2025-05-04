@@ -227,7 +227,7 @@ def generate_initial_population(circuits_df, population_size, seed=None, verbose
 
     return final_population
 
-def calculate_fitness(circuits_seq: list, circuits_df, season=2026, regression=False, clusters=False, verbose=False):
+def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026, regression=False, clusters=False, verbose=False):
     """
     Calculate the fitness of a given circuit list based on cluster assignments.
 
@@ -267,7 +267,7 @@ def calculate_fitness(circuits_seq: list, circuits_df, season=2026, regression=F
         if verbose:
             print('Travel logistics keys:', travel_logistic_keys)
         # Fetch travel logistics data from the database
-        travel_logistics_df = get_table("travel_logistic")
+        travel_logistics_df = get_table("travel_logistic", db_path=db_path)
 
         # Filter the DataFrame for rows where 'code' matches the travel logistic keys
         filtered_logistics = travel_logistics_df[travel_logistics_df['codes'].isin(travel_logistic_keys)]
@@ -306,7 +306,7 @@ def calculate_fitness(circuits_seq: list, circuits_df, season=2026, regression=F
         circuit_date_mapping = {circuit: calendar[i] for i, circuit in enumerate(circuits_seq)}
 
         # Fetch the fone_geography table
-        fone_geography_df = get_table("fone_geography")
+        fone_geography_df = get_table("fone_geography", db_path=db_path)
 
         # Check for month conflicts
         total_conflicts = 0

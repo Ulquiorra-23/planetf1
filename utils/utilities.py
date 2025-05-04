@@ -14,15 +14,14 @@ import sqlite3
 from utils.sql import get_table
 from models import clustering
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-DB_PATH = os.path.join(PROJECT_ROOT, 'data', 'planet_fone.db') # Construct absolute path to DB
 
-def get_historical_seq(verbose = False):
+def get_historical_seq(db_path: str, verbose = False):
     """
     Fetches historical sequence data from the database, processes it, and returns a JSON string.
     """
-    historical_races = get_table('fone_calendar')
-    geography = get_table('fone_geography')
+    # Pass db_path to get_table
+    historical_races = get_table('fone_calendar', db_path=db_path, verbose=verbose)
+    geography = get_table('fone_geography', db_path=db_path, verbose=verbose)
     if verbose:
         print("Fetched historical races and geography data.")
 
@@ -77,8 +76,7 @@ def get_historical_seq(verbose = False):
 
     return historical_seq
 
-
-def get_historical_cities(year: int, verbose: bool = False, info: bool = False) -> pd.DataFrame:
+def get_historical_cities(year: int, db_path: str, verbose: bool = False, info: bool = False) -> pd.DataFrame:
     """
     Retrieves the DataFrame of cities for the given year from dfs_by_year_dict.
 
@@ -94,16 +92,20 @@ def get_historical_cities(year: int, verbose: bool = False, info: bool = False) 
         ConnectionError: If connection to the database fails.
         ValueError: If no data is found for the specified year.
     """
-    connection = None # Initialize connection to None
+    connection = None
     try:
+        # Add check for file existence
+        if not Path(db_path).is_file():
+             raise FileNotFoundError(f"Database file not found at specified path: {db_path}")
         if verbose:
-            print(f"Connecting to the database at: {DB_PATH}")
-        # Connect to the database using the absolute path
-        connection = sqlite3.connect(DB_PATH)
+            print(f"Connecting to the database at: {db_path}")
+        # Use the passed db_path argument here
+        connection = sqlite3.connect(db_path)
+    # ... (rest of try/except/finally block is mostly unchanged, just uses connection variable) ...
     except sqlite3.Error as e:
-        # Add the path to the error message for easier debugging
-        raise ConnectionError(f"Failed to connect to the database at '{DB_PATH}': {e}")
-
+        raise ConnectionError(f"Failed to connect to the database at '{db_path}': {e}")
+    except FileNotFoundError as e:
+         raise e
     try:
         # Create a cursor object to execute SQL queries
         cursor = connection.cursor()
@@ -173,7 +175,6 @@ def get_historical_cities(year: int, verbose: bool = False, info: bool = False) 
         print(f"Total rows: {len(city_data_df)}")
 
     return city_data_df
-
 
 def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
     assert 2026 <= year <= 2030, "Year must be between 2026 and 2030"
@@ -273,7 +274,7 @@ def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
 
     return [d.strftime("%d-%m") for d in race_days]
 
-def get_random_sample(n, info: bool, verbose=False, seed=None):
+def get_random_sample(n: int, db_path: str, info: bool, verbose=False, seed=None):
     """
     Fetches a random n-sized sample of city_x, latitude, and longitude from the fone_geography table.
 
@@ -286,12 +287,20 @@ def get_random_sample(n, info: bool, verbose=False, seed=None):
     Returns:
         pandas.DataFrame: A DataFrame containing the random sample.
     """
-    if verbose:
-        print(f"Fetching a random sample of {n} rows from the database...")
-
-    # Connect to the database
-    connection = sqlite3.connect(r"data\planet_fone.db")
-
+    connection = None
+    try:
+        # Add check for file existence
+        if not Path(db_path).is_file():
+             raise FileNotFoundError(f"Database file not found at specified path: {db_path}")
+        if verbose:
+            print(f"Fetching a random sample of {n} rows from the database at {db_path}...")
+        # Use the passed db_path argument here
+        connection = sqlite3.connect(db_path)
+    # ... (rest of try/except/finally block is mostly unchanged, just uses connection variable) ...
+    except sqlite3.Error as e:
+        raise ConnectionError(f"Failed to connect to the database at '{db_path}': {e}")
+    except FileNotFoundError as e:
+         raise e
     # SQL query to fetch all rows
     query = """
     SELECT fg.id, fg.code_6, fg.circuit_x, fg.city_x, fg.country_x, fg.latitude, fg.longitude,fg.first_gp_probability, fg.last_gp_probability
@@ -317,20 +326,19 @@ def get_random_sample(n, info: bool, verbose=False, seed=None):
         print(f"Random sample of {n} rows fetched successfully.")
     return sample_df
 
-def get_circuit_for_pop(id: int, verbose: bool = False):
+def get_circuit_for_pop(id_val: int, db_path: str, verbose: bool = False):
     """
     Fetches the circuit data for a given ID from the database and returns it as a DataFrame.
     """
-    circuits = get_table('fone_geography')
+    circuits = get_table('fone_geography', db_path=db_path, verbose=verbose)
     if verbose:
         print("Fetched circuit data from the database.")        
-    circuit = circuits[circuits['id'] == id][['id', 'code_6', 'circuit_x', 'city_x', 'country_x', 'latitude', 'longitude', 'first_gp_probability', 'last_gp_probability']]
+    circuit = circuits[circuits['id'] == id_val][['id', 'code_6', 'circuit_x', 'city_x', 'country_x', 'latitude', 'longitude', 'first_gp_probability', 'last_gp_probability']]
     if verbose:
-        print(f"Fetched circuit details for ID {id}: {circuit}.")
+        print(f"Fetched circuit details for ID {id_val}: {circuit}.")
     return circuit
 
-
-def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, custom:list = None,verbose=False):
+def get_circuits_for_population(db_path: str, n:int =None, seed:int =None, season:int =None, custom:list = None,verbose=False):
     """
     Generate a DataFrame based on the provided seed and n or season.
 
@@ -354,7 +362,7 @@ def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, c
         for id in custom:
             if verbose:
                 print(f"Fetching circuit details for ID {id}...")
-            circuit = get_circuit_for_pop(id, verbose=verbose)
+            circuit = get_circuit_for_pop(id, db_path=db_path, verbose=verbose)
             prereq_custom = pd.concat([prereq_custom, circuit], ignore_index=True)
         if verbose:
             print(f"Fetched {prereq_custom['circuit_x'].tolist()} circuits for custom population.")
@@ -375,8 +383,8 @@ def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, c
     if seed is not None:
         if verbose:
             print(f"Generating circuits for population with seed={seed} and n={n}.")
-        circuit_names_random = get_random_sample(n, seed=seed, info=True, verbose=verbose)
-        circuits_random = get_random_sample(n, seed=seed, info=False, verbose=verbose)
+        circuit_names_random = get_random_sample(n, seed=seed, db_path=db_path, info=True, verbose=verbose)
+        circuits_random = get_random_sample(n, seed=seed, db_path=db_path, info=False, verbose=verbose)
         clustersized_circuits, fig = clustering.clusterize_circuits(df=circuits_random, verbose=verbose, fig_verbose=True)
         prereq_random = pd.merge(circuit_names_random, clustersized_circuits[['city', 'cluster_id']], on='city', how='left')
         prereq_random.columns = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
@@ -389,7 +397,7 @@ def get_circuits_for_population(n:int =None, seed:int =None, season:int =None, c
     if season is not None:
         if verbose:
             print(f"Generating circuits for population for season={season}.")
-        circuit_names = get_historical_cities(season, info=True, verbose=verbose)
+        circuit_names = get_historical_cities(season, db_path=db_path, info=True, verbose=verbose)
         clustersized_circuits, fig = clustering.clusterize_circuits(df=circuit_names[['city', 'latitude', 'longitude']], verbose=verbose, fig_verbose=True)
         prereq = pd.merge(circuit_names, clustersized_circuits[['city', 'cluster_id']], on='city', how='left')
         if verbose:

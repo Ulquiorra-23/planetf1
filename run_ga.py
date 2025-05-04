@@ -83,7 +83,7 @@ random.seed(params["RANDOM_SEED"])
 np.random.seed(params["RANDOM_SEED"])
 
 # --- Prepare Scenario Data ---
-def prepare_scenario(from_season: int = None, from_sample: int = None, from_input: list = None, verbose: bool = False):
+def prepare_scenario(db_path: str, from_season: int = None, from_sample: int = None, from_input: list = None, verbose: bool = False):
     """
     Prepare the scenario data for the genetic algorithm.
 
@@ -104,17 +104,17 @@ def prepare_scenario(from_season: int = None, from_sample: int = None, from_inpu
 
     # Fetch and prepare the scenario data
     if from_season is not None:
-        circuits_df_scenario, fig = get_circuits_for_population(season=from_season, verbose=verbose)
+        circuits_df_scenario, fig = get_circuits_for_population(db_path=db_path, season=from_season, verbose=verbose)
         if verbose:
             print(f"Scenario prepared using season: {from_season}")
     
     if from_sample is not None:
-        circuits_df_scenario, fig = get_circuits_for_population(n=from_sample, seed=params["RANDOM_SEED"], verbose=verbose)
+        circuits_df_scenario, fig = get_circuits_for_population(db_path=db_path, n=from_sample, seed=params["RANDOM_SEED"], verbose=verbose)
         if verbose:
             print(f"Scenario prepared using sample size: {from_sample}")
         
     if from_input is not None:
-        circuits_df_scenario, fig = get_circuits_for_population(custom=from_input, verbose=verbose)
+        circuits_df_scenario, fig = get_circuits_for_population(db_path=db_path, custom=from_input, verbose=verbose)
         if verbose:
             print(f"Scenario prepared using custom input: {from_input}")
     
@@ -132,7 +132,7 @@ def prepare_scenario(from_season: int = None, from_sample: int = None, from_inpu
 # --- DEAP Setup ---
 # Create Fitness and Individual types
 # weights=(-1.0,) means we want to minimize the fitness score
-def deap_toolbox(circuits_df_scenario: pd.DataFrame, fitness_function: callable, params:dict, seed:int=None, verbose=False):
+def deap_toolbox(circuits_df_scenario: pd.DataFrame, db_path: str, fitness_function: callable, params:dict, seed:int=None, verbose=False):
     """
     Create and configure a DEAP toolbox for the genetic algorithm.
 
@@ -163,6 +163,7 @@ def deap_toolbox(circuits_df_scenario: pd.DataFrame, fitness_function: callable,
     # Register the genetic operators
     toolbox.register("evaluate", fitness_function, 
                      circuits_df=circuits_df_scenario, 
+                     db_path=db_path,
                      season=params['SEASON_YEAR'], 
                      regression=params['REGRESSION'],
                      clusters=params['CLUSTERS'], 

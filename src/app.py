@@ -16,10 +16,26 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import plotly.express as px
 
-# Add the parent directory to the system path to import utils
-# Ensure this path logic correctly points to your project root from app.py's location
-# If app.py is in 'src/', this should work. Adjust if structure is different.
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+# --- Determine Project Root and DB Path ---
+# Assuming app.py is in 'src/' relative to the project root
+# Adjust if your structure is different (e.g., app.py in root)
+APP_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = APP_DIR.parent # Go up one level from src/
+DB_PATH = PROJECT_ROOT / "data" / "planet_fone.db"
+# Convert to string for functions expecting string paths
+DB_PATH_STR = str(DB_PATH)
+print(f"DB_PATH: {DB_PATH_STR}") # Debugging output
+# Add a check and error if DB doesn't exist at the expected path
+if not DB_PATH.is_file():
+    st.error(f"FATAL ERROR: Database file not found at expected location: {DB_PATH_STR}")
+    st.error(f"App directory: {APP_DIR}")
+    st.error(f"Project root calculated as: {PROJECT_ROOT}")
+    st.error("Please ensure the 'data' folder and 'planet_fone.db' exist relative to the project root.")
+    st.stop() # Stop the app if DB is missing
+
+# Add the project root to the system path AFTER calculating DB_PATH
+# This allows imports like 'from utils.sql import ...'
+sys.path.append(str(PROJECT_ROOT))
 
 from utils.sql import get_table, get_circuits_by
 # Make sure utilities and models are importable
@@ -35,7 +51,6 @@ from models import genetic_ops # Import your genetic operators module
 from run_ga import (
     prepare_scenario,
     set_default_params,
-    update_param, # If you implement interactive updates
     deap_toolbox,
     run_genetic_algorithm
 )
@@ -315,10 +330,10 @@ with page2:
 
     # --- Data Loading and Display ---
     st.subheader("🗺️ Circuit Geography Data Sample")
-    geo_df = get_table("fone_geography")
-    calendar_df = get_table("fone_calendar")
-    logistics_df = get_table("travel_logistic")
-    regression_df = get_table("training_regression_calendar")
+    geo_df = get_table("fone_geography", db_path=DB_PATH_STR)
+    calendar_df = get_table("fone_calendar", db_path=DB_PATH_STR)
+    logistics_df = get_table("travel_logistic", db_path=DB_PATH_STR)
+    regression_df = get_table("training_regression_calendar", db_path=DB_PATH_STR)
 
     if not geo_df.empty:
         st.dataframe(geo_df.head(), use_container_width=False) # Show a sample of the geography data
@@ -476,8 +491,8 @@ with page3:
     *(Note: This section relies on ongoing regression model development.)*
     """)
 
-    calendar_df = get_table("fone_calendar")
-    logistics_df = get_table("travel_logistic")
+    calendar_df = get_table("fone_calendar", db_path=DB_PATH_STR)
+    logistics_df = get_table("travel_logistic", db_path=DB_PATH_STR)
 
     if not calendar_df.empty and not logistics_df.empty:
         merged_df = calendar_df.merge(logistics_df, left_on="outbound_route", right_on="id", how="inner")
@@ -543,8 +558,8 @@ with page4:
     st.subheader("🛠️ Calendar Circuit Builder")
     st.write("Select or build the list of circuits to be clustered.")
 
-    calendar_df_clust = get_table("fone_calendar") # Use different var names if needed
-    geo_df_clust = get_table("fone_geography")
+    calendar_df_clust = get_table("fone_calendar", db_path=DB_PATH_STR)
+    geo_df_clust = get_table("fone_geography", db_path=DB_PATH_STR)
 
     if not calendar_df_clust.empty and not geo_df_clust.empty:
         col_build1, col_build2 = st.columns([1, 2]) # Adjust layout
@@ -563,15 +578,15 @@ with page4:
                 seasons = sorted(calendar_df_clust['year'].unique(), reverse=True)
                 selected_season_clust = st.selectbox("Select Season:", options=seasons, key="clust_season_select")
                 # Fetch IDs directly
-                starting_list_df_temp, _ = execute_and_capture(get_historical_cities, year=int(selected_season_clust), info=True, verbose=False) # Don't need verbose here
+                starting_list_df_temp, _ = execute_and_capture(get_historical_cities, year=int(selected_season_clust), info=True, verbose=False, db_path=DB_PATH_STR)
                 if starting_list_df_temp is not None:
                      starting_list_ids = starting_list_df_temp['geo_id'].tolist()
             elif start_type == "Random Selection":
                 size = st.number_input("Number of circuits:", min_value=15, max_value=len(geo_df_clust), value=15, step=1, key="clust_random_size")
                 seed_clust = st.number_input("Random seed:", value=SEED, step=1, key="clust_random_seed")
-                starting_list_df_temp, _ = execute_and_capture(get_random_sample, n=size, info=True, seed=seed_clust, verbose=False)
+                starting_list_df_temp, _ = execute_and_capture(get_random_sample, n=size, info=True, seed=seed_clust, verbose=False, db_path=DB_PATH_STR)
                 if starting_list_df_temp is not None:
-                     starting_list_ids = starting_list_df_temp['geo_id'].tolist()
+                     starting_list_ids = starting_list_df_temp['id'].tolist()
             else: # Empty List
                 starting_list_ids = []
 
@@ -789,7 +804,7 @@ with page5:
             prepare_args = {"from_sample": int(sample_size), "verbose": True}
             scenario_input_valid = True
         elif run_type == "Custom List":
-            all_geo_df_ga = get_table("fone_geography")
+            all_geo_df_ga = get_table("fone_geography", db_path=DB_PATH_STR)
             if not all_geo_df_ga.empty:
                 circuit_options_ga = all_geo_df_ga.set_index('id')['circuit_x'].to_dict()
                 # Use text area for easier pasting, then parse
@@ -813,10 +828,10 @@ with page5:
 
         if prepare_clicked and scenario_input_valid:
             st.write("⏳ Preparing scenario...")
-            circuits_df_pack, verbose_output = execute_and_capture(prepare_scenario, **prepare_args)
+            circuits_df_pack, verbose_output = execute_and_capture(prepare_scenario, db_path=DB_PATH_STR, **prepare_args)
             circuits_df, fig = circuits_df_pack
             code_list = circuits_df['circuit_name'].to_list() if circuits_df is not None else [] # Get the list of circuit IDs
-            code_names = get_circuits_by('code_6', code_list, 'circuit_x') # Call to ensure the function is executed
+            code_names = get_circuits_by('code_6', code_list, 'circuit_x', db_path=DB_PATH_STR) # Call to ensure the function is executed
             
             if circuits_df is not None and not circuits_df.empty:
                 st.session_state.circuits_df_scenario = circuits_df
@@ -916,6 +931,7 @@ with page5:
             toolbox_results, verbose_output = execute_and_capture(
                 deap_toolbox,
                 circuits_df_scenario=st.session_state.circuits_df_scenario,
+                db_path=DB_PATH_STR,
                 fitness_function=fitness_func,
                 params=st.session_state.ga_params,
                 seed=st.session_state.ga_params.get("RANDOM_SEED", SEED),
@@ -1014,6 +1030,7 @@ with page5:
                 st.error("❌ Genetic Algorithm execution failed.")
                 st.session_state.ga_run_complete = False
                 st.session_state.run_ga_verbose = verbose_output
+                st.code(st.session_state.run_ga_verbose, language='text')
 
         else:
             st.error("❌ DEAP Toolbox must be set up before running the algorithm.")
