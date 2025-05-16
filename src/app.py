@@ -433,7 +433,7 @@ with page2:
                 image_path = next((img for loc_id, _, _, _, img in F1_LOCATION_DESCRIPTIONS if loc_id == location_id), None)
 
                 # Display details in two sub-columns
-                sub_col1, sub_col2 = st.columns(2,)
+                sub_col1, sub_col2 = st.columns([3,3])
                 with sub_col1:
                     st.image(image_path if image_path else "https://placehold.co/300x200/2a2a2a/444444?text=No+Image",
                              caption=f"{city_details_row['circuit_x']} Circuit Area" if image_path else "Image not available", 
@@ -804,23 +804,35 @@ with page5:
             scenario_input_valid = True
         elif run_type == "Custom List":
             all_geo_df_ga = get_table("fone_geography", db_path=DB_PATH_STR)
-            if not all_geo_df_ga.empty:
+            calendar_df_ga = get_table("fone_calendar", db_path=DB_PATH_STR)
+            if not all_geo_df_ga.empty and not calendar_df_ga.empty:
                 circuit_options_ga = all_geo_df_ga.set_index('id')['circuit_x'].to_dict()
-                # Use text area for easier pasting, then parse
-                id_list_str_ga = st.text_area("Enter Circuit IDs (comma-separated, min 15):", "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15", key="ga_custom_ids_text", height=100)
-                try:
-                    selected_ids_ga = [int(x.strip()) for x in id_list_str_ga.split(',') if x.strip()]
-                    if len(selected_ids_ga) >= 15:
-                        prepare_args = {"from_input": selected_ids_ga, "verbose": True}
-                        scenario_input_valid = True
-                    else:
-                        st.warning("⚠️ Please enter at least 15 circuit IDs.")
-                except ValueError:
-                    st.error("❌ Invalid input. Please enter comma-separated numbers.")
+                # Get available seasons
+                seasons = sorted(calendar_df_ga['year'].unique(), reverse=True)
+                selected_season_ga = st.selectbox("Populate with Season:", options=["(None)"] + [str(s) for s in seasons], key="ga_custom_season")
+                # Default selection: circuits from selected season, or empty
+                if selected_season_ga != "(None)":
+                    season_ids = calendar_df_ga[calendar_df_ga['year'] == int(selected_season_ga)]['geo_id'].unique().tolist()
+                else:
+                    season_ids = []
+                # Multiselect for circuits
+                selected_ids_ga = st.multiselect(
+                    "Select Circuits (min 15):",
+                    options=list(circuit_options_ga.keys()),
+                    format_func=lambda x: f"{x}: {circuit_options_ga.get(x, 'Unknown')}",
+                    default=season_ids,
+                    key="ga_custom_ids_multiselect"
+                )
+                if len(selected_ids_ga) >= 15:
+                    prepare_args = {"from_input": [int(x) for x in selected_ids_ga], "verbose": True}
+                    scenario_input_valid = True
+                else:
+                    st.warning("⚠️ Please select at least 15 circuits.")
             else:
-                st.error("❌ Could not load geography data for custom list.")
+                st.error("❌ Could not load geography or calendar data for custom list.")
 
     with col_scen2:
+        
         st.write(" ") # Spacer
         st.write(" ") # Spacer
         prepare_clicked = st.button("✅ Prepare Scenario", key="prepare_scenario_button", disabled=not scenario_input_valid, use_container_width=True)

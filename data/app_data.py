@@ -47,5 +47,6 @@ F1_LOCATION_DESCRIPTIONS = [
     (45, "Lagos", "Lagos", "Major Nigerian city and economic hub; represents a potential location for establishing an F1 race in West Africa.", "media/45.jpg"),
     (46, "Oslo", "Oslo", "Capital of Norway; could be a candidate for a Scandinavian Grand Prix, likely requiring a street circuit or new facility.", "media/46.jpg"),
     (47, "Kuala Terengganu", "Kuala Terengganu", "Malaysian city on the east coast; a potential alternative or additional host location in Malaysia, possibly aiming for a street circuit.", "media/47.jpg"),
-    (48, "Vancouver", "Vancouver", "Major Canadian city on the west coast; previously hosted IndyCar races and could be a potential alternative or addition to the Montreal GP.", "media/48.jpg")
+    (48, "Vancouver", "Vancouver", "Major Canadian city on the west coast; previously hosted IndyCar races and could be a potential alternative or addition to the Montreal GP.", "media/48.jpg"),
+    (49, "Madrid", "Madrid", "Capital of Spain; will be hosting a Formula1 race in 2026 for the first time, likely utilizing a street circuit layout.", "media/49.jpg"),
 ]
