@@ -18,13 +18,12 @@ import plotly.express as px
 
 # --- Determine Project Root and DB Path ---
 # Assuming app.py is in 'src/' relative to the project root
-# Adjust if your structure is different (e.g., app.py in root)
 APP_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = APP_DIR.parent # Go up one level from src/
 DB_PATH = PROJECT_ROOT / "data" / "planet_fone.db"
 # Convert to string for functions expecting string paths
 DB_PATH_STR = str(DB_PATH)
-print(f"DB_PATH: {DB_PATH_STR}") # Debugging output
+
 # Add a check and error if DB doesn't exist at the expected path
 if not DB_PATH.is_file():
     st.error(f"FATAL ERROR: Database file not found at expected location: {DB_PATH_STR}")

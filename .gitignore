@@ -52,3 +52,7 @@ jspm_packages/
 *.zip
 *.docx
 *.pyc
+
+#specific
+notebooks/planet_fone.db
+notebooks/planet_fone.db-journal

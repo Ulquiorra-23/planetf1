@@ -47,7 +47,7 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
 
     Args:
         coord (np.ndarray): Scaled coordinates as a numpy array (e.g., latitude and longitude).
-        min_clusters (int): Minimum number of clusters to evaluate. Default is 5.
+        min_clusters (int): Minimum number of clusters to evaluate. Default is 3.
         max_clusters (int): Maximum number of clusters to evaluate. Default is 10.
         random_state (int): Random state for reproducibility. Default is 23.
         verbose (bool): If True, print debug information. Default is False.

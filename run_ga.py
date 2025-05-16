@@ -2,6 +2,7 @@
 import random
 import functools
 import sys
+from pathlib import Path
 
 # --- Third-Party Library Imports ---
 import numpy as np
@@ -18,6 +19,17 @@ try:
 except ImportError:
     print("DEAP library not found. Please install it using: pip install deap")
     exit()  # Exit or handle appropriately if DEAP is missing
+
+# --- Determine Project Root and DB Path ---
+# Assuming app.py is in 'src/' relative to the project root
+# Adjust if your structure is different (e.g., app.py in root)
+APP_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = APP_DIR 
+DB_PATH = PROJECT_ROOT / "data" / "planet_fone.db"
+# Convert to string for functions expecting string paths
+DB_PATH_STR = str(DB_PATH)
+
+
 
 # --- Main GA Execution ---
 
@@ -258,20 +270,20 @@ if __name__ == "__main__":
             print("Error: Year input required for scenario choice 1.")
             sys.exit(1)
         additional_input = int(sys.argv[2])
-        circuits_df_scenario = prepare_scenario(from_season=additional_input, verbose=True)
+        circuits_df_scenario, fig  = prepare_scenario(from_season=additional_input, db_path=DB_PATH_STR, verbose=True)
     elif scenario_choice == 2:
         if len(sys.argv) < 3:
             print("Error: Sample size input required for scenario choice 2.")
             sys.exit(1)
         additional_input = int(sys.argv[2])
-        circuits_df_scenario = prepare_scenario(from_sample=additional_input, verbose=True)
+        circuits_df_scenario, fig  = prepare_scenario(from_sample=additional_input, db_path=DB_PATH_STR, verbose=True)
     elif scenario_choice == 3:
         if len(sys.argv) < 3:
             print("Error: Comma-separated list input required for scenario choice 3.")
             sys.exit(1)
         additional_input = list(map(int, sys.argv[2].split(',')))
         print(f"Custom input: {additional_input}")
-        circuits_df_scenario = prepare_scenario(from_input=additional_input, verbose=True)
+        circuits_df_scenario, fig  = prepare_scenario(from_input=additional_input, db_path=DB_PATH_STR, verbose=True)
     else:
         print("Error: Invalid scenario choice. Must be 1, 2, or 3.")
         sys.exit(1)
@@ -303,5 +315,5 @@ if __name__ == "__main__":
                 print(e)
 
     # Run the genetic algorithm
-    toolbox, stats, hof = deap_toolbox(circuits_df_scenario, genetic_ops.calculate_fitness, params, seed=params['RANDOM_SEED'], verbose=params['VERBOSE'])
+    toolbox, stats, hof = deap_toolbox(circuits_df_scenario, DB_PATH_STR, genetic_ops.calculate_fitness, params, seed=params['RANDOM_SEED'], verbose=params['VERBOSE'])
     pop, log, best_ind, best_fitness = run_genetic_algorithm(toolbox, stats, hof, params, verbose=params['VERBOSE'])
