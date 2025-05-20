@@ -135,7 +135,7 @@ def get_historical_cities(year: int, db_path: str, verbose: bool = False, info: 
         # --- This is where the ValueError originates ---
         if not city_data:
             # Raise the error if the query returned nothing for that year
-            raise ValueError(f"No data found for the year {year} in the database '{DB_PATH}'. Query: {sql_query}")
+            raise ValueError(f"No data found for the year {year} in the database '{db_path}'. Query: {sql_query}")
         # ----------------------------------------------
 
     except sqlite3.Error as e:

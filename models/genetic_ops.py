@@ -5,6 +5,12 @@ from collections import defaultdict
 # Third-party library imports
 import pandas as pd
 import numpy as np
+import textwrap
+import logging
+
+logging.basicConfig(level=logging.INFO, filemode='w', filename='genetic_ops.log',
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Local application/library imports
 from utils.sql import get_table
@@ -246,9 +252,9 @@ def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026
     """
     if not circuits_seq or len(circuits_seq) < 15:
         if verbose:
-            print("Circuit sequence is empty or too short. Returning fitness score of 0.")
+            logger.info("Circuit sequence is empty or too short. Returning fitness score of 0.")
         return float('inf')
-
+    logger.info("Evaluating Fitness...")
     total_emissions = 0.0
     total_penalties = 0.0
     
@@ -260,12 +266,12 @@ def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026
     
     if not regression:
         if verbose:
-            print('Regression is set to False. Using synthetic data for fitness calculation.')
-            print('Getting travel logistics...')
+            logger.info('Regression is set to False. Using synthetic data for fitness calculation.')
+            logger.info('Getting travel logistics...')
         travel_logistic_keys = [(circuits_seq[i], circuits_seq[i+1]) for i in range(len(circuits_seq) - 1)]
         travel_logistic_keys = [f"{travel_logistic_key[0]}-{travel_logistic_key[1]}" for travel_logistic_key in travel_logistic_keys]
         if verbose:
-            print('Travel logistics keys:', travel_logistic_keys)
+            logger.info(f'found [{len(travel_logistic_keys)}] travel logistic keys')
         # Fetch travel logistics data from the database
         travel_logistics_df = get_table("travel_logistic", db_path=db_path)
 
@@ -275,33 +281,33 @@ def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026
         # Extract the effort scores
         effort_scores = filtered_logistics['effort_score'].tolist()
         total_emissions = round(sum(effort_scores), 2)
-        
+
         if verbose:
-            print("Effort scores:", effort_scores)
-            print("Total emissions:", total_emissions)
+            logger.info("Effort scores: %s", textwrap.fill(str(effort_scores), width=100))
+            logger.info("Total emissions: %s", total_emissions)
     
     total_cluster_penalties = 0.0
     
     if clusters:
         cluster_dict = circuits_df.groupby('cluster_id')['circuit_name'].apply(list).to_dict()
         if verbose:
-            print("Cluster dictionary has been created with the following keys:", cluster_dict.keys())
+            logger.info("Cluster dictionary has been created!")
         cluster_ids = [key for circuit in circuits_seq for key, value in cluster_dict.items() if circuit in value]
         if verbose:
-            print("Cluster IDs for the given circuit sequence:", cluster_ids)
+            logger.info("Cluster IDs for the given circuit sequence: %s", textwrap.fill(str(cluster_ids), width=100))
         fragmentation_score_value = fragmentation_score(cluster_ids, non_linear_power=1.0)
         if verbose:
-            print("Fragmentation score:", fragmentation_score_value)
+            logger.info("Fragmentation score: %s", fragmentation_score_value)
         weight = travel_logistics_df['effort_score'].mean() if not travel_logistics_df.empty else 0
         if verbose:
-            print("Weight:", weight)
+            logger.info("Weight: %s", weight)
         total_cluster_penalties = round(fragmentation_score_value * weight, 2)
     
     total_conflict_penalties = 0.0
     calendar = generate_f1_calendar(year=season, n=len(circuits_seq), verbose=False)
     if calendar:
         if verbose:
-            print("Generated calendar:", calendar)
+            logger.info("Generated calendar: %s", textwrap.fill(str(calendar), width=100))
         # Assign each circuit in circuits_seq to a date in the calendar
         circuit_date_mapping = {circuit: calendar[i] for i, circuit in enumerate(circuits_seq)}
 
@@ -314,19 +320,34 @@ def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026
             month_assigned = int(date[-2:].lstrip("0"))
             months_to_avoid = fone_geography_df.loc[fone_geography_df['code_6'] == circuit, 'months_to_avoid'].values
             
-            if isinstance(months_to_avoid, list) and all(isinstance(x, int) for x in months_to_avoid):
-                pass  # months_to_avoid is valid
-            else:
-                months_to_avoid = []
-            if month_assigned in months_to_avoid:
+            # Ensure months_to_avoid is a list of integers
+            months_to_avoid_list = []
+            if len(months_to_avoid) > 0 and pd.notnull(months_to_avoid[0]):
+                # Handle both string (e.g., "3,4,5") and list/array cases
+                if isinstance(months_to_avoid[0], str):
+                    months_to_avoid_list = [int(m) for m in months_to_avoid[0].split(',') if m.strip().isdigit()]
+                elif isinstance(months_to_avoid[0], (list, np.ndarray)):
+                    months_to_avoid_list = [int(m) for m in months_to_avoid[0]]
+                else:
+                    months_to_avoid_list = [int(months_to_avoid[0])]
+            if month_assigned in months_to_avoid_list:
+                logger.info(f"Conflict for circuit {circuit}: assigned month {month_assigned} is in months to avoid {months_to_avoid_list}.")
+                # Apply penalties based on the number of conflicts
                 total_conflicts += 1
-                if verbose:
-                    print(f"Conflict for circuit {circuit}: assigned month {month_assigned} is in months to avoid {months_to_avoid}.")
         if total_conflicts > 0:
-            total_conflict_penalties = total_emissions
+            total_conflict_penalties = total_emissions #elevated to the power of the number of conflicts for test purposes
+            if verbose:
+                logger.info(f"Total conflict penalties: {total_conflict_penalties}")
     
     total_penalties = total_cluster_penalties + total_conflict_penalties
-
+    if True: #verbose: #for testing purposes
+        logger.info("Circuit sequence: %s", textwrap.fill(str(circuits_seq), width=100))
+        logger.info(f"Total cluster penalties: {total_cluster_penalties}")
+        logger.info(f"Total conflict penalties: {total_conflict_penalties}")
+        logger.info(f"Total penalties: {total_penalties}")
+        logger.info(f"Total emissions: {total_emissions}")
+        logger.info(f"Total fitness score: {total_emissions + total_penalties}")
+        logger.info("Fitness calculation completed.")
     return (total_emissions + total_penalties,)
 
 def tournament_selection(population, fitnesses, k, num_parents, verbose=False):

@@ -38,7 +38,7 @@ sys.path.append(str(PROJECT_ROOT))
 
 from utils.sql import get_table, get_circuits_by
 # Make sure utilities and models are importable
-from utils.utilities import get_random_sample, get_historical_cities
+from utils.utilities import get_random_sample, get_historical_cities, generate_f1_calendar
 from models.clustering import kmeans_plot_elbow, scale_coords, clusterize_circuits # Import clustering functions
 from data.app_data import F1_LOCATION_DESCRIPTIONS # Import descriptions
 
@@ -795,7 +795,7 @@ with page5:
         prepare_args = {}
 
         if run_type == "Historical Season":
-            season_year = st.number_input("Season Year (2000-2025):", min_value=2000, max_value=2025, value=2024, step=1, key="ga_season_year")
+            season_year = st.number_input("Season Year (2000-2025):", min_value=2000, max_value=2025, value=2025, step=1, key="ga_season_year")
             prepare_args = {"from_season": int(season_year), "verbose": True}
             scenario_input_valid = True
         elif run_type == "Random Sample":
@@ -903,17 +903,23 @@ with page5:
         st.write("**Current Parameters (Editable below):**")
         with st.expander("Show/Edit Parameters", expanded=False): # Keep collapsed by default
             current_params = st.session_state.ga_params.copy()
-            col_p1, col_p2 = st.columns(2)
+            col_p1, col_p2, col_p3 = st.columns([2,1,1])
             with col_p1:
                 current_params["POPULATION_SIZE"] = st.number_input("Population Size", min_value=10, max_value=1000, value=current_params["POPULATION_SIZE"], step=10, key="pop_size")
                 current_params["NUM_GENERATIONS"] = st.number_input("Number of Generations", min_value=5, max_value=1000, value=current_params["NUM_GENERATIONS"], step=5, key="num_gen")
+                current_params["TOURNAMENT_SIZE"] = st.number_input("Tournament Size (Selection)", min_value=2, max_value=20, value=current_params["TOURNAMENT_SIZE"], step=1, key="tourn_size")
                 current_params["CROSSOVER_PROB"] = st.slider("Crossover Probability (cxpb)", min_value=0.0, max_value=1.0, value=current_params["CROSSOVER_PROB"], step=0.05, key="cxpb")
-                current_params["REGRESSION"] = st.checkbox("📈 Use Regression for Fitness", value=current_params["REGRESSION"], key="use_regr")
+                current_params["MUTATION_PROB"] = st.slider("Mutation Probability (mutpb)", min_value=0.0, max_value=1.0, value=current_params["MUTATION_PROB"], step=0.05, key="mutpb")
+                
 
             with col_p2:
-                 current_params["MUTATION_PROB"] = st.slider("Mutation Probability (mutpb)", min_value=0.0, max_value=1.0, value=current_params["MUTATION_PROB"], step=0.05, key="mutpb")
-                 current_params["TOURNAMENT_SIZE"] = st.number_input("Tournament Size (Selection)", min_value=2, max_value=20, value=current_params["TOURNAMENT_SIZE"], step=1, key="tourn_size")
-                 current_params["CLUSTERS"] = st.checkbox("🧩 Use Clusters in Fitness", value=current_params["CLUSTERS"], key="use_clust")
+                current_params["SEED"] = st.number_input("Random Seed", min_value=0, max_value=10000, value=current_params["RANDOM_SEED"], step=1, key="random_seed")
+                current_params["REGRESSION"] = st.checkbox("📈 Estimate Leg Emissions with Regression", value=current_params["REGRESSION"], key="use_regr")
+                current_params["VERBOSE"] = st.checkbox("🗣️ Verbose Output", value=current_params["VERBOSE"], key="verbose_output")
+            with col_p3:
+                current_params["SEASON_YEAR"] = st.number_input("📅 Season To Simulate (2026-2030)", min_value=2026, max_value=2030, value=current_params["SEASON_YEAR"], step=1, key="season_year")
+                current_params["CLUSTERS"] = st.checkbox("🧩 Use Cluster Penalties", value=current_params["CLUSTERS"], key="use_clust")
+                
 
             update_params_clicked = st.button("💾 Update Parameters", key="update_params_button")
             if update_params_clicked:
@@ -1057,8 +1063,8 @@ with page5:
 
         with col_res1:
             if st.session_state.best_fitness is not None:
-                 fitness_type = "Est. Emissions (Units)" if st.session_state.ga_params.get("REGRESSION", False) else "Distance (km)"
-                 st.metric(label=f"🏆 Best Fitness ({fitness_type})", value=f"{st.session_state.best_fitness:,.2f}")
+                fitness_type = "Est. Emissions (Units)" if st.session_state.ga_params.get("REGRESSION", False) else "Distance (km)"
+                st.metric(label=f"🏆 Best Fitness ({fitness_type})", value=f"{st.session_state.best_fitness:,.2f}")
 
             if st.session_state.best_individual is not None:
                 st.write("**📅 Optimized Sequence:**")
@@ -1066,19 +1072,26 @@ with page5:
                 # Attempt to map codes back to full names
                 name_map = {}
                 if scenario_df is not None and 'circuit_name' in scenario_df.columns and 'circuit' in scenario_df.columns:
-                     # Assuming 'circuit_name' holds the codes/IDs and 'circuit' holds the full name
-                     name_map = scenario_df.set_index('circuit_name')['circuit'].to_dict()
-
+                    name_map = scenario_df.set_index('circuit_name')['circuit'].to_dict()
+                
+                fg = get_table("fone_geography", db_path=DB_PATH_STR)
+                season_year = st.session_state.ga_params.get("SEASON_YEAR", 2026)
+                calendar = generate_f1_calendar(season_year, len(st.session_state.best_individual))
+                calendar_year = [cal + "-" + str(season_year) for cal in calendar]
+                # Create a DataFrame for the sequence
                 sequence_df = pd.DataFrame({
                     'Order': range(1, len(st.session_state.best_individual) + 1),
-                    'Circuit Code': st.session_state.best_individual
-                })
+                    'Circuit Code': st.session_state.best_individual,
+                    'Circuit Name': [fg[fg['code_6'] == code]['circuit_x'].values[0] if not fg[fg['code_6'] == code].empty else "Unknown" for code in st.session_state.best_individual],
+                    'Calendar Date': calendar_year
+                })                
+
                 # Add mapped names if available
                 if name_map:
-                     sequence_df['Circuit Name'] = sequence_df['Circuit Code'].map(name_map).fillna("N/A")
-                     st.dataframe(sequence_df[['Order', 'Circuit Name', 'Circuit Code']], use_container_width=True, height=400) # Limit height
+                    sequence_df['Circuit Name'] = sequence_df['Circuit Code'].map(name_map).fillna("N/A")
+                    st.dataframe(sequence_df[['Order', 'Circuit Name', 'Circuit Code']], use_container_width=True, height=400) # Limit height
                 else:
-                     st.dataframe(sequence_df, use_container_width=True, height=400) # Limit height
+                    st.dataframe(sequence_df, use_container_width=True, height=400) # Limit height
             else:
                  st.warning("⚠️ Best sequence data not available.")
 

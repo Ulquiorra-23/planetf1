@@ -146,24 +146,32 @@ def prepare_scenario(db_path: str, from_season: int = None, from_sample: int = N
 # weights=(-1.0,) means we want to minimize the fitness score
 def deap_toolbox(circuits_df_scenario: pd.DataFrame, db_path: str, fitness_function: callable, params:dict, seed:int=None, verbose=False):
     """
-    Create and configure a DEAP toolbox for the genetic algorithm.
+    Initialize and configure the DEAP toolbox for the genetic algorithm.
 
     Parameters:
-    - circuits_df_scenario: pd.DataFrame, the scenario data for the circuits.
-    - fitness_function: callable, the fitness function to evaluate individuals.
-    - seed: int, random seed for reproducibility.
-    - verbose: bool, whether to print detailed information.
+    - circuits_df_scenario (pd.DataFrame): DataFrame containing scenario circuit data.
+    - db_path (str): Path to the database file.
+    - fitness_function (callable): Function to evaluate the fitness of individuals.
+    - params (dict): Dictionary of GA parameters.
+    - seed (int, optional): Random seed for reproducibility.
+    - verbose (bool, optional): If True, prints detailed setup information.
 
     Returns:
-    - toolbox: deap.base.Toolbox, the configured DEAP toolbox.
-    - stats: deap.tools.support.Statistics, the statistics object for logging.
+    - toolbox (deap.base.Toolbox): Configured DEAP toolbox.
+    - stats (deap.tools.Statistics): Statistics object for tracking GA progress.
+    - hof (deap.tools.HallOfFame): Hall of Fame object to store the best individual(s).
     """
     if verbose:
         print("Initializing DEAP toolbox...")
+        print("Parameters fed into toolbox:")
+        for k, v in params.items():
+            print(f"  {k}: {v}")
 
-    # Create Fitness and Individual types
-    creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-    creator.create("Individual", list, fitness=creator.FitnessMin)
+    # Create Fitness and Individual types (avoid re-creation if already exists)
+    if not hasattr(creator, "FitnessMin"):
+        creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+    if not hasattr(creator, "Individual"):
+        creator.create("Individual", list, fitness=creator.FitnessMin)
 
     # Initialize Toolbox
     toolbox = base.Toolbox()
@@ -179,7 +187,7 @@ def deap_toolbox(circuits_df_scenario: pd.DataFrame, db_path: str, fitness_funct
                      season=params['SEASON_YEAR'], 
                      regression=params['REGRESSION'],
                      clusters=params['CLUSTERS'], 
-                     verbose=False)
+                     verbose=params['VERBOSE'])
     toolbox.register("mate", functools.partial(genetic_ops.order_crossover_deap, toolbox))
     toolbox.register("mutate", functools.partial(genetic_ops.swap_mutation_deap, toolbox))
     toolbox.register("select", tools.selTournament, tournsize=params['TOURNAMENT_SIZE'])
