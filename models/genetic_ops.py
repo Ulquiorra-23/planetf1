@@ -335,7 +335,7 @@ def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026
                 # Apply penalties based on the number of conflicts
                 total_conflicts += 1
         if total_conflicts > 0:
-            total_conflict_penalties = total_emissions #elevated to the power of the number of conflicts for test purposes
+            total_conflict_penalties = total_emissions
             if verbose:
                 logger.info(f"Total conflict penalties: {total_conflict_penalties}")
     
