@@ -1,0 +1,777 @@
+{
+  "id": "GA_RUN_OUTPUT_20250524_135455",
+  "start_time": "2025-05-24T13:54:55.701438",
+  "end_time": "2025-05-24T14:00:37.652719",
+  "run_time_seconds": 341.951281,
+  "arguments": {
+    "circuits_df": [
+      {
+        "circuit_name": "BAHSAK",
+        "cluster_id": "2",
+        "start_freq_prob": 0.23076923076923078,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Sakhir",
+        "city_x": "Sakhir",
+        "country_x": "Bahrain",
+        "latitude": 26.0325,
+        "longitude": 50.5106,
+        "months_to_avoid": "[6, 7, 8, 9]"
+      },
+      {
+        "circuit_name": "AUSMEL",
+        "cluster_id": "5",
+        "start_freq_prob": 0.7307692307692307,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Melbourne",
+        "city_x": "Melbourne",
+        "country_x": "Australia",
+        "latitude": -37.8497,
+        "longitude": 144.968,
+        "months_to_avoid": "[6, 7, 8]"
+      },
+      {
+        "circuit_name": "CHISHA",
+        "cluster_id": "6",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.038461538461538464,
+        "circuit_x": "Shanghai",
+        "city_x": "Shanghai",
+        "country_x": "China",
+        "latitude": 31.3303,
+        "longitude": 121.2246,
+        "months_to_avoid": "[7, 8]"
+      },
+      {
+        "circuit_name": "JAPSUZ",
+        "cluster_id": "6",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.11538461538461539,
+        "circuit_x": "Suzuka",
+        "city_x": "Suzuka",
+        "country_x": "Japan",
+        "latitude": 34.8431,
+        "longitude": 136.5419,
+        "months_to_avoid": "[9, 10]"
+      },
+      {
+        "circuit_name": "SAUJED",
+        "cluster_id": "2",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Jeddah",
+        "city_x": "Jeddah",
+        "country_x": "Saudi Arabia",
+        "latitude": 21.6319,
+        "longitude": 39.1044,
+        "months_to_avoid": "[6, 7, 8, 9]"
+      },
+      {
+        "circuit_name": "USAMIA",
+        "cluster_id": "3",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Miami",
+        "city_x": "Miami",
+        "country_x": "United States",
+        "latitude": 25.9581,
+        "longitude": -80.2389,
+        "months_to_avoid": "[6, 7, 8, 9]"
+      },
+      {
+        "circuit_name": "MONMON",
+        "cluster_id": "0",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Monte Carlo",
+        "city_x": "Monte Carlo",
+        "country_x": "Monaco",
+        "latitude": 43.7347,
+        "longitude": 7.4206,
+        "months_to_avoid": "[11, 12, 1, 2]"
+      },
+      {
+        "circuit_name": "SPACAT",
+        "cluster_id": "0",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Catalunya",
+        "city_x": "Montmel\u00f3",
+        "country_x": "Spain",
+        "latitude": 41.57,
+        "longitude": 2.2611,
+        "months_to_avoid": "[12, 1, 2]"
+      },
+      {
+        "circuit_name": "CANMON",
+        "cluster_id": "3",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Montreal",
+        "city_x": "Montreal",
+        "country_x": "Canada",
+        "latitude": 45.5,
+        "longitude": -73.5228,
+        "months_to_avoid": "[11, 12, 1, 2, 3]"
+      },
+      {
+        "circuit_name": "AUSSPI",
+        "cluster_id": "0",
+        "start_freq_prob": 0.038461538461538464,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Spielberg",
+        "city_x": "Spielberg",
+        "country_x": "Austria",
+        "latitude": 47.2196,
+        "longitude": 14.7649,
+        "months_to_avoid": "[12, 1, 2]"
+      },
+      {
+        "circuit_name": "UKGSIL",
+        "cluster_id": "0",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Silverstone",
+        "city_x": "Silverstone",
+        "country_x": "United Kingdom",
+        "latitude": 52.0786,
+        "longitude": -1.0169,
+        "months_to_avoid": "[11, 12, 1, 2]"
+      },
+      {
+        "circuit_name": "BELSPA",
+        "cluster_id": "0",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Spa-Francorchamps",
+        "city_x": "Stavelot",
+        "country_x": "Belgium",
+        "latitude": 50.4455,
+        "longitude": 5.9708,
+        "months_to_avoid": "[11, 12, 1, 2]"
+      },
+      {
+        "circuit_name": "HUNBUD",
+        "cluster_id": "0",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Budapest",
+        "city_x": "Mogyor\u00f3d",
+        "country_x": "Hungary",
+        "latitude": 47.5789,
+        "longitude": 19.2486,
+        "months_to_avoid": "[]"
+      },
+      {
+        "circuit_name": "NETZAN",
+        "cluster_id": "0",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Zandvoort",
+        "city_x": "Zandvoort",
+        "country_x": "Netherlands",
+        "latitude": 52.3888,
+        "longitude": 4.5409,
+        "months_to_avoid": "[12, 1, 2]"
+      },
+      {
+        "circuit_name": "ITAMON",
+        "cluster_id": "0",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Monza",
+        "city_x": "Monza",
+        "country_x": "Italy",
+        "latitude": 45.6156,
+        "longitude": 9.2811,
+        "months_to_avoid": "[11, 12, 1, 2]"
+      },
+      {
+        "circuit_name": "AZEBAK",
+        "cluster_id": "0",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Baku",
+        "city_x": "Baku",
+        "country_x": "Azerbaijan",
+        "latitude": 40.3725,
+        "longitude": 49.8533,
+        "months_to_avoid": "[12, 1, 2]"
+      },
+      {
+        "circuit_name": "SINMAR",
+        "cluster_id": "1",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Marina Bay",
+        "city_x": "Singapore",
+        "country_x": "Singapore",
+        "latitude": 1.2914,
+        "longitude": 103.8645,
+        "months_to_avoid": "[]"
+      },
+      {
+        "circuit_name": "USAAUS",
+        "cluster_id": "3",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Austin",
+        "city_x": "Austin",
+        "country_x": "United States",
+        "latitude": 30.1328,
+        "longitude": -97.6411,
+        "months_to_avoid": "[7, 8]"
+      },
+      {
+        "circuit_name": "MEXMEX",
+        "cluster_id": "3",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Mexico City",
+        "city_x": "Mexico City",
+        "country_x": "Mexico",
+        "latitude": 19.4042,
+        "longitude": -99.0907,
+        "months_to_avoid": "[6, 7, 8]"
+      },
+      {
+        "circuit_name": "BRASAO",
+        "cluster_id": "4",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.2692307692307692,
+        "circuit_x": "S\u00e3o Paulo",
+        "city_x": "S\u00e3o Paulo",
+        "country_x": "Brazil",
+        "latitude": -23.7036,
+        "longitude": -46.6997,
+        "months_to_avoid": "[]"
+      },
+      {
+        "circuit_name": "USALAS",
+        "cluster_id": "3",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Las Vegas",
+        "city_x": "Las Vegas",
+        "country_x": "United States",
+        "latitude": 36.1699,
+        "longitude": -115.1398,
+        "months_to_avoid": "[6, 7, 8]"
+      },
+      {
+        "circuit_name": "QATLUS",
+        "cluster_id": "2",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Lusail",
+        "city_x": "Lusail",
+        "country_x": "Qatar",
+        "latitude": 25.4914,
+        "longitude": 51.4542,
+        "months_to_avoid": "[6, 7, 8, 9]"
+      },
+      {
+        "circuit_name": "UAEYAS",
+        "cluster_id": "2",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.5384615384615384,
+        "circuit_x": "Yas Marina",
+        "city_x": "Abu Dhabi",
+        "country_x": "United Arab Emirates",
+        "latitude": 24.4672,
+        "longitude": 54.6031,
+        "months_to_avoid": "[5, 6, 7, 8]"
+      },
+      {
+        "circuit_name": "SPAMAD",
+        "cluster_id": "0",
+        "start_freq_prob": 0.0,
+        "end_freq_prob": 0.0,
+        "circuit_x": "Madring",
+        "city_x": "Madrid",
+        "country_x": "Spain",
+        "latitude": 40.4636,
+        "longitude": -3.6162,
+        "months_to_avoid": "[6, 7, 8]"
+      }
+    ],
+    "params": {
+      "POPULATION_SIZE": 500,
+      "CROSSOVER_PROB": 0.8,
+      "MUTATION_PROB": 0.5,
+      "NUM_GENERATIONS": 50,
+      "TOURNAMENT_SIZE": 5,
+      "RANDOM_SEED": 42,
+      "SEASON_YEAR": 2026,
+      "REGRESSION": false,
+      "CLUSTERS": true,
+      "VERBOSE": false,
+      "SEED": 42
+    },
+    "population_size": 500
+  },
+  "results": {
+    "best_individual": [
+      "JAPSUZ",
+      "CHISHA",
+      "SINMAR",
+      "AUSMEL",
+      "BRASAO",
+      "USAMIA",
+      "USAAUS",
+      "MEXMEX",
+      "USALAS",
+      "CANMON",
+      "UKGSIL",
+      "MONMON",
+      "AUSSPI",
+      "ITAMON",
+      "BELSPA",
+      "NETZAN",
+      "SPACAT",
+      "SPAMAD",
+      "HUNBUD",
+      "AZEBAK",
+      "QATLUS",
+      "BAHSAK",
+      "UAEYAS",
+      "SAUJED"
+    ],
+    "calendar": [
+      "22-02",
+      "01-03",
+      "15-03",
+      "22-03",
+      "29-03",
+      "12-04",
+      "19-04",
+      "03-05",
+      "10-05",
+      "24-05",
+      "31-05",
+      "14-06",
+      "21-06",
+      "05-07",
+      "12-07",
+      "26-07",
+      "23-08",
+      "06-09",
+      "13-09",
+      "27-09",
+      "04-10",
+      "11-10",
+      "25-10",
+      "01-11"
+    ],
+    "best_fitness": 42413.75,
+    "logbook": [
+      {
+        "gen": 0,
+        "nevals": 500,
+        "avg": 142335.34193999998,
+        "std": 12528.487540947788,
+        "min": 115555.0,
+        "max": 180908.65
+      },
+      {
+        "gen": 1,
+        "nevals": 457,
+        "avg": 156924.92216,
+        "std": 31168.34630149495,
+        "min": 73749.83,
+        "max": 285278.45
+      },
+      {
+        "gen": 2,
+        "nevals": 444,
+        "avg": 152226.13410000002,
+        "std": 35337.98189637051,
+        "min": 75547.61,
+        "max": 257226.57
+      },
+      {
+        "gen": 3,
+        "nevals": 446,
+        "avg": 145441.29032,
+        "std": 36914.17866904676,
+        "min": 60561.990000000005,
+        "max": 317704.65
+      },
+      {
+        "gen": 4,
+        "nevals": 446,
+        "avg": 148622.17013999997,
+        "std": 41596.292212143875,
+        "min": 60561.990000000005,
+        "max": 272033.17999999993
+      },
+      {
+        "gen": 5,
+        "nevals": 445,
+        "avg": 150638.35692000002,
+        "std": 47998.50395372199,
+        "min": 60561.990000000005,
+        "max": 298230.37
+      },
+      {
+        "gen": 6,
+        "nevals": 450,
+        "avg": 147483.63712,
+        "std": 50336.95895380541,
+        "min": 60561.990000000005,
+        "max": 279695.47000000003
+      },
+      {
+        "gen": 7,
+        "nevals": 445,
+        "avg": 149797.96048,
+        "std": 55538.686208840634,
+        "min": 58743.16,
+        "max": 296517.55000000005
+      },
+      {
+        "gen": 8,
+        "nevals": 443,
+        "avg": 149252.75718000002,
+        "std": 57979.4034490409,
+        "min": 50975.43,
+        "max": 330421.87
+      },
+      {
+        "gen": 9,
+        "nevals": 454,
+        "avg": 160991.55338,
+        "std": 61078.07539159836,
+        "min": 50784.79,
+        "max": 340396.42000000004
+      },
+      {
+        "gen": 10,
+        "nevals": 453,
+        "avg": 153345.93077999997,
+        "std": 64103.508905756935,
+        "min": 58764.16,
+        "max": 335463.09
+      },
+      {
+        "gen": 11,
+        "nevals": 453,
+        "avg": 159118.39474000002,
+        "std": 63723.389609221485,
+        "min": 57089.54,
+        "max": 337221.93000000005
+      },
+      {
+        "gen": 12,
+        "nevals": 439,
+        "avg": 147019.79830000002,
+        "std": 60163.05308340545,
+        "min": 57089.54,
+        "max": 320657.02
+      },
+      {
+        "gen": 13,
+        "nevals": 455,
+        "avg": 154848.82588,
+        "std": 62307.59326318681,
+        "min": 60327.31,
+        "max": 320067.01
+      },
+      {
+        "gen": 14,
+        "nevals": 451,
+        "avg": 153997.07726,
+        "std": 63658.86480282219,
+        "min": 60327.31,
+        "max": 323746.06999999995
+      },
+      {
+        "gen": 15,
+        "nevals": 452,
+        "avg": 144258.65918000002,
+        "std": 61304.50432938594,
+        "min": 59145.71000000001,
+        "max": 300441.77
+      },
+      {
+        "gen": 16,
+        "nevals": 447,
+        "avg": 138150.31874000002,
+        "std": 59582.10728393625,
+        "min": 58245.380000000005,
+        "max": 324295.56
+      },
+      {
+        "gen": 17,
+        "nevals": 450,
+        "avg": 136932.00807999997,
+        "std": 59259.47702411454,
+        "min": 58438.9,
+        "max": 292441.89
+      },
+      {
+        "gen": 18,
+        "nevals": 446,
+        "avg": 136464.06516,
+        "std": 57315.22299553166,
+        "min": 49691.08,
+        "max": 287053.17000000004
+      },
+      {
+        "gen": 19,
+        "nevals": 447,
+        "avg": 131856.43910000002,
+        "std": 56800.69105841501,
+        "min": 50542.22,
+        "max": 319092.0
+      },
+      {
+        "gen": 20,
+        "nevals": 451,
+        "avg": 136231.24792,
+        "std": 54496.435697766385,
+        "min": 52649.21,
+        "max": 278468.97
+      },
+      {
+        "gen": 21,
+        "nevals": 456,
+        "avg": 142290.1689,
+        "std": 55398.700023502446,
+        "min": 51759.09,
+        "max": 299841.82999999996
+      },
+      {
+        "gen": 22,
+        "nevals": 462,
+        "avg": 140337.51372000002,
+        "std": 57125.96599473718,
+        "min": 48931.39,
+        "max": 274165.46
+      },
+      {
+        "gen": 23,
+        "nevals": 455,
+        "avg": 134854.58166,
+        "std": 54564.57014475357,
+        "min": 48509.03,
+        "max": 295518.28
+      },
+      {
+        "gen": 24,
+        "nevals": 440,
+        "avg": 133513.03702000002,
+        "std": 58448.229877007594,
+        "min": 48547.63,
+        "max": 290435.53
+      },
+      {
+        "gen": 25,
+        "nevals": 449,
+        "avg": 133428.11358,
+        "std": 56587.07509001039,
+        "min": 48509.03,
+        "max": 289905.58
+      },
+      {
+        "gen": 26,
+        "nevals": 463,
+        "avg": 131732.8037,
+        "std": 57667.06454711336,
+        "min": 48547.63,
+        "max": 297726.79
+      },
+      {
+        "gen": 27,
+        "nevals": 451,
+        "avg": 125233.73002000002,
+        "std": 55604.37751769035,
+        "min": 48547.63,
+        "max": 315138.78
+      },
+      {
+        "gen": 28,
+        "nevals": 438,
+        "avg": 119784.02844,
+        "std": 56502.75438039672,
+        "min": 48118.71,
+        "max": 281066.96
+      },
+      {
+        "gen": 29,
+        "nevals": 450,
+        "avg": 113173.42292,
+        "std": 52155.02938474509,
+        "min": 46845.3,
+        "max": 272136.58999999997
+      },
+      {
+        "gen": 30,
+        "nevals": 449,
+        "avg": 110310.51068,
+        "std": 53360.825665537894,
+        "min": 46244.5,
+        "max": 262744.95999999996
+      },
+      {
+        "gen": 31,
+        "nevals": 453,
+        "avg": 107979.24428,
+        "std": 49687.245232955866,
+        "min": 46244.5,
+        "max": 255080.54
+      },
+      {
+        "gen": 32,
+        "nevals": 449,
+        "avg": 105915.21484,
+        "std": 52275.172209499666,
+        "min": 46055.76,
+        "max": 264230.70999999996
+      },
+      {
+        "gen": 33,
+        "nevals": 443,
+        "avg": 102587.9175,
+        "std": 51114.219210690906,
+        "min": 43687.18,
+        "max": 253876.47
+      },
+      {
+        "gen": 34,
+        "nevals": 451,
+        "avg": 103888.58744,
+        "std": 49888.14487801064,
+        "min": 43687.18,
+        "max": 259042.59000000003
+      },
+      {
+        "gen": 35,
+        "nevals": 457,
+        "avg": 103394.47116,
+        "std": 52665.446694497026,
+        "min": 43854.75,
+        "max": 324204.49
+      },
+      {
+        "gen": 36,
+        "nevals": 467,
+        "avg": 106343.1035,
+        "std": 52796.52969569606,
+        "min": 43009.26,
+        "max": 269113.57
+      },
+      {
+        "gen": 37,
+        "nevals": 452,
+        "avg": 106390.61312000001,
+        "std": 50759.99634682948,
+        "min": 43009.26,
+        "max": 250109.49
+      },
+      {
+        "gen": 38,
+        "nevals": 450,
+        "avg": 105608.57287999999,
+        "std": 51483.38077269167,
+        "min": 42974.25,
+        "max": 253422.32
+      },
+      {
+        "gen": 39,
+        "nevals": 455,
+        "avg": 103314.79488,
+        "std": 52297.449964848995,
+        "min": 42974.25,
+        "max": 259717.99
+      },
+      {
+        "gen": 40,
+        "nevals": 453,
+        "avg": 101661.94556000001,
+        "std": 51838.904995717145,
+        "min": 42965.4,
+        "max": 245571.33
+      },
+      {
+        "gen": 41,
+        "nevals": 441,
+        "avg": 99075.76565999999,
+        "std": 50825.81212728888,
+        "min": 42924.85,
+        "max": 258708.6
+      },
+      {
+        "gen": 42,
+        "nevals": 454,
+        "avg": 97261.60618,
+        "std": 48048.689162346825,
+        "min": 42752.33,
+        "max": 234555.06
+      },
+      {
+        "gen": 43,
+        "nevals": 447,
+        "avg": 97171.14746000001,
+        "std": 49433.70644567758,
+        "min": 42682.8,
+        "max": 226743.37
+      },
+      {
+        "gen": 44,
+        "nevals": 449,
+        "avg": 89668.06812000001,
+        "std": 49525.08061687457,
+        "min": 42609.61,
+        "max": 261097.71000000002
+      },
+      {
+        "gen": 45,
+        "nevals": 460,
+        "avg": 95305.44189999999,
+        "std": 51078.31923076819,
+        "min": 42609.61,
+        "max": 242631.11
+      },
+      {
+        "gen": 46,
+        "nevals": 452,
+        "avg": 87938.11323999999,
+        "std": 47549.48770153754,
+        "min": 42524.11,
+        "max": 241101.90999999997
+      },
+      {
+        "gen": 47,
+        "nevals": 447,
+        "avg": 87524.41946,
+        "std": 48834.463830358865,
+        "min": 42524.11,
+        "max": 244122.75
+      },
+      {
+        "gen": 48,
+        "nevals": 460,
+        "avg": 85834.11384,
+        "std": 48661.388917118,
+        "min": 42418.22,
+        "max": 246892.46
+      },
+      {
+        "gen": 49,
+        "nevals": 456,
+        "avg": 87796.6075,
+        "std": 48442.91356360808,
+        "min": 42460.06,
+        "max": 235653.71
+      },
+      {
+        "gen": 50,
+        "nevals": 445,
+        "avg": 85086.26502,
+        "std": 48817.58152857491,
+        "min": 42413.75,
+        "max": 245983.84
+      }
+    ]
+  }
+}
