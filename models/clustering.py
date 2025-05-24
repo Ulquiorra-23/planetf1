@@ -1,3 +1,7 @@
+# main imports
+import sys
+from pathlib import Path
+
 # Third-party library imports
 import pandas as pd
 import numpy as np
@@ -8,7 +12,16 @@ from kneed import KneeLocator
 import plotly.express as px
 
 
-def scale_coords(data: pd.DataFrame, verbose: bool = False):
+APP_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = APP_DIR.parent # Go up one level from src/
+sys.path.append(str(PROJECT_ROOT))
+
+# custom imports
+from utils.logs import log_wrap, logls, logdf
+
+
+@log_wrap
+def scale_coords(data: pd.DataFrame, verbose: bool = False, logger=None) -> np.ndarray:
     """
     Scales the latitude and longitude features of the given DataFrame.
 
@@ -23,9 +36,9 @@ def scale_coords(data: pd.DataFrame, verbose: bool = False):
     feature_cols = ['latitude', 'longitude']
     coords = data[feature_cols].values  # Get as numpy array
     if verbose:
-        print(f"\nSelected features: {feature_cols}")
-        print("Original Coordinates (first 5 rows):")
-        print(coords[:5])
+        logger.info(f"Selected features: {feature_cols}")
+        logger.info("Original Coordinates (first 5 rows):")
+        logls(coords[:5])
 
     # --- 2. Scale Features (using StandardScaler) ---
     scaler = StandardScaler()
@@ -34,14 +47,15 @@ def scale_coords(data: pd.DataFrame, verbose: bool = False):
     scaled_coords = scaler.fit_transform(coords)
 
     if verbose:
-        print("\nScaled Coordinates (first 5 rows):")
-        # Print with formatting for better readability
-        print(np.round(scaled_coords[:5], 4))
-        print("\nFeature scaling complete.")
+        logger.info("Scaled Coordinates (first 5 rows):")
+        # logger.info with formatting for better readability
+        logls(np.round(scaled_coords[:5], 4))
+        logger.info("Feature scaling complete.")
     
     return scaled_coords
 
-def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, verbose=False, img_verbose=False):
+@log_wrap
+def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, verbose=False, img_verbose=False, logger=None):
     """
     Plots the Elbow Method to determine the optimal number of clusters for K-Means.
 
@@ -71,8 +85,8 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
         inertia.append(kmeans_elbow.inertia_)
 
     if verbose:
-        print("\nInertia values for each k:")
-        print(inertia)
+        logger.info("Inertia values for each k:")
+        logls(inertia)
 
     fig = None
     if img_verbose:
@@ -87,7 +101,7 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
 
     # --- Using kneed library to find elbow ---
     if verbose:
-        print("\n--- Using kneed library to find elbow ---")
+        logger.info("--- Using kneed library to find elbow ---")
     try:
         # Instantiate KneeLocator
         kneedle = KneeLocator(
@@ -103,23 +117,23 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
 
         if optimal_k_kneed:
             if verbose:
-                print(f"Optimal k found by kneed: {optimal_k_kneed}")
+                logger.info(f"Optimal k found by kneed: {optimal_k_kneed}")
             chosen_k = optimal_k_kneed
             if img_verbose:
                 # Add kneed's result to the plot
                 ax.axvline(optimal_k_kneed, linestyle='--', color='r', label=f'Elbow (k={optimal_k_kneed})')
         else:
             if verbose:
-                print("kneed could not find a distinct elbow point.")
+                logger.warning("kneed could not find a distinct elbow point.")
             chosen_k = min_clusters  # Example fallback
             if verbose:
-                print(f"Falling back to k={chosen_k}")
+                logger.warning(f"Falling back to k={chosen_k}")
 
     except ImportError:
-        print("Error: 'kneed' library not found. Please install it using: pip install kneed")
+        logger.error("Error: 'kneed' library not found. Please install it using: pip install kneed")
         chosen_k = None
     except Exception as e:
-        print(f"An error occurred using kneed: {e}")
+        logger.error(f"An error occurred using kneed: {e}")
         chosen_k = None
 
     if img_verbose:
@@ -136,7 +150,8 @@ def kmeans_plot_elbow(coord, min_clusters=3, max_clusters=10, random_state=23, v
 
     return chosen_k, fig
 
-def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=False):
+@log_wrap
+def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=False, logger=None):
     """
     Clusterize circuits based on their geographical coordinates.
 
@@ -150,7 +165,7 @@ def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=
         tuple: (pd.DataFrame, fig), where the DataFrame has an additional 'cluster_id' column, and fig is the Plotly figure.
     """
     if verbose:
-        print("Starting clusterization process...")
+        logger.info("Starting clusterization process...")
 
     if df is None:
         raise ValueError("DataFrame containing 'city', 'latitude', and 'longitude' must be provided.")
@@ -161,36 +176,37 @@ def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=
     
     # Scale the coordinates
     if verbose:
-        print("Scaling coordinates...")
+        logger.info("Scaling coordinates...")
     coords = scale_coords(df, verbose=verbose)
     
     # Determine the optimal number of clusters using the elbow method
     max_clusters = len(df)
     if verbose:
-        print(f"Determining optimal number of clusters (max_clusters={max_clusters})...")
+        logger.info(f"Determining optimal number of clusters (max_clusters={max_clusters})...")
     optimal_k, _ = kmeans_plot_elbow(coords, max_clusters=max_clusters, random_state=23, verbose=verbose, img_verbose=opt_k_img_verbose)
     
     # Perform K-Means clustering
     if verbose:
-        print(f"Running K-Means with k={optimal_k}...")
+        logger.info(f"Running K-Means with k={optimal_k}...")
     kmeans = KMeans(n_clusters=optimal_k, n_init=10, random_state=23)
     kmeans.fit(coords)
     cluster_labels = kmeans.labels_
     
     # Add cluster IDs to the DataFrame
     if verbose:
-        print("Assigning cluster IDs to circuits...")
+        logger.info("Assigning cluster IDs to circuits...")
     clustered_df = df.copy()
     clustered_df['cluster_id'] = cluster_labels
     clustered_df['cluster_id'] = clustered_df['cluster_id'].astype(str)
     if verbose:
-        print("Cluster IDs assigned successfully.")
+        logger.info("Cluster IDs assigned successfully.")
+        logdf(clustered_df)
     
     # Generate visualization if fig_verbose is True
     fig = None
     if fig_verbose:
         if verbose:
-            print("\n--- Generating Enhanced Plotly Map ---")
+            logger.info("--- Generating Enhanced Plotly Map ---")
         # Group cities by cluster_id for legend
         cluster_cities = clustered_df.groupby('cluster_id')['city'].apply(lambda x: ', '.join(x)).to_dict()
         fig = px.scatter_geo(
@@ -232,9 +248,9 @@ def clusterize_circuits(df, verbose=False, opt_k_img_verbose=False, fig_verbose=
                 wrapped_cities = '<br>'.join([', '.join(cities[i:i+3]) for i in range(0, len(cities), 3)])
                 trace.name = f"Cluster {cluster_id}:<br>{wrapped_cities}"
         if verbose:
-            print("\nEnhanced Plotly figure object 'fig' created.")
+            logger.info("Enhanced Plotly figure object 'fig' created.")
     if verbose:
-        print("Clusterization process completed.")
+        logger.info("Clusterization process completed.")
     
     return clustered_df, fig
 

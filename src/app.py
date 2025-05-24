@@ -5,8 +5,9 @@ import io
 from contextlib import redirect_stdout
 import random
 import os
-# Add these imports at the top of your app.py
+from datetime import datetime
 import subprocess
+import json
 import re # For parsing results
 
 import pandas as pd
@@ -24,6 +25,14 @@ DB_PATH = PROJECT_ROOT / "data" / "planet_fone.db"
 # Convert to string for functions expecting string paths
 DB_PATH_STR = str(DB_PATH)
 
+LOG_PATH = PROJECT_ROOT / "logs"
+# --- Delete old app.log files ---
+for log_file in LOG_PATH.glob("*_app.log"):
+    try:
+        log_file.unlink()
+    except Exception as e:
+        print(f"Could not delete log file {log_file}: {e}")
+
 # Add a check and error if DB doesn't exist at the expected path
 if not DB_PATH.is_file():
     st.error(f"FATAL ERROR: Database file not found at expected location: {DB_PATH_STR}")
@@ -36,6 +45,7 @@ if not DB_PATH.is_file():
 # This allows imports like 'from utils.sql import ...'
 sys.path.append(str(PROJECT_ROOT))
 
+from utils.logs import log_wrap, logls, logdf
 from utils.sql import get_table, get_circuits_by
 # Make sure utilities and models are importable
 from utils.utilities import get_random_sample, get_historical_cities, generate_f1_calendar
@@ -65,6 +75,28 @@ SEED = 42  # Set a random seed for reproducibility
 random.seed(SEED)  # Set the random seed for reproducibility
 np.random.seed(SEED)  # Set the random seed for reproducibility
 
+GEO_DF = get_table("fone_geography", db_path=DB_PATH_STR, verbose=True)
+CALENDAR_DF = get_table("fone_calendar", db_path=DB_PATH_STR, verbose=True)
+LOGISTICS_DF = get_table("travel_logistic", db_path=DB_PATH_STR, verbose=True)
+REGRESSION_DF = get_table("training_regression_calendar", db_path=DB_PATH_STR, verbose=True)
+
+file_log_name = f"{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}_app.log"
+def is_streamlit_local():
+    """
+    Returns True if running Streamlit locally, False if running in deployed/production.
+    Checks for 'streamlit' in sys.argv and common Streamlit dev server env vars.
+    """
+
+    # Streamlit sets this env var when running locally
+    if os.environ.get("STREAMLIT_SERVER_HEADLESS") == "1":
+        return True
+    # Streamlit dev server usually has 'streamlit' in sys.argv[0]
+    if len(sys.argv) > 0 and "streamlit" in sys.argv[0]:
+        return True
+    # Deployed versions (e.g., Streamlit Cloud) set this env var
+    if os.environ.get("STREAMLIT_CLOUD") == "true":
+        return False
+    return False
 
 # --- Page Configuration (Must be the first Streamlit command) ---
 st.set_page_config(
@@ -256,7 +288,7 @@ st.markdown("""
             """, unsafe_allow_html=True)
 
 # --- Helper Function for Capturing Output ---
-def execute_and_capture( func, *args, **kwargs):
+def execute_and_capture(func, *args, **kwargs):
     """
     Executes a function with the given arguments and captures its stdout.
 
@@ -269,15 +301,20 @@ def execute_and_capture( func, *args, **kwargs):
         tuple: A tuple containing the function's return value and the captured stdout as a string.
                Returns (None, error_message_string) if an exception occurs.
     """
+    logging_enabled = is_streamlit_local() 
     string_io = io.StringIO()
     result = None # Initialize result to None
     captured_string = ""
     try:
+        if logging_enabled:
+            captured_string = f"Executing {func.__name__} see detailed logs in the files"
+            result = func(*args, **kwargs) # Call the function with args and kwargs
         # Redirect stdout to the buffer
-        with redirect_stdout(string_io):
+        else:
+            with redirect_stdout(string_io):
             # Execute the function and capture its return value
-            result = func(*args, **kwargs)
-        captured_string = string_io.getvalue()
+                result = func(*args, **kwargs)
+            captured_string = string_io.getvalue()
     except Exception as e:
         # Capture any exceptions that occur within the block
         # Append error to any existing captured output
@@ -287,6 +324,344 @@ def execute_and_capture( func, *args, **kwargs):
 
     return result, captured_string
 
+@st.cache_data # Cache the result to avoid re-reading files on every interaction
+def load_all_logs_metadata(log_path_obj):
+    """
+    Loads lightweight metadata from all GA run JSON log files.
+    """
+    all_metadata = []
+    log_files = sorted([f for f in log_path_obj.glob("*.json")], reverse=True)
+    for log_file in log_files:
+        try:
+            with open(log_file, 'r') as f:
+                data = json.load(f)
+            params = data.get("arguments", {}).get("params", {})
+            circuits_df_data = data.get("arguments", {}).get("circuits_df", [])
+            circuit_codes = sorted([c.get("circuit_name") for c in circuits_df_data if c.get("circuit_name")])
+
+            all_metadata.append({
+                "file_name": log_file.name,
+                "run_id": data.get("id", log_file.name), # Use ID, fallback to filename
+                "season_year": params.get("SEASON_YEAR"),
+                "circuit_set_tuple": tuple(circuit_codes), # Use a tuple of sorted codes for hashability/comparability
+                "num_circuits": len(circuit_codes)
+            })
+        except Exception as e:
+            print(f"Warning: Could not parse metadata from {log_file.name}: {e}") # Log to console
+            continue # Skip corrupted or unparsable files
+    return all_metadata
+
+def render_ga_review_page(log_path_obj, geo_df_obj): # Pass LOG_PATH and GEO_DF
+    st.header("📜 Genetic Algorithm Run Review & Comparison")
+    st.markdown("Select a primary run to see its details, or select additional compatible runs for comparison.")
+    st.divider()
+
+    all_logs_metadata = load_all_logs_metadata(log_path_obj)
+    # --- Add Refresh Button for Logs Metadata ---
+    col_refresh = st.columns([1])[0]
+    with col_refresh:
+        if st.button("🔄 Refresh Logs", help="Reload GA run logs from disk (use if new runs have been added)."):
+            load_all_logs_metadata.clear()  # Clear Streamlit cache for this function
+            all_logs_metadata = load_all_logs_metadata(log_path_obj)
+
+    if not all_logs_metadata:
+        st.warning(f"⚠️ No valid GA run JSON log files found or parsed in `{log_path_obj}`. Please ensure logs exist and are correctly formatted.")
+        return # Exit this function if no logs
+
+    log_options_for_primary = {meta['run_id']: meta['file_name'] for meta in all_logs_metadata}
+
+    # --- Selection Controls in Main Area ---
+    col_select1, col_select2 = st.columns([1,2]) # Adjust ratio as needed
+
+    with col_select1:
+        primary_run_id = st.selectbox(
+            "1. Select Primary Run:",
+            options=list(log_options_for_primary.keys()),
+            index=0,
+            help="This run will be used for single review or as a base for comparison."
+        )
+
+    primary_run_metadata = next((meta for meta in all_logs_metadata if meta['run_id'] == primary_run_id), None)
+    selected_comparison_run_ids = [] # Initialize
+
+    with col_select2:
+        if primary_run_metadata:
+            # Print primary run info and also list of circuit names in the same markdown
+            if primary_run_metadata:
+                code_list = list(primary_run_metadata['circuit_set_tuple'])
+                if geo_df_obj is not None and 'code_6' in geo_df_obj.columns and 'circuit_x' in geo_df_obj.columns:
+                    code_to_name = dict(zip(geo_df_obj['code_6'], geo_df_obj['circuit_x']))
+                    circuit_names = [code_to_name.get(code, code) for code in code_list]
+                else:
+                    circuit_names = code_list
+                st.markdown(
+                    f"**Primary Run:** `{primary_run_id}`"
+                    f"\n  * Season: `{primary_run_metadata['season_year']}`"
+                    f"\n  * Circuits: `{primary_run_metadata['num_circuits']}`"
+                    f"\n  * Circuit Names: {', '.join(circuit_names)}"
+                )
+
+            compatible_runs_metadata = []
+            for meta in all_logs_metadata:
+                if meta['run_id'] == primary_run_id:
+                    continue
+                if meta['season_year'] == primary_run_metadata['season_year'] and \
+                   meta['circuit_set_tuple'] == primary_run_metadata['circuit_set_tuple']:
+                    compatible_runs_metadata.append(meta)
+            
+            log_options_for_comparison = {meta['run_id']: meta['file_name'] for meta in compatible_runs_metadata}
+            
+            if log_options_for_comparison:
+                selected_comparison_run_ids = st.multiselect(
+                    "2. Select Compatible Runs to Compare:",
+                    options=list(log_options_for_comparison.keys()),
+                    help="These runs have the same season year and circuit set as the primary run."
+                )
+            else:
+                st.info("No other runs found with the exact same season and circuit set as the primary run.")
+        else:
+            st.warning("Could not retrieve metadata for the selected primary run.")
+
+
+    st.divider()
+
+    # --- Data Loading for Selected Runs ---
+    selected_runs_data_list = [] # Changed name to avoid conflict with streamlit state key
+    final_selected_file_names_list = []
+
+    if primary_run_id:
+        primary_file_name = log_options_for_primary.get(primary_run_id)
+        if primary_file_name:
+            final_selected_file_names_list.append(primary_file_name)
+
+    for comp_run_id in selected_comparison_run_ids:
+        comp_file_name = log_options_for_comparison.get(comp_run_id) # Get from the filtered comparison options
+        if comp_file_name and comp_file_name not in final_selected_file_names_list:
+            final_selected_file_names_list.append(comp_file_name)
+
+    if final_selected_file_names_list:
+        for file_name in final_selected_file_names_list:
+            file_path = log_path_obj / file_name
+            try:
+                with open(file_path, 'r') as f:
+                    data = json.load(f)
+                    selected_runs_data_list.append(data)
+            except Exception as e:
+                st.error(f"Error loading {file_name}: {e}")
+                continue
+    
+    # --- Display Logic ---
+    if not selected_runs_data_list:
+        st.info("Please select a primary run to begin.")
+    # Check if only the primary run is effectively selected for detailed view
+    elif len(selected_runs_data_list) == 1 and (not selected_comparison_run_ids or selected_runs_data_list[0]['id'] == primary_run_id):
+        st.subheader(f"🔎 Detailed Review: {primary_run_id}")
+        log_data = selected_runs_data_list[0]
+        
+        # Metrics for single run
+        col_meta1, col_meta2, col_meta3 = st.columns(3)
+        col_meta1.metric("Run ID", log_data.get("id", "N/A"))
+        col_meta2.metric("Start Time", log_data.get("start_time", "N/A").split('T')[-1].split('.')[0] if log_data.get("start_time") else "N/A")
+        # Format run duration as MM:SS
+        run_time_seconds = log_data.get('run_time_seconds', 0)
+        minutes = int(run_time_seconds // 60)
+        seconds = int(run_time_seconds % 60)
+        formatted_duration = f"{minutes}m {seconds:02d}s"
+        col_meta3.metric("Run Duration", formatted_duration)
+
+        with st.expander("⚙️ GA Parameters Used (Single Run)"):
+            st.json(log_data.get("arguments", {}).get("params", {}))
+
+        with st.expander("🗺️ Input Circuits Scenario (Single Run)"):
+            circuits_arg_df = pd.DataFrame(log_data.get("arguments", {}).get("circuits_df", []))
+            if not circuits_arg_df.empty:
+                st.dataframe(circuits_arg_df[['circuit_name', 'cluster_id', 'circuit_x', 'city_x', 'country_x', 'months_to_avoid', 'start_freq_prob', 'end_freq_prob']], use_container_width=True)
+            else:
+                st.info("No circuit data in arguments for this run.")
+        
+        st.divider()
+        st.subheader("🏆 Optimization Results (Single Run)")
+        results_data = log_data.get("results", {})
+        best_fitness = results_data.get("best_fitness")
+        best_individual = results_data.get("best_individual")
+        calendar_dates_single = results_data.get("calendar") # Renamed to avoid clash
+        logbook_data = results_data.get("logbook")
+
+        if best_fitness is not None:
+            fitness_type = "Est. Emissions" if log_data.get("arguments", {}).get("params", {}).get("REGRESSION", False) else "Distance Score"
+            st.metric(label=f"🏆 Best Fitness ({fitness_type})", value=f"{best_fitness:,.2f}")
+
+        if best_individual and geo_df_obj is not None:
+            st.write("**📅 Optimized Sequence (Single Run):**")
+            sequence_df_data = []
+            for i, code in enumerate(best_individual):
+                circuit_info = geo_df_obj[geo_df_obj['code_6'] == code]
+                circuit_name = circuit_info['circuit_x'].values[0] if not circuit_info.empty else "Unknown"
+                city_name = circuit_info['city_x'].values[0] if not circuit_info.empty else "Unknown"
+                country_name = circuit_info['country_x'].values[0] if not circuit_info.empty else "Unknown"
+                date_str = calendar_dates_single[i] if calendar_dates_single and i < len(calendar_dates_single) else "N/A"
+                season_year_from_log = log_data.get("arguments", {}).get("params", {}).get("SEASON_YEAR", "N/A")
+                sequence_df_data.append({
+                    'Order': i + 1, 'Circuit Code': code, 'Circuit Name': circuit_name,
+                    'City': city_name, 'Country': country_name, 'Calendar Date': f"{date_str}-{season_year_from_log}"
+                })
+            sequence_df_single = pd.DataFrame(sequence_df_data) # Renamed
+            st.dataframe(sequence_df_single, use_container_width=True, height=min(500, (len(sequence_df_single) + 1) * 35 + 3))
+
+        if logbook_data:
+            st.write("**📉 Fitness Evolution (Single Run):**")
+            logbook_df_single = pd.DataFrame(logbook_data) # Renamed
+            if not logbook_df_single.empty and 'gen' in logbook_df_single.columns and 'min' in logbook_df_single.columns and 'avg' in logbook_df_single.columns:
+                fig_single, ax_single = plt.subplots(figsize=(10, 5)) # Renamed
+                line1 = ax_single.plot(logbook_df_single["gen"], logbook_df_single["min"], color='#FF1801', linestyle='-', marker='o', markersize=4, label="Minimum Fitness")
+                line2 = ax_single.plot(logbook_df_single["gen"], logbook_df_single["avg"], color='#888888', linestyle='--', label="Average Fitness")
+                ax_single.set_xlabel("Generation", fontsize=12, color="white")
+                ax_single.set_ylabel("Fitness Score", color="white", fontsize=12)
+                ax_single.tick_params(axis='y', labelcolor="white")
+                ax_single.tick_params(axis='x', labelcolor="white")
+                ax_single.grid(True, linestyle='--', alpha=0.3)
+                ax_single.set_facecolor('#2a2a2a')
+                fig_single.patch.set_facecolor('#1E1E1E')
+                ax_single.spines['top'].set_visible(False); ax_single.spines['right'].set_visible(False)
+                ax_single.spines['bottom'].set_color('#555555'); ax_single.spines['left'].set_color('#555555')
+                lns = line1 + line2; labs = [l.get_label() for l in lns]
+                ax_single.legend(lns, labs, loc="upper right", facecolor='#333333', edgecolor='#555555', labelcolor='white')
+                plt.title("Fitness over Generations", color='white', fontsize=14, fontweight='bold')
+                st.pyplot(fig_single)
+                plt.close(fig_single) # Close the figure
+            else: st.info("ℹ️ Logbook data incomplete for plotting (Single Run).")
+        else: st.info("ℹ️ No logbook data found for fitness evolution plot (Single Run).")
+
+    elif len(selected_runs_data_list) > 1:
+        st.subheader(f"⚖️ Comparison: {primary_run_id} vs. {len(selected_runs_data_list) -1 } other run(s)")
+        max_runs_for_calendars = 4 
+        runs_for_display_calendars = selected_runs_data_list[:max_runs_for_calendars]
+
+        st.markdown("**Parameter & Overall Results Summary**")
+        comparison_summary_data = []
+        for run_data in selected_runs_data_list:
+            params = run_data.get("arguments", {}).get("params", {})
+            results = run_data.get("results", {})
+            comparison_summary_data.append({
+                "Run ID": run_data.get("id", "N/A"), "Best Fitness": results.get("best_fitness"),
+                "Run Time (s)": f"{run_data.get('run_time_seconds', 0):.2f}",
+                "Season Year": params.get("SEASON_YEAR", "N/A"), "Pop. Size": params.get("POPULATION_SIZE"),
+                "Generations": params.get("NUM_GENERATIONS"), "Mutation Prob.": params.get("MUTATION_PROB"),
+                "Crossover Prob.": params.get("CROSSOVER_PROB"),
+                "Num. Circuits": len(run_data.get("arguments", {}).get("circuits_df", [])),
+                "Regression Used": params.get("REGRESSION", False), "Clusters Used": params.get("CLUSTERS", False),
+                "Seed": params.get("RANDOM_SEED", "N/A")
+            })
+        summary_df = pd.DataFrame(comparison_summary_data).set_index("Run ID")
+        st.dataframe(summary_df, use_container_width=True)
+        st.divider()
+
+        chart_col1, chart_col2 = st.columns(2)
+        chart_figsize = (10, 5)
+
+        with chart_col1:
+            st.markdown("**🏆 Final Best Fitness Comparison**")
+            fitness_data = {
+                run.get("id", f"Run_{i}"): run.get("results", {}).get("best_fitness")
+                for i, run in enumerate(selected_runs_data_list)
+                if run.get("results", {}).get("best_fitness") is not None
+            }
+            if fitness_data:
+                fitness_df = pd.DataFrame(list(fitness_data.items()), columns=['Run ID', 'Best Fitness']).sort_values(by="Best Fitness", ascending=True)
+                fig_bar, ax_bar = plt.subplots(figsize=chart_figsize)
+                xtick_labels = [rid.split('_')[-1] if '_' in rid and len(rid.split('_')[-1]) == 6 and rid.split('_')[-1].isdigit() else rid for rid in fitness_df['Run ID']]
+                
+                bars = ax_bar.bar(range(len(fitness_df)), fitness_df['Best Fitness'], color=px.colors.qualitative.Plotly)
+                ax_bar.set_ylabel("Best Fitness Score", color="white")
+                ax_bar.set_xlabel("Run (Timestamp/ID)", color="white")
+                ax_bar.set_xticks(range(len(fitness_df)))
+                ax_bar.set_xticklabels(xtick_labels, rotation=45, ha="right", color="white", rotation_mode="anchor")
+                ax_bar.tick_params(axis='y', labelcolor="white")
+                ax_bar.set_title("Comparison of Best Fitness Scores", color="white", fontsize=14, fontweight='bold')
+                fig_bar.patch.set_facecolor('#1E1E1E'); ax_bar.set_facecolor('#2a2a2a')
+                ax_bar.grid(axis='y', linestyle='--', alpha=0.3)
+                for bar_obj in bars:
+                    yval = bar_obj.get_height()
+                    max_val_for_text = fitness_df['Best Fitness'].max()
+                    if max_val_for_text is None or max_val_for_text == 0 : max_val_for_text = yval # handle case where max is 0 or None
+                    ax_bar.text(bar_obj.get_x() + bar_obj.get_width()/2.0, yval + 0.01 * max_val_for_text, f'{yval:,.2f}', ha='center', va='bottom', color='white', fontsize=8)
+                plt.tight_layout()
+                st.pyplot(fig_bar)
+                plt.close(fig_bar) # Close the figure
+            else: st.info("No fitness data to compare.")
+
+        with chart_col2:
+            st.markdown("**📉 Fitness Evolution Comparison (Min Fitness)**")
+            fig_line, ax_line = plt.subplots(figsize=chart_figsize)
+            max_gens = 0; plotted_anything_line = False
+            colors = px.colors.qualitative.Plotly
+            for i, run_data in enumerate(selected_runs_data_list):
+                logbook = run_data.get("results", {}).get("logbook")
+                run_id_full = run_data.get("id", f"Run_{i+1}")
+                run_id_short = run_id_full.split('_')[-1] if '_' in run_id_full and len(run_id_full.split('_')[-1]) == 6 and run_id_full.split('_')[-1].isdigit() else run_id_full
+
+                if logbook:
+                    logbook_df = pd.DataFrame(logbook)
+                    if not logbook_df.empty and 'gen' in logbook_df.columns and 'min' in logbook_df.columns:
+                        ax_line.plot(logbook_df["gen"], logbook_df["min"], label=f"{run_id_short}", color=colors[i % len(colors)], marker='o', markersize=3, alpha=0.7)
+                        plotted_anything_line = True
+                        if not logbook_df.empty and "gen" in logbook_df and logbook_df["gen"].max() > max_gens:
+                             max_gens = logbook_df["gen"].max()
+            
+            if plotted_anything_line:
+                ax_line.set_xlabel("Generation", fontsize=12, color="white")
+                ax_line.set_ylabel("Minimum Fitness Score", color="white", fontsize=12)
+                ax_line.tick_params(axis='y', labelcolor="white"); ax_line.tick_params(axis='x', labelcolor="white")
+                ax_line.grid(True, linestyle='--', alpha=0.3); ax_line.set_facecolor('#2a2a2a')
+                fig_line.patch.set_facecolor('#1E1E1E')
+                ax_line.spines['top'].set_visible(False); ax_line.spines['right'].set_visible(False)
+                ax_line.spines['bottom'].set_color('#555555'); ax_line.spines['left'].set_color('#555555')
+                ax_line.legend(loc="upper right", facecolor='#333333', edgecolor='#555555', labelcolor='white', fontsize='small', title="Run (Time)")
+                plt.title("Comparison of Minimum Fitness Evolution", color='white', fontsize=14, fontweight='bold')
+                plt.tight_layout()
+                st.pyplot(fig_line)
+                plt.close(fig_line) # Close the figure
+            else: st.info("No logbook data available for evolution comparison or data was incomplete.")
+        st.divider()
+
+        st.markdown(f"**📅 Optimized Calendar Comparison (Showing up to {max_runs_for_calendars} runs)**")
+        if len(selected_runs_data_list) > max_runs_for_calendars:
+            st.caption(f"Displaying details for the primary run and the first {max_runs_for_calendars-1} selected compatible runs. Select fewer runs for a less cluttered side-by-side view.")
+
+        if runs_for_display_calendars:
+            num_cols_for_calendars = len(runs_for_display_calendars)
+            cols_calendars = st.columns(num_cols_for_calendars) # Renamed
+            for i, run_data in enumerate(runs_for_display_calendars):
+                with cols_calendars[i]:
+                    run_id_full_cal = run_data.get("id", f"Run_{i+1}")
+                    run_id_display_cal = run_id_full_cal.split('_')[-1] if '_' in run_id_full_cal and len(run_id_full_cal.split('_')[-1]) == 6 and run_id_full_cal.split('_')[-1].isdigit() else run_id_full_cal
+                    results = run_data.get("results", {})
+                    best_individual_cal = results.get("best_individual") # Renamed
+                    calendar_dates_cal = results.get("calendar") # Renamed
+                    best_fitness_cal = results.get("best_fitness") # Renamed
+
+                    st.markdown(f"**Run: {run_id_display_cal}**")
+                    if best_fitness_cal is not None:
+                        fitness_type_comp = "Est. Em." if run_data.get("arguments", {}).get("params", {}).get("REGRESSION", False) else "Dist. Score"
+                        st.metric(label=f"{fitness_type_comp}", value=f"{best_fitness_cal:,.2f}")
+
+                    if best_individual_cal and geo_df_obj is not None:
+                        sequence_df_data_cal = [] # Renamed
+                        for j, code in enumerate(best_individual_cal):
+                            circuit_info = geo_df_obj[geo_df_obj['code_6'] == code]
+                            circuit_name = circuit_info['circuit_x'].values[0] if not circuit_info.empty else "Unknown"
+                            season_year_from_log_comp = run_data.get("arguments", {}).get("params", {}).get("SEASON_YEAR", "N/A")
+                            date_str_comp = calendar_dates_cal[j] if calendar_dates_cal and j < len(calendar_dates_cal) else "N/A"
+                            sequence_df_data_cal.append({
+                                '#': j + 1, 'Code': code, 'Circuit': circuit_name,
+                                'Date': f"{date_str_comp}-{season_year_from_log_comp}"
+                            })
+                        sequence_df_comp_cal = pd.DataFrame(sequence_df_data_cal) # Renamed
+                        st.dataframe(sequence_df_comp_cal.set_index('#'), height=min(600, (len(sequence_df_comp_cal) + 1) * 35 + 3), use_container_width=True)
+                    else: st.write("No optimized sequence data.")
+        else: st.info("No runs selected or data available for calendar comparison.")
+
+
 # --- Header ---
 with st.container():
     st.title("🏎️ F1 Green Flag: Sustainable Calendar Optimization")
@@ -295,8 +670,8 @@ with st.container():
 
 # --- Navigation Tabs ---
 # Added emojis to tab labels
-page1, page2, page3, page4, page5 = st.tabs(
-    ["🏠 Overview", "📊 Data Explorer", "📈 Regression Analysis", "🧩 Clustering Analysis", "⚙️ GA Optimization"]
+page1, page2, page3, page4, page5, page_ga_review = st.tabs(
+    ["🏠 Overview", "📊 Data Explorer", "📈 Regression Analysis", "🧩 Clustering Analysis", "⚙️ GA Optimization", "🔍 GA Results Analysis"]
 )
 
 # --- Page 1: Overview ---
@@ -329,10 +704,10 @@ with page2:
 
     # --- Data Loading and Display ---
     st.subheader("🗺️ Circuit Geography Data Sample")
-    geo_df = get_table("fone_geography", db_path=DB_PATH_STR)
-    calendar_df = get_table("fone_calendar", db_path=DB_PATH_STR)
-    logistics_df = get_table("travel_logistic", db_path=DB_PATH_STR)
-    regression_df = get_table("training_regression_calendar", db_path=DB_PATH_STR)
+    geo_df = GEO_DF.copy()  # Use the preloaded geography DataFrame
+    calendar_df = CALENDAR_DF.copy()  # Use the preloaded calendar DataFrame
+    logistics_df = LOGISTICS_DF.copy()  # Use the preloaded logistics DataFrame
+    regression_df = REGRESSION_DF.copy()  # Use the preloaded regression DataFrame
 
     if not geo_df.empty:
         st.dataframe(geo_df.head(), use_container_width=False) # Show a sample of the geography data
@@ -490,8 +865,8 @@ with page3:
     *(Note: This section relies on ongoing regression model development.)*
     """)
 
-    calendar_df = get_table("fone_calendar", db_path=DB_PATH_STR)
-    logistics_df = get_table("travel_logistic", db_path=DB_PATH_STR)
+    calendar_df = CALENDAR_DF.copy()
+    logistics_df = LOGISTICS_DF.copy()
 
     if not calendar_df.empty and not logistics_df.empty:
         merged_df = calendar_df.merge(logistics_df, left_on="outbound_route", right_on="id", how="inner")
@@ -557,8 +932,8 @@ with page4:
     st.subheader("🛠️ Calendar Circuit Builder")
     st.write("Select or build the list of circuits to be clustered.")
 
-    calendar_df_clust = get_table("fone_calendar", db_path=DB_PATH_STR)
-    geo_df_clust = get_table("fone_geography", db_path=DB_PATH_STR)
+    calendar_df_clust = CALENDAR_DF.copy()
+    geo_df_clust = GEO_DF.copy()
 
     if not calendar_df_clust.empty and not geo_df_clust.empty:
         col_build1, col_build2 = st.columns([1, 2]) # Adjust layout
@@ -803,8 +1178,8 @@ with page5:
             prepare_args = {"from_sample": int(sample_size), "verbose": True}
             scenario_input_valid = True
         elif run_type == "Custom List":
-            all_geo_df_ga = get_table("fone_geography", db_path=DB_PATH_STR)
-            calendar_df_ga = get_table("fone_calendar", db_path=DB_PATH_STR)
+            all_geo_df_ga = GEO_DF.copy()
+            calendar_df_ga = CALENDAR_DF.copy()
             if not all_geo_df_ga.empty and not calendar_df_ga.empty:
                 circuit_options_ga = all_geo_df_ga.set_index('id')['circuit_x'].to_dict()
                 # Get available seasons
@@ -910,6 +1285,7 @@ with page5:
                 current_params["TOURNAMENT_SIZE"] = st.number_input("Tournament Size (Selection)", min_value=2, max_value=20, value=current_params["TOURNAMENT_SIZE"], step=1, key="tourn_size")
                 current_params["CROSSOVER_PROB"] = st.slider("Crossover Probability (cxpb)", min_value=0.0, max_value=1.0, value=current_params["CROSSOVER_PROB"], step=0.05, key="cxpb")
                 current_params["MUTATION_PROB"] = st.slider("Mutation Probability (mutpb)", min_value=0.0, max_value=1.0, value=current_params["MUTATION_PROB"], step=0.05, key="mutpb")
+                current_params["LOG_RESULTS_NAME"] = st.text_input("Log Results Name", value=current_params["LOG_RESULTS_NAME"], key="log_results_name")
                 
 
             with col_p2:
@@ -999,6 +1375,7 @@ with page5:
                     stats=st.session_state.stats,
                     hof=st.session_state.hof,
                     params=st.session_state.ga_params,
+                    circuits_df_scenario=st.session_state.circuits_df_scenario, 
                     verbose=True
                 )
 
@@ -1073,8 +1450,8 @@ with page5:
                 name_map = {}
                 if scenario_df is not None and 'circuit_name' in scenario_df.columns and 'circuit' in scenario_df.columns:
                     name_map = scenario_df.set_index('circuit_name')['circuit'].to_dict()
-                
-                fg = get_table("fone_geography", db_path=DB_PATH_STR)
+
+                fg = GEO_DF.copy()
                 season_year = st.session_state.ga_params.get("SEASON_YEAR", 2026)
                 calendar = generate_f1_calendar(season_year, len(st.session_state.best_individual))
                 calendar_year = [cal + "-" + str(season_year) for cal in calendar]
@@ -1110,6 +1487,8 @@ with page5:
     elif st.session_state.toolbox_setup:
          st.info("ℹ️ Click 'Run Genetic Algorithm' to start the optimization.")
 
+with page_ga_review:
+    render_ga_review_page(LOG_PATH, GEO_DF)
 
 # --- Footer ---
 st.divider()

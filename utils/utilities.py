@@ -10,25 +10,37 @@ import pandas as pd
 import numpy as np
 import sqlite3
 
+APP_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = APP_DIR.parent # Go up one level from src/
+sys.path.append(str(PROJECT_ROOT))
+DB_PATH = PROJECT_ROOT / "data" / "planet_fone.db"
+# Convert to string for functions expecting string paths
+DB_PATH_STR = str(DB_PATH)
+
 # Local application/library imports
 from utils.sql import get_table
 from models import clustering
+from utils.logs import log_wrap, logdf, logls
 
+FONE_CALENDAR_DF = get_table("fone_calendar", db_path=DB_PATH_STR)
+TRAVEL_LOGISTIC_DF = get_table("travel_logistic", db_path=DB_PATH_STR)
+FONE_GEOGRAPHY_DF = get_table("fone_geography", db_path=DB_PATH_STR)
 
-def get_historical_seq(db_path: str, verbose = False):
+@log_wrap
+def get_historical_seq(db_path: str, verbose = False, logger=None) -> str:
     """
     Fetches historical sequence data from the database, processes it, and returns a JSON string.
     """
     # Pass db_path to get_table
-    historical_races = get_table('fone_calendar', db_path=db_path, verbose=verbose)
-    geography = get_table('fone_geography', db_path=db_path, verbose=verbose)
+    historical_races = FONE_CALENDAR_DF
+    geography = FONE_GEOGRAPHY_DF
     if verbose:
-        print("Fetched historical races and geography data.")
+        logger.info("Fetched historical races and geography data.")
 
     # Sort the DataFrame by date
     historical_races_sorted = historical_races.sort_values(by='date')
     if verbose:
-        print("Sorted historical races by date.")
+        logger.info("Sorted historical races by date.")
 
     # Identify rows where the geo_id and year of consecutive rows are the same
     consecutive_geo_id_indices = historical_races_sorted[
@@ -72,11 +84,12 @@ def get_historical_seq(db_path: str, verbose = False):
     # Convert the result to JSON
     historical_seq = json.dumps(result, indent=4, ensure_ascii=False)
     if verbose:
-        print("Generated historical sequence JSON.")
+        logger.info("Generated historical sequence JSON.")
 
     return historical_seq
 
-def get_historical_cities(year: int, db_path: str, verbose: bool = False, info: bool = False) -> pd.DataFrame:
+@log_wrap
+def get_historical_cities(year: int, db_path: str, verbose: bool = False, info: bool = False, logger=None) -> pd.DataFrame:
     """
     Retrieves the DataFrame of cities for the given year from dfs_by_year_dict.
 
@@ -98,11 +111,12 @@ def get_historical_cities(year: int, db_path: str, verbose: bool = False, info: 
         if not Path(db_path).is_file():
              raise FileNotFoundError(f"Database file not found at specified path: {db_path}")
         if verbose:
-            print(f"Connecting to the database at: {db_path}")
+            logger.info(f"Connecting to the database at: {db_path}")
         # Use the passed db_path argument here
         connection = sqlite3.connect(db_path)
     # ... (rest of try/except/finally block is mostly unchanged, just uses connection variable) ...
     except sqlite3.Error as e:
+        logger.error(f"Failed to connect to the database at '{db_path}': {e}")
         raise ConnectionError(f"Failed to connect to the database at '{db_path}': {e}")
     except FileNotFoundError as e:
          raise e
@@ -146,7 +160,7 @@ def get_historical_cities(year: int, db_path: str, verbose: bool = False, info: 
         if connection:
             connection.close()
             if verbose:
-                print("Database connection closed.")
+                logger.info("Database connection closed.")
 
     # Convert the list of city data to a DataFrame
     column_names = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude','first_gp_probability','last_gp_probability']
@@ -162,26 +176,26 @@ def get_historical_cities(year: int, db_path: str, verbose: bool = False, info: 
     # Remove duplicates and print what is being removed
     duplicates = city_data_df[city_data_df.duplicated()]
     if verbose and not duplicates.empty:
-        print("Removing duplicates:")
-        print(duplicates)
+        logger.info("Removing duplicates:")
+        logdf(duplicates)
 
     city_data_df = city_data_df.drop_duplicates().reset_index(drop=True) # Reset index after dropping
 
     # Print the DataFrame info if verbose
     if verbose:
-        print(f"Extracted city data from year {year} (info={info}):")
-        # Use head() for brevity in verbose output, info() can be long
-        print(city_data_df.head())
-        print(f"Total rows: {len(city_data_df)}")
+        logger.info(f"Extracted city data from year {year} (info={info}):")
+        logdf(city_data_df)
+        logger.info(f"Total rows: {len(city_data_df)}")
 
     return city_data_df
 
-def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
+@log_wrap
+def generate_f1_calendar(year: int, n: int, verbose: bool = False, logger=None) -> list[str]:
     assert 2026 <= year <= 2030, "Year must be between 2026 and 2030"
     assert 15 <= n <= 25, "Races must be between 15 and 25"
 
     if verbose:
-        print(f"Generating calendar for year {year} with {n} races.")
+        logger.info(f"Generating calendar for year {year} with {n} races.")
 
     sundays = []
     dt = datetime.date(year, 1, 1)
@@ -191,20 +205,20 @@ def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
         dt += datetime.timedelta(days=1)
 
     if verbose:
-        print(f"Identified {len(sundays)} Sundays in the year {year}.")
+        logger.info(f"Identified {len(sundays)} Sundays in the year {year}.")
 
     season_start = max([d for d in sundays if d.month == 2])
     season_end = min([d for d in sundays if d.month == 12])
     sundays = [d for d in sundays if season_start <= d <= season_end]
 
     if verbose:
-        print(f"Season starts on {season_start} and ends on {season_end}.")
-        print(f"{len(sundays)} Sundays remain after filtering for season start and end.")
+        logger.info(f"Season starts on {season_start} and ends on {season_end}.")
+        logger.info(f"{len(sundays)} Sundays remain after filtering for season start and end.")
 
     sundays = [d for d in sundays if not (d.month == 8 and d.day <= 21)]
 
     if verbose:
-        print(f"{len(sundays)} Sundays remain after filtering for August break.")
+        logger.info(f"{len(sundays)} Sundays remain after filtering for August break.")
 
     race_days = []
     triple_header_count = 0
@@ -221,7 +235,7 @@ def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
         triple_header = 0
 
     if verbose:
-        print(f"Triple-header allowance: {triple_header}.")
+        logger.info(f"Triple-header allowance: {triple_header}.")
 
     while len(race_days) < n and i < len(sundays):
         current = sundays[i]
@@ -234,7 +248,7 @@ def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
                 (current - d3).days == 7
             ):
                 if verbose:
-                    print(f"Skipping {current} to avoid 4-in-a-row.")
+                    logger.warning(f"Skipping {current} to avoid 4-in-a-row.")
                 i += 1
                 continue
 
@@ -251,7 +265,7 @@ def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
                 i += 3
                 p = triple_header_count + 1 if triple_header == 3 else triple_header_count + 6
                 if verbose:
-                    print(f"Added triple-header: {s1}, {s2}, {s3}.")
+                    logger.info(f"Added triple-header: {s1}, {s2}, {s3}.")
                 continue
 
         if not race_days or (current - race_days[-1]).days >= 14:
@@ -264,17 +278,21 @@ def generate_f1_calendar(year: int, n: int, verbose: bool = False) -> list[str]:
                     p = 1
                 i += 2
                 if verbose:
-                    print(f"Added race days: {race_days[-2]}, {race_days[-1]}.")
+                    logger.info(f"Added race days: {race_days[-2]}, {race_days[-1]}.")
 
         i += 1
 
     race_days = race_days[:n]
     if verbose:
-        print(f"Final race days: {[d.strftime('%d-%m') for d in race_days]}.")
+        # Log final race days, 4 per line for readability
+        race_days_strs = [d.strftime('%d-%m') for d in race_days]
+        logger.info(f"Final race days:")
+        logls(race_days_strs)
 
     return [d.strftime("%d-%m") for d in race_days]
 
-def get_random_sample(n: int, db_path: str, info: bool, verbose=False, seed=None):
+@log_wrap
+def get_random_sample(n: int, db_path: str, info: bool, verbose=False, seed=None, logger=None) -> pd.DataFrame:
     """
     Fetches a random n-sized sample of city_x, latitude, and longitude from the fone_geography table.
 
@@ -293,7 +311,7 @@ def get_random_sample(n: int, db_path: str, info: bool, verbose=False, seed=None
         if not Path(db_path).is_file():
              raise FileNotFoundError(f"Database file not found at specified path: {db_path}")
         if verbose:
-            print(f"Fetching a random sample of {n} rows from the database at {db_path}...")
+            logger.info(f"Fetching a random sample of {n} rows from the database at {db_path}...")
         # Use the passed db_path argument here
         connection = sqlite3.connect(db_path)
     # ... (rest of try/except/finally block is mostly unchanged, just uses connection variable) ...
@@ -323,22 +341,25 @@ def get_random_sample(n: int, db_path: str, info: bool, verbose=False, seed=None
     sample_df.rename(columns={'city_x': 'city'}, inplace=True)
 
     if verbose:
-        print(f"Random sample of {n} rows fetched successfully.")
+        logger.info(f"Random sample of {n} rows fetched successfully.")
     return sample_df
 
-def get_circuit_for_pop(id_val: int, db_path: str, verbose: bool = False):
+@log_wrap
+def get_circuit_for_pop(id_val: int, db_path: str, verbose: bool = False, logger=None):
     """
     Fetches the circuit data for a given ID from the database and returns it as a DataFrame.
     """
-    circuits = get_table('fone_geography', db_path=db_path, verbose=verbose)
+    circuits = FONE_GEOGRAPHY_DF
     if verbose:
-        print("Fetched circuit data from the database.")        
+        logger.info("Fetched circuit data from the database.")        
     circuit = circuits[circuits['id'] == id_val][['id', 'code_6', 'circuit_x', 'city_x', 'country_x', 'latitude', 'longitude', 'first_gp_probability', 'last_gp_probability']]
     if verbose:
-        print(f"Fetched circuit details for ID {id_val}: {circuit}.")
+        logger.info(f"Fetched circuit details for ID {id_val}:")
+        logdf(circuit)
     return circuit
 
-def get_circuits_for_population(db_path: str, n:int =None, seed:int =None, season:int =None, custom:list = None,verbose=False):
+@log_wrap
+def get_circuits_for_population(db_path: str, n:int =None, seed:int =None, season:int =None, custom:list = None,verbose=False, logger=None):
     """
     Generate a DataFrame based on the provided seed and n or season.
 
@@ -357,15 +378,15 @@ def get_circuits_for_population(db_path: str, n:int =None, seed:int =None, seaso
 
     if custom is not None:
         if verbose:
-            print(f"Generating circuits for custom population with n = {len(custom)}.")
+            logger.info(f"Generating circuits for custom population with n = {len(custom)}.")
         prereq_custom = pd.DataFrame()
         for id in custom:
             if verbose:
-                print(f"Fetching circuit details for ID {id}...")
+                logger.info(f"Fetching circuit details for ID {id}...")
             circuit = get_circuit_for_pop(id, db_path=db_path, verbose=verbose)
             prereq_custom = pd.concat([prereq_custom, circuit], ignore_index=True)
         if verbose:
-            print(f"Fetched {prereq_custom['circuit_x'].tolist()} circuits for custom population.")
+            logger.info(f"Fetched {prereq_custom['circuit_x'].tolist()} circuits for custom population.")
         
         clustersized_circuits = prereq_custom[['city_x', 'latitude', 'longitude']].copy()
         clustersized_circuits.rename(columns={'city_x': 'city'}, inplace=True)
@@ -376,13 +397,13 @@ def get_circuits_for_population(db_path: str, n:int =None, seed:int =None, seaso
         prereq_custom.columns = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
                                     'first_gp_probability', 'last_gp_probability', 'cluster_id']
         if verbose:
-            print("Generated DataFrame for custom circuits:")
-            print(prereq_custom['circuit'].tolist())
+            logger.info("Generated DataFrame for custom circuits:")
+            logls(prereq_custom['circuit'].tolist())
         return prereq_custom, fig 
 
     if seed is not None:
         if verbose:
-            print(f"Generating circuits for population with seed={seed} and n={n}.")
+            logger.info(f"Generating circuits for population with seed={seed} and n={n}.")
         circuit_names_random = get_random_sample(n, seed=seed, db_path=db_path, info=True, verbose=verbose)
         circuits_random = get_random_sample(n, seed=seed, db_path=db_path, info=False, verbose=verbose)
         clustersized_circuits, fig = clustering.clusterize_circuits(df=circuits_random, verbose=verbose, fig_verbose=True)
@@ -390,17 +411,17 @@ def get_circuits_for_population(db_path: str, n:int =None, seed:int =None, seaso
         prereq_random.columns = ['geo_id', 'code', 'circuit', 'city', 'country', 'latitude', 'longitude',
                                  'first_gp_probability', 'last_gp_probability', 'cluster_id']
         if verbose:
-            print("Generated DataFrame for random circuits:")
-            print(prereq_random['circuit'].tolist())
+            logger.info("Generated DataFrame for random circuits:")
+            logls(prereq_random['circuit'].tolist())
         return prereq_random, fig
 
     if season is not None:
         if verbose:
-            print(f"Generating circuits for population for season={season}.")
+            logger.info(f"Generating circuits for population for season={season}.")
         circuit_names = get_historical_cities(season, db_path=db_path, info=True, verbose=verbose)
         clustersized_circuits, fig = clustering.clusterize_circuits(df=circuit_names[['city', 'latitude', 'longitude']], verbose=verbose, fig_verbose=True)
         prereq = pd.merge(circuit_names, clustersized_circuits[['city', 'cluster_id']], on='city', how='left')
         if verbose:
-            print("Generated DataFrame for historical circuits:")
-            print(prereq['circuit'].tolist())
+            logger.info("Generated DataFrame for historical circuits:")
+            logls(prereq['circuit'].tolist())
         return prereq, fig

@@ -2,7 +2,9 @@
 import random
 import functools
 import sys
+import json
 from pathlib import Path
+from datetime import datetime
 
 # --- Third-Party Library Imports ---
 import numpy as np
@@ -10,8 +12,9 @@ import pandas as pd
 
 # --- Custom Library Imports ---
 from models import genetic_ops
-from utils.utilities import get_circuits_for_population
+from utils.utilities import get_circuits_for_population, generate_f1_calendar
 from utils.sql import get_table
+from utils.logs import log_wrap, logls, logdf
 
 # --- DEAP Imports ---
 try:
@@ -29,11 +32,14 @@ DB_PATH = PROJECT_ROOT / "data" / "planet_fone.db"
 # Convert to string for functions expecting string paths
 DB_PATH_STR = str(DB_PATH)
 
+RUN_LOGS_PATH = PROJECT_ROOT / "logs" 
 
+GEO_DF = get_table("fone_geography", db_path=DB_PATH_STR)
 
 # --- Main GA Execution ---
 
-def update_param(params: dict, key: str, value, verbose: bool = False) -> dict:
+@log_wrap
+def update_param(params: dict, key: str, value, verbose: bool = False, logger = None) -> dict:
     """
     Update a specific parameter in the parameters dictionary with a datatype check.
 
@@ -51,12 +57,13 @@ def update_param(params: dict, key: str, value, verbose: bool = False) -> dict:
             raise TypeError(f"Type mismatch for parameter '{key}': "
                             f"expected {type(params[key]).__name__}, got {type(value).__name__}.")
         if verbose:
-            print(f"Updating parameter '{key}' from {params[key]} to {value}.")
+            logger.info(f"Updating parameter '{key}' from {params[key]} to {value}.")
     else:
         if verbose:
-            print(f"Adding new parameter '{key}' with value {value}.")
+            logger.info(f"Adding new parameter '{key}' with value {value}.")
     params[key] = value
     return params
+
 
 def set_default_params(params: dict) -> dict:
     """
@@ -79,6 +86,7 @@ def set_default_params(params: dict) -> dict:
         "REGRESSION": False,  # Set to True for regression estimates
         "CLUSTERS": True,  # Set to True for clustering
         "VERBOSE": False,  # Set to True for detailed output
+        "LOG_RESULTS_NAME": f"GA_RUN_OUTPUT_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
     }
     # Update params with defaults if not already set
     for key, value in defaults.items():
@@ -95,7 +103,8 @@ random.seed(params["RANDOM_SEED"])
 np.random.seed(params["RANDOM_SEED"])
 
 # --- Prepare Scenario Data ---
-def prepare_scenario(db_path: str, from_season: int = None, from_sample: int = None, from_input: list = None, verbose: bool = False):
+@log_wrap
+def prepare_scenario(db_path: str, from_season: int = None, from_sample: int = None, from_input: list = None, verbose: bool = False, logger = None) -> tuple:
     """
     Prepare the scenario data for the genetic algorithm.
 
@@ -118,33 +127,34 @@ def prepare_scenario(db_path: str, from_season: int = None, from_sample: int = N
     if from_season is not None:
         circuits_df_scenario, fig = get_circuits_for_population(db_path=db_path, season=from_season, verbose=verbose)
         if verbose:
-            print(f"Scenario prepared using season: {from_season}")
+            logger.info(f"Scenario prepared using season: {from_season}")
     
     if from_sample is not None:
         circuits_df_scenario, fig = get_circuits_for_population(db_path=db_path, n=from_sample, seed=params["RANDOM_SEED"], verbose=verbose)
         if verbose:
-            print(f"Scenario prepared using sample size: {from_sample}")
-        
+            logger.info(f"Scenario prepared using sample size: {from_sample}")
+
     if from_input is not None:
         circuits_df_scenario, fig = get_circuits_for_population(db_path=db_path, custom=from_input, verbose=verbose)
         if verbose:
-            print(f"Scenario prepared using custom input: {from_input}")
-    
-    circuits_df_scenario = circuits_df_scenario[['code', 'cluster_id', 'first_gp_probability', 'last_gp_probability']]    
+            logger.info(f"Scenario prepared using custom input: {from_input}")
+
+    circuits_df_scenario = circuits_df_scenario[['code', 'cluster_id', 'first_gp_probability', 'last_gp_probability']]
     circuits_df_scenario.columns = ['circuit_name', 'cluster_id', 'start_freq_prob', 'end_freq_prob']
     circuit_list_scenario = circuits_df_scenario['circuit_name'].tolist()
     
     # Print details for debugging if verbose
     if verbose:
-        print(f"Optimizing for {len(circuit_list_scenario)} circuits.")
-        print(f"circuit_list_scenario: {circuit_list_scenario}")
-    
+        logger.info(f"Optimizing for {len(circuit_list_scenario)} circuits.")
+        logls(circuit_list_scenario)
+
     return circuits_df_scenario, fig
 
 # --- DEAP Setup ---
 # Create Fitness and Individual types
 # weights=(-1.0,) means we want to minimize the fitness score
-def deap_toolbox(circuits_df_scenario: pd.DataFrame, db_path: str, fitness_function: callable, params:dict, seed:int=None, verbose=False):
+@log_wrap
+def deap_toolbox(circuits_df_scenario: pd.DataFrame, db_path: str, fitness_function: callable, params:dict, seed:int=None, verbose=False, logger = None) -> tuple:
     """
     Initialize and configure the DEAP toolbox for the genetic algorithm.
 
@@ -162,10 +172,10 @@ def deap_toolbox(circuits_df_scenario: pd.DataFrame, db_path: str, fitness_funct
     - hof (deap.tools.HallOfFame): Hall of Fame object to store the best individual(s).
     """
     if verbose:
-        print("Initializing DEAP toolbox...")
-        print("Parameters fed into toolbox:")
+        logger.info("Initializing DEAP toolbox...")
+        logger.info("Parameters fed into toolbox:")
         for k, v in params.items():
-            print(f"  {k}: {v}")
+            logger.info(f"  {k}: {v}")
 
     # Create Fitness and Individual types (avoid re-creation if already exists)
     if not hasattr(creator, "FitnessMin"):
@@ -203,11 +213,12 @@ def deap_toolbox(circuits_df_scenario: pd.DataFrame, db_path: str, fitness_funct
     hof = tools.HallOfFame(1) # Store only the single best
 
     if verbose:
-        print("DEAP toolbox initialized successfully.")
+        logger.info("DEAP toolbox initialized successfully.")
 
     return toolbox, stats, hof
 
-def run_genetic_algorithm(toolbox, stats, hof, params, verbose=False):
+@log_wrap
+def run_genetic_algorithm(toolbox, stats, hof, params, circuits_df_scenario: pd.DataFrame = None, verbose=False, logger=None):
     """
     Run the genetic algorithm using the provided toolbox, stats, and hall of fame.
 
@@ -225,13 +236,17 @@ def run_genetic_algorithm(toolbox, stats, hof, params, verbose=False):
     - best_fitness: float, the fitness score of the best individual.
     """
     if verbose:
-        print("\n--- Starting Genetic Algorithm ---")
-        print(f"Parameters: {params}")
+        logger.info("--- Starting Genetic Algorithm ---")
+        logger.info(f"Parameters: {params}")
+
+    # Save all arguments and returned value in JSON format
+    start_time = datetime.now()
 
     # Create the initial population
     population = toolbox.population_custom()
+
     if verbose:
-        print(f"Initial Population Size: {len(population)}")
+        logger.info(f"Initial Population Size: {len(population)}")
 
     # Run the genetic algorithm
     population, logbook = algorithms.eaSimple(
@@ -249,11 +264,45 @@ def run_genetic_algorithm(toolbox, stats, hof, params, verbose=False):
     best_fitness = best_individual.fitness.values[0]
 
     if verbose:
-        print("\n--- Genetic Algorithm Finished ---")
-        print(f"Best Individual Found (Calendar Sequence): {best_individual}")
-        print(f"Best Fitness Score Found: {best_fitness}")
-        print(f"Logbook: {logbook}")
+        logger.info("--- Genetic Algorithm Finished ---")
+        logger.info(f"Best Individual Found (Calendar Sequence): {best_individual}")
+        logger.info(f"Best Fitness Score Found: {best_fitness}")
+        logger.info(f"Logbook: {logbook}")
 
+    end_time = datetime.now()
+    run_time = (end_time - start_time).total_seconds()
+
+    if circuits_df_scenario is not None:
+        initial_circuits = circuits_df_scenario.merge(
+            GEO_DF[['code_6', 'circuit_x', 'city_x', 'country_x', 'latitude', 'longitude','months_to_avoid']],
+            left_on='circuit_name',
+            right_on='code_6',
+            how='left'
+        )
+        initial_circuits = initial_circuits.drop(columns=['code_6'])
+    
+    RUN_LOGS_NAME = params['LOG_RESULTS_NAME']
+
+    log_data = {
+        "id": RUN_LOGS_NAME,
+        "start_time": start_time.isoformat(),
+        "end_time": end_time.isoformat(),
+        "run_time_seconds": run_time,
+        "arguments": {
+        "circuits_df" : initial_circuits.to_dict(orient='records'),
+        "params": params,
+        "population_size": len(population),
+        },
+        "results": {
+        "best_individual": list(best_individual),
+        "calendar": generate_f1_calendar(year=params['SEASON_YEAR'],n=len(best_individual)),
+        "best_fitness": best_fitness,
+        "logbook": [dict(gen) for gen in logbook],
+        }
+    }
+    RUN_LOGS_PATH.mkdir(parents=True, exist_ok=True)
+    with open(RUN_LOGS_PATH / RUN_LOGS_NAME, "w", encoding="utf-8") as f:
+        json.dump(log_data, f, indent=2, default=str)
     return population, logbook, best_individual, best_fitness
 
 
