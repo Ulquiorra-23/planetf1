@@ -546,6 +546,7 @@ def render_ga_review_page(log_path_obj, geo_df_obj): # Pass LOG_PATH and GEO_DF
                 "Run ID": run_data.get("id", "N/A"), "Best Fitness": results.get("best_fitness"),
                 "Run Time (s)": f"{run_data.get('run_time_seconds', 0):.2f}",
                 "Season Year": params.get("SEASON_YEAR", "N/A"), "Pop. Size": params.get("POPULATION_SIZE"),
+                "Tournament Size": params.get("TOURNAMENT_SIZE", 2),
                 "Generations": params.get("NUM_GENERATIONS"), "Mutation Prob.": params.get("MUTATION_PROB"),
                 "Crossover Prob.": params.get("CROSSOVER_PROB"),
                 "Num. Circuits": len(run_data.get("arguments", {}).get("circuits_df", [])),

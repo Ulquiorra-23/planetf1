@@ -22,6 +22,9 @@ from utils.sql import get_table
 from utils.utilities import generate_f1_calendar
 from utils.logs import log_wrap, logls, logdf
 
+# Load regression models
+from models.regression import calendar_emissions
+
 TRAVEL_LOGISTIC_DF = get_table("travel_logistic", db_path=DB_PATH_STR)
 FONE_GEOGRAPHY_DF = get_table("fone_geography", db_path=DB_PATH_STR)
 
@@ -87,35 +90,12 @@ def shuffle_respecting_clusters(circuits_to_shuffle, cluster_assignments, seed=N
         cluster_id = cluster_assignments.get(circuit, 'unknown')
         clusters[cluster_id].append(circuit)
 
-    if verbose:
-        logger.info(f"Clusters before shuffling: {dict(clusters)}")
-
-    # Shuffle circuits within each cluster
-    for cluster_id in clusters:
-        random.shuffle(clusters[cluster_id])  # Uses 'random' module
-        if verbose:
-            logger.info(f"Shuffled cluster {cluster_id}: {clusters[cluster_id]}")
-
-    # Shuffle the order of cluster IDs
-    cluster_order = list(clusters.keys())
-    if 'unknown' in cluster_order:
-        cluster_order.remove('unknown')
-        random.shuffle(cluster_order)  # Uses 'random' module
-        if clusters['unknown']:
-            cluster_order.append('unknown')
-    else:
-        random.shuffle(cluster_order)  # Uses 'random' module
+    # Shuffle all circuits together, ignoring clusters
+    final_sequence = circuits_to_shuffle.copy()
+    random.shuffle(final_sequence)
 
     if verbose:
-        logger.info(f"Shuffled cluster order: {cluster_order}")
-
-    # Concatenate based on shuffled cluster order
-    final_sequence = []
-    for cluster_id in cluster_order:
-        final_sequence.extend(clusters[cluster_id])
-
-    if verbose:
-        logger.info(f"Final shuffled sequence:")
+        logger.info("Shuffled sequence:")
         logls(final_sequence)
 
     return final_sequence
@@ -249,7 +229,7 @@ def generate_initial_population(circuits_df, population_size, seed=None, verbose
     return final_population
 
 @log_wrap
-def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026, regression=False, clusters=False, verbose=False, logger=None):
+def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026, regression=False, regression_models: tuple = None, clusters=False, verbose=False, logger=None):
     """
     Calculate the fitness of a given circuit list based on cluster assignments.
 
@@ -274,12 +254,24 @@ def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026
     total_emissions = 0.0
     total_penalties = 0.0
     
+    if regression and not regression_models:
+        raise ValueError("Regression is set to True but no regression models provided.")
+    
+    # Fetch travel logistics data from the database
+    travel_logistics_df = TRAVEL_LOGISTIC_DF
+    
     if regression:
-        total_emissions = 0.0
-    
-    if clusters:
-        total_emissions = 0.0
-    
+        if verbose:
+            logger.info('Regression is set to True. Using regression models for fitness calculation.')
+        air, truck = regression_models
+        air_predictions, truck_predictions = calendar_emissions(list(circuits_seq), season, air, truck, verbose=verbose)
+        total_emissions += air_predictions.sum() + truck_predictions.sum()
+        total_emissions = round(total_emissions, 2)
+        if verbose:
+            logger.info("Air emissions predictions: %s", textwrap.fill(str(air_predictions), width=100))
+            logger.info("Truck emissions predictions: %s", textwrap.fill(str(truck_predictions), width=100))
+            logger.info(f"Total emissions (regression): {total_emissions}")
+
     if not regression:
         if verbose:
             logger.info('Regression is set to False. Using synthetic data for fitness calculation.')
@@ -288,8 +280,7 @@ def calculate_fitness(circuits_seq: list, circuits_df, db_path: str, season=2026
         travel_logistic_keys = [f"{travel_logistic_key[0]}-{travel_logistic_key[1]}" for travel_logistic_key in travel_logistic_keys]
         if verbose:
             logger.info(f'found [{len(travel_logistic_keys)}] travel logistic keys')
-        # Fetch travel logistics data from the database
-        travel_logistics_df = TRAVEL_LOGISTIC_DF
+
 
         # Filter the DataFrame for rows where 'code' matches the travel logistic keys
         filtered_logistics = travel_logistics_df[travel_logistics_df['codes'].isin(travel_logistic_keys)]

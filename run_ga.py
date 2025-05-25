@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 
 # --- Custom Library Imports ---
+from models.regression import load_models
 from models import genetic_ops
 from utils.utilities import get_circuits_for_population, generate_f1_calendar
 from utils.sql import get_table
@@ -31,10 +32,18 @@ PROJECT_ROOT = APP_DIR
 DB_PATH = PROJECT_ROOT / "data" / "planet_fone.db"
 # Convert to string for functions expecting string paths
 DB_PATH_STR = str(DB_PATH)
-
+MODELS_DIR = PROJECT_ROOT / "models"
 RUN_LOGS_PATH = PROJECT_ROOT / "logs" 
 
+# Load the geography data
 GEO_DF = get_table("fone_geography", db_path=DB_PATH_STR)
+
+# Load regression models if available
+try:
+    air, truck = load_models()
+except FileNotFoundError:
+    print("Regression models not found. Ensure they are available in the 'models' directory.")
+    air, truck = None, None
 
 # --- Main GA Execution ---
 
@@ -83,7 +92,11 @@ def set_default_params(params: dict) -> dict:
         "TOURNAMENT_SIZE": 5,  # For tournament selection
         "RANDOM_SEED": 42,
         "SEASON_YEAR": 2026, # For fitness calculation context
-        "REGRESSION": False,  # Set to True for regression estimates
+        "REGRESSION": True,  # Set to True for regression estimates
+        "REGRESSION_MODELS": {
+            "air": air,
+            "truck": truck
+        }, # Regression models to use
         "CLUSTERS": True,  # Set to True for clustering
         "VERBOSE": False,  # Set to True for detailed output
         "LOG_RESULTS_NAME": f"GA_RUN_OUTPUT_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
@@ -196,6 +209,7 @@ def deap_toolbox(circuits_df_scenario: pd.DataFrame, db_path: str, fitness_funct
                      db_path=db_path,
                      season=params['SEASON_YEAR'], 
                      regression=params['REGRESSION'],
+                     regression_models=(params['REGRESSION_MODELS']['air'], params['REGRESSION_MODELS']['truck']),
                      clusters=params['CLUSTERS'], 
                      verbose=params['VERBOSE'])
     toolbox.register("mate", functools.partial(genetic_ops.order_crossover_deap, toolbox))

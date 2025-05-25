@@ -1,512 +1,512 @@
-id,race_name,country,circuit,year,date,geo_id,inbound_route,outbound_route
-1,Australian Grand Prix,Australia,Melbourne,2000,2000-03-12,6,,239.0
-2,Brazilian Grand Prix,Brazil,São Paulo,2000,2000-03-26,4,239.0,156.0
-3,San Marino Grand Prix,Italy,Imola,2000,2000-04-09,16,156.0,706.0
-4,British Grand Prix,UK,Silverstone,2000,2000-04-23,1,706.0,9.0
-5,Spanish Grand Prix,Spain,Montmeló,2000,2000-05-07,10,9.0,458.0
-6,European Grand Prix,Germany,Nürburg,2000,2000-05-21,36,458.0,1677.0
-7,Monaco Grand Prix,Monaco,Monte-Carlo,2000,2000-06-04,32,1677.0,1469.0
-8,Canadian Grand Prix,Canada,Montreal,2000,2000-06-18,12,1469.0,536.0
-9,French Grand Prix,France,Magny Cours,2000,2000-07-02,20,536.0,904.0
-10,Austrian Grand Prix,Austria,Spielberg,2000,2000-07-16,11,904.0,482.0
-11,German Grand Prix,Germany,Hockenheim,2000,2000-07-30,13,482.0,566.0
-12,Hungarian Grand Prix,Hungary,Budapest,2000,2000-08-13,2,566.0,67.0
-13,Belgian Grand Prix,Belgium,Spa,2000,2000-08-27,21,67.0,943.0
-14,Italian Grand Prix,Italy,Monza,2000,2000-09-10,3,943.0,116.0
-15,United States Grand Prix,USA,Indianapolis,2000,2000-09-24,23,116.0,1041.0
-16,Japanese Grand Prix,Japan,Suzuka,2000,2000-10-08,7,1041.0,290.0
-17,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2000,2000-10-22,9,290.0,
-18,Australian Grand Prix,Australia,Melbourne,2001,2001-03-04,6,,243.0
-19,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2001,2001-03-18,9,243.0,380.0
-20,Brazilian Grand Prix,Brazil,São Paulo,2001,2001-04-01,4,380.0,156.0
-21,San Marino Grand Prix,Italy,Imola,2001,2001-04-15,16,156.0,715.0
-22,Spanish Grand Prix,Spain,Montmeló,2001,2001-04-29,10,715.0,433.0
-23,Austrian Grand Prix,Austria,Spielberg,2001,2001-05-13,11,433.0,501.0
-24,Monaco Grand Prix,Monaco,Monte-Carlo,2001,2001-05-27,32,501.0,1469.0
-25,Canadian Grand Prix,Canada,Montreal,2001,2001-06-10,12,1469.0,552.0
-26,European Grand Prix,Germany,Nürburg,2001,2001-06-24,36,552.0,1665.0
-27,French Grand Prix,France,Magny Cours,2001,2001-07-01,20,1665.0,894.0
-28,British Grand Prix,UK,Silverstone,2001,2001-07-15,1,894.0,12.0
-29,German Grand Prix,Germany,Hockenheim,2001,2001-07-29,13,12.0,566.0
-30,Hungarian Grand Prix,Hungary,Budapest,2001,2001-08-19,2,566.0,67.0
-31,Belgian Grand Prix,Belgium,Spa,2001,2001-09-02,21,67.0,943.0
-32,Italian Grand Prix,Italy,Monza,2001,2001-09-16,3,943.0,116.0
-33,United States Grand Prix,USA,Indianapolis,2001,2001-09-30,23,116.0,1041.0
-34,Japanese Grand Prix,Japan,Suzuka,2001,2001-10-14,7,1041.0,
-35,Australian Grand Prix,Australia,Melbourne,2002,2002-03-03,6,,243.0
-36,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2002,2002-03-17,9,243.0,380.0
-37,Brazilian Grand Prix,Brazil,São Paulo,2002,2002-03-31,4,380.0,156.0
-38,San Marino Grand Prix,Italy,Imola,2002,2002-04-14,16,156.0,715.0
-39,Spanish Grand Prix,Spain,Montmeló,2002,2002-04-28,10,715.0,433.0
-40,Austrian Grand Prix,Austria,Spielberg,2002,2002-05-12,11,433.0,501.0
-41,Monaco Grand Prix,Monaco,Monte-Carlo,2002,2002-05-26,32,501.0,1469.0
-42,Canadian Grand Prix,Canada,Montreal,2002,2002-06-09,12,1469.0,552.0
-43,European Grand Prix,Germany,Nürburg,2002,2002-06-23,36,552.0,1646.0
-44,British Grand Prix,UK,Silverstone,2002,2002-07-07,1,1646.0,19.0
-45,French Grand Prix,France,Magny Cours,2002,2002-07-21,20,19.0,906.0
-46,German Grand Prix,Germany,Hockenheim,2002,2002-07-28,13,906.0,566.0
-47,Hungarian Grand Prix,Hungary,Budapest,2002,2002-08-18,2,566.0,67.0
-48,Belgian Grand Prix,Belgium,Spa,2002,2002-09-01,21,67.0,943.0
-49,Italian Grand Prix,Italy,Monza,2002,2002-09-15,3,943.0,116.0
-50,United States Grand Prix,USA,Indianapolis,2002,2002-09-29,23,116.0,1041.0
-51,Japanese Grand Prix,Japan,Suzuka,2002,2002-10-13,7,1041.0,
-52,Australian Grand Prix,Australia,Melbourne,2003,2003-03-09,6,,243.0
-53,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2003,2003-03-23,9,243.0,380.0
-54,Brazilian Grand Prix,Brazil,São Paulo,2003,2003-04-06,4,380.0,156.0
-55,San Marino Grand Prix,Italy,Imola,2003,2003-04-20,16,156.0,715.0
-56,Spanish Grand Prix,Spain,Montmeló,2003,2003-05-04,10,715.0,433.0
-57,Austrian Grand Prix,Austria,Spielberg,2003,2003-05-18,11,433.0,501.0
-58,Monaco Grand Prix,Monaco,Monte-Carlo,2003,2003-06-01,32,501.0,1469.0
-59,Canadian Grand Prix,Canada,Montreal,2003,2003-06-15,12,1469.0,552.0
-60,European Grand Prix,Germany,Nürburg,2003,2003-06-29,36,552.0,1665.0
-61,French Grand Prix,France,Magny Cours,2003,2003-07-06,20,1665.0,894.0
-62,British Grand Prix,UK,Silverstone,2003,2003-07-20,1,894.0,12.0
-63,German Grand Prix,Germany,Hockenheim,2003,2003-08-03,13,12.0,566.0
-64,Hungarian Grand Prix,Hungary,Budapest,2003,2003-08-24,2,566.0,49.0
-65,Italian Grand Prix,Italy,Monza,2003,2003-09-14,3,49.0,116.0
-66,United States Grand Prix,USA,Indianapolis,2003,2003-09-28,23,116.0,1041.0
-67,Japanese Grand Prix,Japan,Suzuka,2003,2003-10-12,7,1041.0,
-68,Australian Grand Prix,Australia,Melbourne,2004,2004-03-07,6,,243.0
-69,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2004,2004-03-21,9,243.0,381.0
-70,Bahrain Grand Prix,Bahrain,Sakhir,2004,2004-04-04,5,381.0,203.0
-71,San Marino Grand Prix,Italy,Imola,2004,2004-04-25,16,203.0,715.0
-72,Spanish Grand Prix,Spain,Montmeló,2004,2004-05-09,10,715.0,454.0
-73,Monaco Grand Prix,Monaco,Monte-Carlo,2004,2004-05-23,32,454.0,1492.0
-74,European Grand Prix,Germany,Nürburg,2004,2004-05-30,36,1492.0,1657.0
-75,Canadian Grand Prix,Canada,Montreal,2004,2004-06-13,12,1657.0,539.0
-76,United States Grand Prix,USA,Indianapolis,2004,2004-06-20,23,539.0,1054.0
-77,French Grand Prix,France,Magny Cours,2004,2004-07-04,20,1054.0,894.0
-78,British Grand Prix,UK,Silverstone,2004,2004-07-11,1,894.0,12.0
-79,German Grand Prix,Germany,Hockenheim,2004,2004-07-25,13,12.0,566.0
-80,Hungarian Grand Prix,Hungary,Budapest,2004,2004-08-15,2,566.0,67.0
-81,Belgian Grand Prix,Belgium,Spa,2004,2004-08-29,21,67.0,943.0
-82,Italian Grand Prix,Italy,Monza,2004,2004-09-12,3,943.0,101.0
-83,Chinese Grand Prix,China,Shanghai,2004,2004-09-26,8,101.0,336.0
-84,Japanese Grand Prix,Japan,Suzuka,2004,2004-10-10,7,336.0,286.0
-85,Brazilian Grand Prix,Brazil,São Paulo,2004,2004-10-24,4,286.0,
-86,Australian Grand Prix,Australia,Melbourne,2005,2005-03-06,6,,243.0
-87,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2005,2005-03-20,9,243.0,381.0
-88,Bahrain Grand Prix,Bahrain,Sakhir,2005,2005-04-03,5,381.0,203.0
-89,San Marino Grand Prix,Italy,Imola,2005,2005-04-24,16,203.0,715.0
-90,Spanish Grand Prix,Spain,Montmeló,2005,2005-05-08,10,715.0,454.0
-91,Monaco Grand Prix,Monaco,Monte-Carlo,2005,2005-05-22,32,454.0,1492.0
-92,European Grand Prix,Germany,Nürburg,2005,2005-05-29,36,1492.0,1657.0
-93,Canadian Grand Prix,Canada,Montreal,2005,2005-06-12,12,1657.0,539.0
-94,United States Grand Prix,USA,Indianapolis,2005,2005-06-19,23,539.0,1054.0
-95,French Grand Prix,France,Magny Cours,2005,2005-07-03,20,1054.0,894.0
-96,British Grand Prix,UK,Silverstone,2005,2005-07-10,1,894.0,12.0
-97,German Grand Prix,Germany,Hockenheim,2005,2005-07-24,13,12.0,566.0
-98,Hungarian Grand Prix,Hungary,Budapest,2005,2005-07-31,2,566.0,65.0
-99,Turkish Grand Prix,Turkey,Istanbul,2005,2005-08-21,19,65.0,849.0
-100,Italian Grand Prix,Italy,Monza,2005,2005-09-04,3,849.0,114.0
-101,Belgian Grand Prix,Belgium,Spa,2005,2005-09-11,21,114.0,944.0
-102,Brazilian Grand Prix,Brazil,São Paulo,2005,2005-09-25,4,944.0,147.0
-103,Japanese Grand Prix,Japan,Suzuka,2005,2005-10-09,7,147.0,289.0
-104,Chinese Grand Prix,China,Shanghai,2005,2005-10-16,8,289.0,
-105,Bahrain Grand Prix,Bahrain,Sakhir,2006,2006-03-12,5,,196.0
-106,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2006,2006-03-19,9,196.0,382.0
-107,Australian Grand Prix,Australia,Melbourne,2006,2006-04-02,6,382.0,250.0
-108,San Marino Grand Prix,Italy,Imola,2006,2006-04-23,16,250.0,740.0
-109,European Grand Prix,Germany,Nürburg,2006,2006-05-07,36,740.0,1655.0
-110,Spanish Grand Prix,Spain,Montmeló,2006,2006-05-14,10,1655.0,454.0
-111,Monaco Grand Prix,Monaco,Monte-Carlo,2006,2006-05-28,32,454.0,1458.0
-112,British Grand Prix,UK,Silverstone,2006,2006-06-11,1,1458.0,11.0
-113,Canadian Grand Prix,Canada,Montreal,2006,2006-06-25,12,11.0,539.0
-114,United States Grand Prix,USA,Indianapolis,2006,2006-07-02,23,539.0,1054.0
-115,French Grand Prix,France,Magny Cours,2006,2006-07-16,20,1054.0,906.0
-116,German Grand Prix,Germany,Hockenheim,2006,2006-07-30,13,906.0,566.0
-117,Hungarian Grand Prix,Hungary,Budapest,2006,2006-08-06,2,566.0,65.0
-118,Turkish Grand Prix,Turkey,Istanbul,2006,2006-08-27,19,65.0,849.0
-119,Italian Grand Prix,Italy,Monza,2006,2006-09-10,3,849.0,101.0
-120,Chinese Grand Prix,China,Shanghai,2006,2006-10-01,8,101.0,336.0
-121,Japanese Grand Prix,Japan,Suzuka,2006,2006-10-08,7,336.0,286.0
-122,Brazilian Grand Prix,Brazil,São Paulo,2006,2006-10-22,4,286.0,
-123,Australian Grand Prix,Australia,Melbourne,2007,2007-03-18,6,,243.0
-124,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2007,2007-04-08,9,243.0,381.0
-125,Bahrain Grand Prix,Bahrain,Sakhir,2007,2007-04-15,5,381.0,197.0
-126,Spanish Grand Prix,Spain,Montmeló,2007,2007-05-13,10,197.0,454.0
-127,Monaco Grand Prix,Monaco,Monte-Carlo,2007,2007-05-27,32,454.0,1469.0
-128,Canadian Grand Prix,Canada,Montreal,2007,2007-06-10,12,1469.0,539.0
-129,United States Grand Prix,USA,Indianapolis,2007,2007-06-17,23,539.0,1054.0
-130,French Grand Prix,France,Magny Cours,2007,2007-07-01,20,1054.0,894.0
-131,British Grand Prix,UK,Silverstone,2007,2007-07-08,1,894.0,35.0
-132,European Grand Prix,Germany,Nürburg,2007,2007-07-22,36,35.0,1647.0
-133,Hungarian Grand Prix,Hungary,Budapest,2007,2007-08-05,2,1647.0,65.0
-134,Turkish Grand Prix,Turkey,Istanbul,2007,2007-08-26,19,65.0,849.0
-135,Italian Grand Prix,Italy,Monza,2007,2007-09-09,3,849.0,114.0
-136,Belgian Grand Prix,Belgium,Spa,2007,2007-09-16,21,114.0,974.0
-137,Japanese Grand Prix,Japan,Oyama,2007,2007-09-30,35,974.0,1606.0
-138,Chinese Grand Prix,China,Shanghai,2007,2007-10-07,8,1606.0,333.0
-139,Brazilian Grand Prix,Brazil,São Paulo,2007,2007-10-21,4,333.0,
-140,Australian Grand Prix,Australia,Melbourne,2008,2008-03-16,6,,243.0
-141,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2008,2008-03-23,9,243.0,381.0
-142,Bahrain Grand Prix,Bahrain,Sakhir,2008,2008-04-06,5,381.0,197.0
-143,Spanish Grand Prix,Spain,Montmeló,2008,2008-04-27,10,197.0,441.0
-144,Turkish Grand Prix,Turkey,Istanbul,2008,2008-05-11,19,441.0,877.0
-145,Monaco Grand Prix,Monaco,Monte-Carlo,2008,2008-05-25,32,877.0,1469.0
-146,Canadian Grand Prix,Canada,Montreal,2008,2008-06-08,12,1469.0,536.0
-147,French Grand Prix,France,Magny Cours,2008,2008-06-22,20,536.0,894.0
-148,British Grand Prix,UK,Silverstone,2008,2008-07-06,1,894.0,12.0
-149,German Grand Prix,Germany,Hockenheim,2008,2008-07-20,13,12.0,566.0
-150,Hungarian Grand Prix,Hungary,Budapest,2008,2008-08-03,2,566.0,72.0
-151,European Grand Prix,Spain,Valencia,2008,2008-08-24,26,72.0,1196.0
-152,Belgian Grand Prix,Belgium,Spa,2008,2008-09-07,21,1196.0,943.0
-153,Italian Grand Prix,Italy,Monza,2008,2008-09-14,3,943.0,107.0
-154,Singapore Grand Prix,Singapore,Marina Bay,2008,2008-09-28,14,107.0,645.0
-155,Japanese Grand Prix,Japan,Oyama,2008,2008-10-12,35,645.0,1606.0
-156,Chinese Grand Prix,China,Shanghai,2008,2008-10-19,8,1606.0,333.0
-157,Brazilian Grand Prix,Brazil,São Paulo,2008,2008-11-02,4,333.0,
-158,Australian Grand Prix,Australia,Melbourne,2009,2009-03-29,6,,243.0
-159,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2009,2009-04-05,9,243.0,384.0
-160,Chinese Grand Prix,China,Shanghai,2009,2009-04-19,8,384.0,334.0
-161,Bahrain Grand Prix,Bahrain,Sakhir,2009,2009-04-26,5,334.0,197.0
-162,Spanish Grand Prix,Spain,Montmeló,2009,2009-05-10,10,197.0,454.0
-163,Monaco Grand Prix,Monaco,Monte-Carlo,2009,2009-05-24,32,454.0,1476.0
-164,Turkish Grand Prix,Turkey,Istanbul,2009,2009-06-07,19,1476.0,847.0
-165,British Grand Prix,UK,Silverstone,2009,2009-06-21,1,847.0,35.0
-166,German Grand Prix,Germany,Nürburg,2009,2009-07-12,36,35.0,1647.0
-167,Hungarian Grand Prix,Hungary,Budapest,2009,2009-07-26,2,1647.0,72.0
-168,European Grand Prix,Spain,Valencia,2009,2009-08-23,26,72.0,1196.0
-169,Belgian Grand Prix,Belgium,Spa,2009,2009-08-30,21,1196.0,943.0
-170,Italian Grand Prix,Italy,Monza,2009,2009-09-13,3,943.0,107.0
-171,Singapore Grand Prix,Singapore,Marina Bay,2009,2009-09-27,14,107.0,618.0
-172,Japanese Grand Prix,Japan,Suzuka,2009,2009-10-04,7,618.0,286.0
-173,Brazilian Grand Prix,Brazil,São Paulo,2009,2009-10-18,4,286.0,177.0
-174,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2009,2009-11-01,37,177.0,
-175,Bahrain Grand Prix,Bahrain,Sakhir,2010,2010-03-14,5,,193.0
-176,Australian Grand Prix,Australia,Melbourne,2010,2010-03-28,6,193.0,243.0
-177,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2010,2010-04-04,9,243.0,384.0
-178,Chinese Grand Prix,China,Shanghai,2010,2010-04-18,8,384.0,338.0
-179,Spanish Grand Prix,Spain,Montmeló,2010,2010-05-09,10,338.0,454.0
-180,Monaco Grand Prix,Monaco,Monte-Carlo,2010,2010-05-16,32,454.0,1476.0
-181,Turkish Grand Prix,Turkey,Istanbul,2010,2010-05-30,19,1476.0,858.0
-182,Canadian Grand Prix,Canada,Montreal,2010,2010-06-13,12,858.0,542.0
-183,European Grand Prix,Spain,Valencia,2010,2010-06-27,26,542.0,1176.0
-184,British Grand Prix,UK,Silverstone,2010,2010-07-11,1,1176.0,12.0
-185,German Grand Prix,Germany,Hockenheim,2010,2010-07-25,13,12.0,566.0
-186,Hungarian Grand Prix,Hungary,Budapest,2010,2010-08-01,2,566.0,67.0
-187,Belgian Grand Prix,Belgium,Spa,2010,2010-08-29,21,67.0,943.0
-188,Italian Grand Prix,Italy,Monza,2010,2010-09-12,3,943.0,107.0
-189,Singapore Grand Prix,Singapore,Marina Bay,2010,2010-09-26,14,107.0,618.0
-190,Japanese Grand Prix,Japan,Suzuka,2010,2010-10-10,7,618.0,310.0
-191,Korean Grand Prix,Korea,Yeongam County,2010,2010-10-24,29,310.0,1320.0
-192,Brazilian Grand Prix,Brazil,São Paulo,2010,2010-11-07,4,1320.0,177.0
-193,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2010,2010-11-14,37,177.0,
-194,Australian Grand Prix,Australia,Melbourne,2011,2011-03-27,6,,243.0
-195,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2011,2011-04-10,9,243.0,384.0
-196,Chinese Grand Prix,China,Shanghai,2011,2011-04-17,8,384.0,347.0
-197,Turkish Grand Prix,Turkey,Istanbul,2011,2011-05-08,19,347.0,856.0
-198,Spanish Grand Prix,Spain,Montmeló,2011,2011-05-22,10,856.0,454.0
-199,Monaco Grand Prix,Monaco,Monte-Carlo,2011,2011-05-29,32,454.0,1469.0
-200,Canadian Grand Prix,Canada,Montreal,2011,2011-06-12,12,1469.0,542.0
-201,European Grand Prix,Spain,Valencia,2011,2011-06-26,26,542.0,1176.0
-202,British Grand Prix,UK,Silverstone,2011,2011-07-10,1,1176.0,35.0
-203,German Grand Prix,Germany,Nürburg,2011,2011-07-24,36,35.0,1647.0
-204,Hungarian Grand Prix,Hungary,Budapest,2011,2011-07-31,2,1647.0,67.0
-205,Belgian Grand Prix,Belgium,Spa,2011,2011-08-28,21,67.0,943.0
-206,Italian Grand Prix,Italy,Monza,2011,2011-09-11,3,943.0,107.0
-207,Singapore Grand Prix,Singapore,Marina Bay,2011,2011-09-25,14,107.0,618.0
-208,Japanese Grand Prix,Japan,Suzuka,2011,2011-10-09,7,618.0,310.0
-209,Korean Grand Prix,Korea,Yeongam County,2011,2011-10-16,29,310.0,1346.0
-210,Indian Grand Prix,India,Uttar Pradesh,2011,2011-10-30,31,1346.0,1446.0
-211,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2011,2011-11-13,37,1446.0,1696.0
-212,Brazilian Grand Prix,Brazil,São Paulo,2011,2011-11-27,4,1696.0,
-213,Australian Grand Prix,Australia,Melbourne,2012,2012-03-18,6,,243.0
-214,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2012,2012-03-25,9,243.0,384.0
-215,Chinese Grand Prix,China,Shanghai,2012,2012-04-15,8,384.0,334.0
-216,Bahrain Grand Prix,Bahrain,Sakhir,2012,2012-04-22,5,334.0,197.0
-217,Spanish Grand Prix,Spain,Montmeló,2012,2012-05-13,10,197.0,454.0
-218,Monaco Grand Prix,Monaco,Monte-Carlo,2012,2012-05-27,32,454.0,1469.0
-219,Canadian Grand Prix,Canada,Montreal,2012,2012-06-10,12,1469.0,542.0
-220,European Grand Prix,Spain,Valencia,2012,2012-06-24,26,542.0,1176.0
-221,British Grand Prix,UK,Silverstone,2012,2012-07-08,1,1176.0,12.0
-222,German Grand Prix,Germany,Hockenheim,2012,2012-07-22,13,12.0,566.0
-223,Hungarian Grand Prix,Hungary,Budapest,2012,2012-07-29,2,566.0,67.0
-224,Belgian Grand Prix,Belgium,Spa,2012,2012-09-02,21,67.0,943.0
-225,Italian Grand Prix,Italy,Monza,2012,2012-09-09,3,943.0,107.0
-226,Singapore Grand Prix,Singapore,Marina Bay,2012,2012-09-23,14,107.0,618.0
-227,Japanese Grand Prix,Japan,Suzuka,2012,2012-10-07,7,618.0,310.0
-228,Korean Grand Prix,Korea,Yeongam County,2012,2012-10-14,29,310.0,1346.0
-229,Indian Grand Prix,India,Uttar Pradesh,2012,2012-10-28,31,1346.0,1446.0
-230,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2012,2012-11-04,37,1446.0,1707.0
-231,United States Grand Prix,USA,Austin,2012,2012-11-18,15,1707.0,662.0
-232,Brazilian Grand Prix,Brazil,São Paulo,2012,2012-11-25,4,662.0,
-233,Australian Grand Prix,Australia,Melbourne,2013,2013-03-17,6,,243.0
-234,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2013,2013-03-24,9,243.0,384.0
-235,Chinese Grand Prix,China,Shanghai,2013,2013-04-14,8,384.0,334.0
-236,Bahrain Grand Prix,Bahrain,Sakhir,2013,2013-04-21,5,334.0,197.0
-237,Spanish Grand Prix,Spain,Montmeló,2013,2013-05-12,10,197.0,454.0
-238,Monaco Grand Prix,Monaco,Monte-Carlo,2013,2013-05-26,32,454.0,1469.0
-239,Canadian Grand Prix,Canada,Montreal,2013,2013-06-09,12,1469.0,518.0
-240,British Grand Prix,UK,Silverstone,2013,2013-06-30,1,518.0,35.0
-241,German Grand Prix,Germany,Nürburg,2013,2013-07-07,36,35.0,1647.0
-242,Hungarian Grand Prix,Hungary,Budapest,2013,2013-07-28,2,1647.0,67.0
-243,Belgian Grand Prix,Belgium,Spa,2013,2013-08-25,21,67.0,943.0
-244,Italian Grand Prix,Italy,Monza,2013,2013-09-08,3,943.0,107.0
-245,Singapore Grand Prix,Singapore,Marina Bay,2013,2013-09-22,14,107.0,639.0
-246,Korean Grand Prix,Korea,Yeongam County,2013,2013-10-06,29,639.0,1323.0
-247,Japanese Grand Prix,Japan,Suzuka,2013,2013-10-13,7,1323.0,312.0
-248,Indian Grand Prix,India,Uttar Pradesh,2013,2013-10-27,31,312.0,1446.0
-249,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2013,2013-11-03,37,1446.0,1707.0
-250,United States Grand Prix,USA,Austin,2013,2013-11-17,15,1707.0,662.0
-251,Brazilian Grand Prix,Brazil,São Paulo,2013,2013-11-24,4,662.0,
-252,Australian Grand Prix,Australia,Melbourne,2014,2014-03-16,6,,243.0
-253,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2014,2014-03-30,9,243.0,381.0
-254,Bahrain Grand Prix,Bahrain,Sakhir,2014,2014-04-06,5,381.0,195.0
-255,Chinese Grand Prix,China,Shanghai,2014,2014-04-20,8,195.0,338.0
-256,Spanish Grand Prix,Spain,Montmeló,2014,2014-05-11,10,338.0,454.0
-257,Monaco Grand Prix,Monaco,Monte-Carlo,2014,2014-05-25,32,454.0,1469.0
-258,Canadian Grand Prix,Canada,Montreal,2014,2014-06-08,12,1469.0,528.0
-259,Austrian Grand Prix,Austria,Spielberg,2014,2014-06-22,11,528.0,471.0
-260,British Grand Prix,UK,Silverstone,2014,2014-07-06,1,471.0,12.0
-261,German Grand Prix,Germany,Hockenheim,2014,2014-07-20,13,12.0,566.0
-262,Hungarian Grand Prix,Hungary,Budapest,2014,2014-07-27,2,566.0,67.0
-263,Belgian Grand Prix,Belgium,Spa,2014,2014-08-24,21,67.0,943.0
-264,Italian Grand Prix,Italy,Monza,2014,2014-09-07,3,943.0,107.0
-265,Singapore Grand Prix,Singapore,Marina Bay,2014,2014-09-21,14,107.0,618.0
-266,Japanese Grand Prix,Japan,Suzuka,2014,2014-10-05,7,618.0,303.0
-267,Russian Grand Prix,Russia,Sochi,2014,2014-10-12,22,303.0,1002.0
-268,United States Grand Prix,USA,Austin,2014,2014-11-02,15,1002.0,662.0
-269,Brazilian Grand Prix,Brazil,São Paulo,2014,2014-11-09,4,662.0,177.0
-270,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2014,2014-11-23,37,177.0,
-271,Australian Grand Prix,Australia,Melbourne,2015,2015-03-15,6,,243.0
-272,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2015,2015-03-29,9,243.0,384.0
-273,Chinese Grand Prix,China,Shanghai,2015,2015-04-12,8,384.0,334.0
-274,Bahrain Grand Prix,Bahrain,Sakhir,2015,2015-04-19,5,334.0,197.0
-275,Spanish Grand Prix,Spain,Montmeló,2015,2015-05-10,10,197.0,454.0
-276,Monaco Grand Prix,Monaco,Monte-Carlo,2015,2015-05-24,32,454.0,1469.0
-277,Canadian Grand Prix,Canada,Montreal,2015,2015-06-07,12,1469.0,528.0
-278,Austrian Grand Prix,Austria,Spielberg,2015,2015-06-21,11,528.0,471.0
-279,British Grand Prix,UK,Silverstone,2015,2015-07-05,1,471.0,1.0
-280,Hungarian Grand Prix,Hungary,Budapest,2015,2015-07-26,2,1.0,67.0
-281,Belgian Grand Prix,Belgium,Spa,2015,2015-08-23,21,67.0,943.0
-282,Italian Grand Prix,Italy,Monza,2015,2015-09-06,3,943.0,107.0
-283,Singapore Grand Prix,Singapore,Marina Bay,2015,2015-09-20,14,107.0,618.0
-284,Japanese Grand Prix,Japan,Suzuka,2015,2015-09-27,7,618.0,303.0
-285,Russian Grand Prix,Russia,Sochi,2015,2015-10-11,22,303.0,1002.0
-286,United States Grand Prix,USA,Austin,2015,2015-10-25,15,1002.0,674.0
-287,Mexican Grand Prix,Mexico,Mexico City,2015,2015-11-01,17,674.0,756.0
-288,Brazilian Grand Prix,Brazil,São Paulo,2015,2015-11-15,4,756.0,177.0
-289,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2015,2015-11-29,37,177.0,
-290,Australian Grand Prix,Australia,Melbourne,2016,2016-03-20,6,,240.0
-291,Bahrain Grand Prix,Bahrain,Sakhir,2016,2016-04-03,5,240.0,195.0
-292,Chinese Grand Prix,China,Shanghai,2016,2016-04-17,8,195.0,350.0
-293,Russian Grand Prix,Russia,Sochi,2016,2016-05-01,22,350.0,997.0
-294,Spanish Grand Prix,Spain,Montmeló,2016,2016-05-15,10,997.0,454.0
-295,Monaco Grand Prix,Monaco,Monte-Carlo,2016,2016-05-29,32,454.0,1469.0
-296,Canadian Grand Prix,Canada,Montreal,2016,2016-06-12,12,1469.0,534.0
-297,European Grand Prix,Azerbaijan,Baku,2016,2016-06-19,18,534.0,810.0
-298,Austrian Grand Prix,Austria,Spielberg,2016,2016-07-03,11,810.0,471.0
-299,British Grand Prix,UK,Silverstone,2016,2016-07-10,1,471.0,1.0
-300,Hungarian Grand Prix,Hungary,Budapest,2016,2016-07-24,2,1.0,59.0
-301,German Grand Prix,Germany,Hockenheim,2016,2016-07-31,13,59.0,584.0
-302,Belgian Grand Prix,Belgium,Spa,2016,2016-08-28,21,584.0,943.0
-303,Italian Grand Prix,Italy,Monza,2016,2016-09-04,3,943.0,107.0
-304,Singapore Grand Prix,Singapore,Marina Bay,2016,2016-09-18,14,107.0,620.0
-305,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2016,2016-10-02,9,620.0,383.0
-306,Japanese Grand Prix,Japan,Suzuka,2016,2016-10-09,7,383.0,296.0
-307,United States Grand Prix,USA,Austin,2016,2016-10-23,15,296.0,674.0
-308,Mexican Grand Prix,Mexico,Mexico City,2016,2016-10-30,17,674.0,756.0
-309,Brazilian Grand Prix,Brazil,São Paulo,2016,2016-11-13,4,756.0,177.0
-310,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2016,2016-11-27,37,177.0,
-311,Australian Grand Prix,Australia,Melbourne,2017,2017-03-26,6,,242.0
-312,Chinese Grand Prix,China,Shanghai,2017,2017-04-09,8,242.0,334.0
-313,Bahrain Grand Prix,Bahrain,Sakhir,2017,2017-04-16,5,334.0,209.0
-314,Russian Grand Prix,Russia,Sochi,2017,2017-04-30,22,209.0,997.0
-315,Spanish Grand Prix,Spain,Montmeló,2017,2017-05-14,10,997.0,454.0
-316,Monaco Grand Prix,Monaco,Monte-Carlo,2017,2017-05-28,32,454.0,1469.0
-317,Canadian Grand Prix,Canada,Montreal,2017,2017-06-11,12,1469.0,534.0
-318,Azerbaijan Grand Prix,Azerbaijan,Baku,2017,2017-06-25,18,534.0,810.0
-319,Austrian Grand Prix,Austria,Spielberg,2017,2017-07-09,11,810.0,471.0
-320,British Grand Prix,UK,Silverstone,2017,2017-07-16,1,471.0,1.0
-321,Hungarian Grand Prix,Hungary,Budapest,2017,2017-07-30,2,1.0,67.0
-322,Belgian Grand Prix,Belgium,Spa,2017,2017-08-27,21,67.0,943.0
-323,Italian Grand Prix,Italy,Monza,2017,2017-09-03,3,943.0,107.0
-324,Singapore Grand Prix,Singapore,Marina Bay,2017,2017-09-17,14,107.0,620.0
-325,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2017,2017-10-01,9,620.0,383.0
-326,Japanese Grand Prix,Japan,Suzuka,2017,2017-10-08,7,383.0,296.0
-327,United States Grand Prix,USA,Austin,2017,2017-10-22,15,296.0,674.0
-328,Mexican Grand Prix,Mexico,Mexico City,2017,2017-10-29,17,674.0,756.0
-329,Brazilian Grand Prix,Brazil,São Paulo,2017,2017-11-12,4,756.0,177.0
-330,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2017,2017-11-26,37,177.0,
-331,Australian Grand Prix,Australia,Melbourne,2018,2018-03-25,6,,240.0
-332,Bahrain Grand Prix,Bahrain,Sakhir,2018,2018-04-08,5,240.0,195.0
-333,Chinese Grand Prix,China,Shanghai,2018,2018-04-15,8,195.0,346.0
-334,Azerbaijan Grand Prix,Azerbaijan,Baku,2018,2018-04-29,18,346.0,809.0
-335,Spanish Grand Prix,Spain,Barcelona,2018,2018-05-13,10,809.0,454.0
-336,Monaco Grand Prix,Monaco,Monte Carlo,2018,2018-05-27,32,454.0,1469.0
-337,Canadian Grand Prix,Canada,Montréal,2018,2018-06-10,12,1469.0,543.0
-338,French Grand Prix,France,Le Castellet,2018,2018-06-24,27,543.0,1233.0
-339,Austrian Grand Prix,Austria,Spielberg,2018,2018-07-01,11,1233.0,471.0
-340,British Grand Prix,Great Britain,Silverstone,2018,2018-07-08,1,471.0,12.0
-341,German Grand Prix,Germany,Hockenheim,2018,2018-07-22,13,12.0,566.0
-342,Hungarian Grand Prix,Hungary,Budapest,2018,2018-07-29,2,566.0,67.0
-343,Belgian Grand Prix,Belgium,Spa-Francorchamps,2018,2018-08-26,21,67.0,943.0
-344,Italian Grand Prix,Italy,Monza,2018,2018-09-02,3,943.0,107.0
-345,Singapore Grand Prix,Singapore,Singapore,2018,2018-09-16,14,107.0,632.0
-346,Russian Grand Prix,Russia,Sochi,2018,2018-09-30,22,632.0,994.0
-347,Japanese Grand Prix,Japan,Suzuka,2018,2018-10-07,7,994.0,296.0
-348,United States Grand Prix,United States,Austin,2018,2018-10-21,15,296.0,674.0
-349,Mexican Grand Prix,Mexico,Mexico City,2018,2018-10-28,17,674.0,756.0
-350,Brazilian Grand Prix,Brazil,São Paulo,2018,2018-11-11,4,756.0,177.0
-351,Abu Dhabi Grand Prix,United Arab Emirates,Yas Marina,2018,2018-11-25,37,177.0,
-352,Australian Grand Prix,Australia,Melbourne,2019,2019-03-17,6,,240.0
-353,Bahrain Grand Prix,Bahrain,Sakhir,2019,2019-03-31,5,240.0,195.0
-354,Chinese Grand Prix,China,Shanghai,2019,2019-04-14,8,195.0,346.0
-355,Azerbaijan Grand Prix,Azerbaijan,Baku,2019,2019-04-28,18,346.0,809.0
-356,Spanish Grand Prix,Spain,Barcelona,2019,2019-05-12,10,809.0,454.0
-357,Monaco Grand Prix,Monaco,Monte Carlo,2019,2019-05-26,32,454.0,1469.0
-358,Canadian Grand Prix,Canada,Montréal,2019,2019-06-09,12,1469.0,543.0
-359,French Grand Prix,France,Le Castellet,2019,2019-06-23,27,543.0,1233.0
-360,Austrian Grand Prix,Austria,Spielberg,2019,2019-06-30,11,1233.0,471.0
-361,British Grand Prix,Great Britain,Silverstone,2019,2019-07-14,1,471.0,12.0
-362,German Grand Prix,Germany,Hockenheim,2019,2019-07-28,13,12.0,566.0
-363,Hungarian Grand Prix,Hungary,Budapest,2019,2019-08-04,2,566.0,67.0
-364,Belgian Grand Prix,Belgium,Spa-Francorchamps,2019,2019-09-01,21,67.0,943.0
-365,Italian Grand Prix,Italy,Monza,2019,2019-09-08,3,943.0,107.0
-366,Singapore Grand Prix,Singapore,Singapore,2019,2019-09-22,14,107.0,632.0
-367,Russian Grand Prix,Russia,Sochi,2019,2019-09-29,22,632.0,994.0
-368,Japanese Grand Prix,Japan,Suzuka,2019,2019-10-13,7,994.0,298.0
-369,Mexican Grand Prix,Mexico,Mexico City,2019,2019-10-27,17,298.0,767.0
-370,United States Grand Prix,United States,Austin,2019,2019-11-03,15,767.0,662.0
-371,Brazilian Grand Prix,Brazil,São Paulo,2019,2019-11-17,4,662.0,177.0
-372,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2019,2019-12-01,37,177.0,
-373,Pre-Season Test 1,Spain,Barcelona,2020,2020-02-21,10,,
-374,Pre-Season Test 2,Spain,Barcelona,2020,2020-02-28,10,,433.0
-375,Austrian Grand Prix,Austria,Spielberg,2020,2020-07-05,11,433.0,
-376,Styrian Grand Prix,Austria,Spielberg,2020,2020-07-12,11,,472.0
-377,Hungarian Grand Prix,Hungary,Budapest,2020,2020-07-19,2,472.0,48.0
-378,British Grand Prix,Great Britain,Silverstone,2020,2020-08-02,1,48.0,
-379,70th Anniversary Grand Prix,Great Britain,Silverstone,2020,2020-08-09,1,,9.0
-380,Spanish Grand Prix,Spain,Barcelona,2020,2020-08-16,10,9.0,443.0
-381,Belgian Grand Prix,Belgium,Spa-Francorchamps,2020,2020-08-30,21,443.0,943.0
-382,Italian Grand Prix,Italy,Monza,2020,2020-09-06,3,943.0,131.0
-383,Tuscan Grand Prix,Italy,Mugello,2020,2020-09-13,38,131.0,1761.0
-384,Russian Grand Prix,Russia,Sochi,2020,2020-09-27,22,1761.0,1022.0
-385,Eifel Grand Prix,Germany,Nürburgring,2020,2020-10-11,36,1022.0,1679.0
-386,Portuguese Grand Prix,Portugal,Portimão,2020,2020-10-25,34,1679.0,1567.0
-387,Emilia Romagna Grand Prix,Italy,Imola,2020,2020-11-01,16,1567.0,723.0
-388,Turkish Grand Prix,Turkey,Istanbul,2020,2020-11-15,19,723.0,851.0
-389,Bahrain Grand Prix,Bahrain,Sakhir,2020,2020-11-29,5,851.0,
-390,Sakhir Grand Prix,Bahrain,Sakhir,2020,2020-12-06,5,,224.0
-391,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2020,2020-12-13,37,224.0,
-392,Pre-Season Test,Bahrain,Bahrain,2021,2021-03-14,5,,
-393,Bahrain Grand Prix,Bahrain,Sakhir,2021,2021-03-28,5,,203.0
-394,Emilia Romagna Grand Prix,Italy,Imola,2021,2021-04-18,16,203.0,738.0
-395,Portuguese Grand Prix,Portugal,Portimão,2021,2021-05-02,34,738.0,1561.0
-396,Spanish Grand Prix,Spain,Barcelona,2021,2021-05-09,10,1561.0,454.0
-397,Monaco Grand Prix,Monaco,Monte Carlo,2021,2021-05-23,32,454.0,1475.0
-398,Azerbaijan Grand Prix,Azerbaijan,Baku,2021,2021-06-06,18,1475.0,825.0
-399,French Grand Prix,France,Le Castellet,2021,2021-06-20,27,825.0,1233.0
-400,Styrian Grand Prix,Austria,Spielberg,2021,2021-06-27,11,1233.0,
-401,Austrian Grand Prix,Austria,Spielberg,2021,2021-07-04,11,,471.0
-402,British Grand Prix,Great Britain,Silverstone,2021,2021-07-18,1,471.0,1.0
-403,Hungarian Grand Prix,Hungary,Budapest,2021,2021-08-01,2,1.0,67.0
-404,Belgian Grand Prix,Belgium,Spa-Francorchamps,2021,2021-08-29,21,67.0,964.0
-405,Dutch Grand Prix,Netherlands,Zandvoort,2021,2021-09-05,25,964.0,1131.0
-406,Italian Grand Prix,Italy,Monza,2021,2021-09-12,3,1131.0,115.0
-407,Russian Grand Prix,Russia,Sochi,2021,2021-09-26,22,115.0,1006.0
-408,Turkish Grand Prix,Turkey,Istanbul,2021,2021-10-10,19,1006.0,861.0
-409,United States Grand Prix,United States,Austin,2021,2021-10-24,15,861.0,674.0
-410,Mexico City Grand Prix,Mexico,Mexico City,2021,2021-11-07,17,674.0,756.0
-411,São Paulo Grand Prix,Brazil,São Paulo,2021,2021-11-14,4,756.0,168.0
-412,Qatar Grand Prix,Qatar,Lusail,2021,2021-11-21,28,168.0,1293.0
-413,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2021,2021-12-05,24,1293.0,1117.0
-414,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2021,2021-12-12,37,1117.0,
-415,Pre-Season Track Session,Spain,Spain,2022,2022-02-25,10,,428.0
-416,Pre-Season Test,Bahrain,Bahrain,2022,2022-03-12,5,428.0,
-417,Bahrain Grand Prix,Bahrain,Sakhir,2022,2022-03-20,5,,211.0
-418,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2022,2022-03-27,24,211.0,1087.0
-419,Australian Grand Prix,Australia,Melbourne,2022,2022-04-10,6,1087.0,250.0
-420,Emilia Romagna Grand Prix,Italy,Imola,2022,2022-04-24,16,250.0,734.0
-421,Miami Grand Prix,United States,Miami,2022,2022-05-08,30,734.0,1373.0
-422,Spanish Grand Prix,Spain,Barcelona,2022,2022-05-22,10,1373.0,454.0
-423,Monaco Grand Prix,Monaco,Monaco,2022,2022-05-29,32,454.0,1475.0
-424,Azerbaijan Grand Prix,Azerbaijan,Baku,2022,2022-06-12,18,1475.0,811.0
-425,Canadian Grand Prix,Canada,Montréal,2022,2022-06-19,12,811.0,518.0
-426,British Grand Prix,Great Britain,Silverstone,2022,2022-07-03,1,518.0,10.0
-427,Austrian Grand Prix,Austria,Spielberg,2022,2022-07-10,11,10.0,496.0
-428,French Grand Prix,France,Le Castellet,2022,2022-07-24,27,496.0,1224.0
-429,Hungarian Grand Prix,Hungary,Budapest,2022,2022-07-31,2,1224.0,67.0
-430,Belgian Grand Prix,Belgium,Spa-Francorchamps,2022,2022-08-28,21,67.0,964.0
-431,Dutch Grand Prix,Netherlands,Zandvoort,2022,2022-09-04,25,964.0,1131.0
-432,Italian Grand Prix,Italy,Monza,2022,2022-09-11,3,1131.0,107.0
-433,Singapore Grand Prix,Singapore,Marina Bay,2022,2022-10-02,14,107.0,618.0
-434,Japanese Grand Prix,Japan,Suzuka,2022,2022-10-09,7,618.0,296.0
-435,United States Grand Prix,United States,Austin,2022,2022-10-23,15,296.0,674.0
-436,Mexico City Grand Prix,Mexico,Mexico City,2022,2022-10-30,17,674.0,756.0
-437,São Paulo Grand Prix,Brazil,São Paulo,2022,2022-11-13,4,756.0,177.0
-438,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2022,2022-11-20,37,177.0,
-439,Pre-Season Testing,Bahrain,Sakhir,2023,2023-02-25,5,,
-440,Bahrain Grand Prix,Bahrain,Sakhir,2023,2023-03-05,5,,211.0
-441,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2023,2023-03-19,24,211.0,1087.0
-442,Australian Grand Prix,Australia,Melbourne,2023,2023-04-02,6,1087.0,252.0
-443,Azerbaijan Grand Prix,Azerbaijan,Baku,2023,2023-04-30,18,252.0,828.0
-444,Miami Grand Prix,United States,Miami,2023,2023-05-07,30,828.0,1394.0
-445,Monaco Grand Prix,Monaco,Monaco,2023,2023-05-28,32,1394.0,1467.0
-446,Spanish Grand Prix,Spain,Barcelona,2023,2023-06-04,10,1467.0,434.0
-447,Canadian Grand Prix,Canada,Montréal,2023,2023-06-18,12,434.0,528.0
-448,Austrian Grand Prix,Austria,Spielberg,2023,2023-07-02,11,528.0,471.0
-449,British Grand Prix,Great Britain,Silverstone,2023,2023-07-09,1,471.0,1.0
-450,Hungarian Grand Prix,Hungary,Budapest,2023,2023-07-23,2,1.0,67.0
-451,Belgian Grand Prix,Belgium,Spa-Francorchamps,2023,2023-07-30,21,67.0,964.0
-452,Dutch Grand Prix,Netherlands,Zandvoort,2023,2023-08-27,25,964.0,1131.0
-453,Italian Grand Prix,Italy,Monza,2023,2023-09-03,3,1131.0,107.0
-454,Singapore Grand Prix,Singapore,Marina Bay,2023,2023-09-17,14,107.0,618.0
-455,Japanese Grand Prix,Japan,Suzuka,2023,2023-09-24,7,618.0,309.0
-456,Qatar Grand Prix,Qatar,Lusail,2023,2023-10-08,28,309.0,1284.0
-457,United States Grand Prix,United States,Austin,2023,2023-10-22,15,1284.0,674.0
-458,Mexico City Grand Prix,Mexico,Mexico City,2023,2023-10-29,17,674.0,756.0
-459,São Paulo Grand Prix,Brazil,São Paulo,2023,2023-11-05,4,756.0,173.0
-460,Las Vegas Grand Prix,United States,Las Vegas,2023,2023-11-18,33,173.0,1540.0
-461,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2023,2023-11-26,37,1540.0,
-462,Pre-Season Testing,Bahrain,Sakhir,2024,2024-02-23,5,,
-463,Bahrain Grand Prix,Bahrain,Sakhir,2024,2024-03-02,5,,211.0
-464,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2024,2024-03-09,24,211.0,1087.0
-465,Australian Grand Prix,Australia,Melbourne,2024,2024-03-24,6,1087.0,241.0
-466,Japanese Grand Prix,Japan,Suzuka,2024,2024-04-07,7,241.0,289.0
-467,Chinese Grand Prix,China,Shanghai,2024,2024-04-21,8,289.0,358.0
-468,Miami Grand Prix,United States,Miami,2024,2024-05-05,30,358.0,1379.0
-469,Emilia Romagna Grand Prix,Italy,Imola,2024,2024-05-19,16,1379.0,736.0
-470,Monaco Grand Prix,Monaco,Monaco,2024,2024-05-26,32,736.0,1469.0
-471,Canadian Grand Prix,Canada,Montréal,2024,2024-06-09,12,1469.0,527.0
-472,Spanish Grand Prix,Spain,Barcelona,2024,2024-06-23,10,527.0,433.0
-473,Austrian Grand Prix,Austria,Spielberg,2024,2024-06-30,11,433.0,471.0
-474,British Grand Prix,United Kingdom,Silverstone,2024,2024-07-07,1,471.0,1.0
-475,Hungarian Grand Prix,Hungary,Budapest,2024,2024-07-21,2,1.0,67.0
-476,Belgian Grand Prix,Belgium,Spa-Francorchamps,2024,2024-07-28,21,67.0,964.0
-477,Dutch Grand Prix,Netherlands,Zandvoort,2024,2024-08-25,25,964.0,1131.0
-478,Italian Grand Prix,Italy,Monza,2024,2024-09-01,3,1131.0,111.0
-479,Azerbaijan Grand Prix,Azerbaijan,Baku,2024,2024-09-15,18,111.0,813.0
-480,Singapore Grand Prix,Singapore,Marina Bay,2024,2024-09-22,14,813.0,625.0
-481,United States Grand Prix,United States,Austin,2024,2024-10-20,15,625.0,674.0
-482,Mexico City Grand Prix,Mexico,Mexico City,2024,2024-10-27,17,674.0,756.0
-483,São Paulo Grand Prix,Brazil,São Paulo,2024,2024-11-03,4,756.0,173.0
-484,Las Vegas Grand Prix,United States,Las Vegas,2024,2024-11-23,33,173.0,1532.0
-485,Qatar Grand Prix,Qatar,Lusail,2024,2024-12-01,28,1532.0,1305.0
-486,Abu Dhabi Grand Prix,United Arab Emirates,Yas Island,2024,2024-12-08,37,1305.0,
-487,Pre-Season Testing,Bahrain,Sakhir,2025,2025-02-28,5,,193.0
-488,Australian Grand Prix,Australia,Melbourne,2025,2025-03-16,6,193.0,242.0
-489,Chinese Grand Prix,China,Shanghai,2025,2025-03-23,8,242.0,336.0
-490,Japanese Grand Prix,Japan,Suzuka,2025,2025-04-06,7,336.0,287.0
-491,Bahrain Grand Prix,Bahrain,Sakhir,2025,2025-04-13,5,287.0,211.0
-492,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2025,2025-04-20,24,211.0,1110.0
-493,Miami Grand Prix,United States,Miami,2025,2025-05-04,30,1110.0,1379.0
-494,Emilia Romagna Grand Prix,Italy,Imola,2025,2025-05-18,16,1379.0,736.0
-495,Monaco Grand Prix,Monaco,Monaco,2025,2025-05-25,32,736.0,1467.0
-496,Spanish Grand Prix,Spain,Barcelona,2025,2025-06-01,10,1467.0,434.0
-497,Canadian Grand Prix,Canada,Montréal,2025,2025-06-15,12,434.0,528.0
-498,Austrian Grand Prix,Austria,Spielberg,2025,2025-06-29,11,528.0,471.0
-499,British Grand Prix,United Kingdom,Silverstone,2025,2025-07-06,1,471.0,20.0
-500,Belgian Grand Prix,Belgium,Spa-Francorchamps,2025,2025-07-27,21,20.0,942.0
-501,Hungarian Grand Prix,Hungary,Budapest,2025,2025-08-03,2,942.0,71.0
-502,Dutch Grand Prix,Netherlands,Zandvoort,2025,2025-08-31,25,71.0,1131.0
-503,Italian Grand Prix,Italy,Monza,2025,2025-09-07,3,1131.0,111.0
-504,Azerbaijan Grand Prix,Azerbaijan,Baku,2025,2025-09-21,18,111.0,813.0
-505,Singapore Grand Prix,Singapore,Marina Bay,2025,2025-10-05,14,813.0,625.0
-506,United States Grand Prix,United States,Austin,2025,2025-10-19,15,625.0,674.0
-507,Mexico City Grand Prix,Mexico,Mexico City,2025,2025-10-26,17,674.0,756.0
-508,São Paulo Grand Prix,Brazil,São Paulo,2025,2025-11-09,4,756.0,173.0
-509,Las Vegas Grand Prix,United States,Las Vegas,2025,2025-11-22,33,173.0,1532.0
-510,Qatar Grand Prix,Qatar,Lusail,2025,2025-11-30,28,1532.0,1305.0
-511,Abu Dhabi Grand Prix,United Arab Emirates,Yas Island,2025,2025-12-07,37,1305.0,
+id,race_name,country,circuit,year,date,geo_id,inbound_route,outbound_route,outbound_year_emissions_t,outbound_effort_score,yearly_outbound_effort_score,leg_emissions,Gap_Next_Days,Season_Phase,outbound_same_continent,consecutive_races_in_region,stint_position,involved_in_back_to_back,involved_in_triple_header,time_to_arrive_here
+1,Australian Grand Prix,Australia,Melbourne,2000,2000-03-12,6,,239,95500,13062.910868716239,58454.43418982744,21341.545859655227,14,Early_Season,0,0,Single,0,0,3W+
+2,Brazilian Grand Prix,Brazil,São Paulo,2000,2000-03-26,4,239,156,95500,9612.464690965093,58454.43418982744,15704.375394449033,14,Early_Season,0,0,Single,0,0,2W
+3,San Marino Grand Prix,Italy,Imola,2000,2000-04-09,16,156,706,95500,143.19,58454.43418982744,233.9368294215691,14,Early_Season,1,4,Start,0,0,2W
+4,British Grand Prix,UK,Silverstone,2000,2000-04-23,1,706,9,95500,145.07999999999998,58454.43418982744,237.0246191248079,14,Early_Season,1,4,Middle,0,0,2W
+5,Spanish Grand Prix,Spain,Montmeló,2000,2000-05-07,10,9,458,95500,113.4216,58454.43418982744,185.30267121950865,14,Early_Season,1,4,Middle,0,0,2W
+6,European Grand Prix,Germany,Nürburg,2000,2000-05-21,36,458,1677,95500,102.30030000000001,58454.43418982744,167.133234380022,14,Early_Season,1,4,End,0,0,2W
+7,Monaco Grand Prix,Monaco,Monte-Carlo,2000,2000-06-04,32,1677,1469,95500,6121.731961204659,58454.43418982744,10001.386727934227,14,Mid_Season,0,0,Single,0,0,2W
+8,Canadian Grand Prix,Canada,Montreal,2000,2000-06-18,12,1469,536,95500,5658.437269982127,58454.43418982744,9244.478486070662,14,Mid_Season,0,0,Single,0,0,2W
+9,French Grand Prix,France,Magny Cours,2000,2000-07-02,20,536,904,95500,120.0789,58454.43418982744,196.17904285515507,14,Mid_Season,1,5,Start,0,0,2W
+10,Austrian Grand Prix,Austria,Spielberg,2000,2000-07-16,11,904,482,95500,61.449299999999994,58454.43418982744,100.39286550858876,14,Mid_Season,1,5,Middle,0,0,2W
+11,German Grand Prix,Germany,Hockenheim,2000,2000-07-30,13,482,566,95500,91.53,58454.43418982744,149.53724419970823,14,Mid_Season,1,5,Middle,0,0,2W
+12,Hungarian Grand Prix,Hungary,Budapest,2000,2000-08-13,2,566,67,95500,115.32329999999999,58454.43418982744,188.40957581138653,14,Mid_Season,1,5,Middle,0,0,2W
+13,Belgian Grand Prix,Belgium,Spa,2000,2000-08-27,21,67,943,95500,71.4042,58454.43418982744,116.65669498836236,14,Mid_Season,1,5,End,0,0,2W
+14,Italian Grand Prix,Italy,Monza,2000,2000-09-10,3,943,116,95500,7345.695115647774,58454.43418982744,12001.037958322137,14,Late_Season,0,0,Single,0,0,2W
+15,United States Grand Prix,USA,Indianapolis,2000,2000-09-24,23,116,1041,95500,10627.670529264316,58454.43418982744,17362.969116231186,14,Late_Season,0,0,Single,0,0,2W
+16,Japanese Grand Prix,Japan,Suzuka,2000,2000-10-08,7,1041,290,95500,5061.746154047234,58454.43418982744,8269.63367982842,14,Late_Season,1,1,Start,0,0,2W
+17,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2000,2000-10-22,9,290,,95500,,58454.43418982744,,,Late_Season,0,0,Single,0,0,2W
+18,Australian Grand Prix,Australia,Melbourne,2001,2001-03-04,6,,243,95500,6334.527181443277,62505.004157821575,9678.382618780017,14,Early_Season,0,0,Single,0,0,3W+
+19,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2001,2001-03-18,9,243,380,95500,15901.039785490371,62505.004157821575,24294.843588524207,14,Early_Season,0,0,Single,0,0,2W
+20,Brazilian Grand Prix,Brazil,São Paulo,2001,2001-04-01,4,380,156,95500,9612.464690965093,62505.004157821575,14686.670137150826,14,Early_Season,0,0,Single,0,0,2W
+21,San Marino Grand Prix,Italy,Imola,2001,2001-04-15,16,156,715,95500,103.68539999999999,62505.004157821575,158.41860717260533,14,Early_Season,1,3,Start,0,0,2W
+22,Spanish Grand Prix,Spain,Montmeló,2001,2001-04-29,10,715,433,95500,143.6616,62505.004157821575,219.4973504098741,14,Early_Season,1,3,Middle,0,0,2W
+23,Austrian Grand Prix,Austria,Spielberg,2001,2001-05-13,11,433,501,95500,85.1184,62505.004157821575,130.05050250817078,14,Early_Season,1,3,End,0,0,2W
+24,Monaco Grand Prix,Monaco,Monte-Carlo,2001,2001-05-27,32,501,1469,95500,6121.731961204659,62505.004157821575,9353.257553889589,14,Early_Season,0,0,Single,0,0,2W
+25,Canadian Grand Prix,Canada,Montreal,2001,2001-06-10,12,1469,552,95500,5721.561993806082,62505.004157821575,8741.846797239286,14,Mid_Season,0,0,Single,0,0,2W
+26,European Grand Prix,Germany,Nürburg,2001,2001-06-24,36,552,1665,95500,64.35,62505.004157821575,98.31892794508342,7,Mid_Season,1,6,Start,1,0,2W
+27,French Grand Prix,France,Magny Cours,2001,2001-07-01,20,1665,894,95500,76.86,62505.004157821575,117.4326775735682,14,Mid_Season,1,6,Middle,1,0,1W
+28,British Grand Prix,UK,Silverstone,2001,2001-07-15,1,894,12,95500,88.38,62505.004157821575,135.0338283105901,14,Mid_Season,1,6,Middle,0,0,2W
+29,German Grand Prix,Germany,Hockenheim,2001,2001-07-29,13,12,566,95500,91.53,62505.004157821575,139.84664296524454,21,Mid_Season,1,6,Middle,0,0,2W
+30,Hungarian Grand Prix,Hungary,Budapest,2001,2001-08-19,2,566,67,95500,115.32329999999999,62505.004157821575,176.19989468670147,14,Mid_Season,1,6,Middle,0,0,3W+
+31,Belgian Grand Prix,Belgium,Spa,2001,2001-09-02,21,67,943,95500,71.4042,62505.004157821575,109.0968825917067,14,Late_Season,1,6,End,0,0,2W
+32,Italian Grand Prix,Italy,Monza,2001,2001-09-16,3,943,116,95500,7345.695115647774,62505.004157821575,11223.323524194637,14,Late_Season,0,0,Single,0,0,2W
+33,United States Grand Prix,USA,Indianapolis,2001,2001-09-30,23,116,1041,95500,10627.670529264316,62505.004157821575,16237.780466057888,14,Late_Season,0,0,Single,0,0,2W
+34,Japanese Grand Prix,Japan,Suzuka,2001,2001-10-14,7,1041,,95500,,62505.004157821575,,,Late_Season,0,0,Single,0,0,2W
+35,Australian Grand Prix,Australia,Melbourne,2002,2002-03-03,6,,243,95500,6334.527181443277,62483.69125782157,9681.683870622912,14,Early_Season,0,0,Single,0,0,3W+
+36,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2002,2002-03-17,9,243,380,95500,15901.039785490371,62483.69125782157,24303.13044804698,14,Early_Season,0,0,Single,0,0,2W
+37,Brazilian Grand Prix,Brazil,São Paulo,2002,2002-03-31,4,380,156,95500,9612.464690965093,62483.69125782157,14691.679692855125,14,Early_Season,0,0,Single,0,0,2W
+38,San Marino Grand Prix,Italy,Imola,2002,2002-04-14,16,156,715,95500,103.68539999999999,62483.69125782157,158.4726430316406,14,Early_Season,1,3,Start,0,0,2W
+39,Spanish Grand Prix,Spain,Montmeló,2002,2002-04-28,10,715,433,95500,143.6616,62483.69125782157,219.5722199475947,14,Early_Season,1,3,Middle,0,0,2W
+40,Austrian Grand Prix,Austria,Spielberg,2002,2002-05-12,11,433,501,95500,85.1184,62483.69125782157,130.09486213704528,14,Early_Season,1,3,End,0,0,2W
+41,Monaco Grand Prix,Monaco,Monte-Carlo,2002,2002-05-26,32,501,1469,95500,6121.731961204659,62483.69125782157,9356.447907066675,14,Early_Season,0,0,Single,0,0,2W
+42,Canadian Grand Prix,Canada,Montreal,2002,2002-06-09,12,1469,552,95500,5721.561993806082,62483.69125782157,8744.828601016468,14,Mid_Season,0,0,Single,0,0,2W
+43,European Grand Prix,Germany,Nürburg,2002,2002-06-23,36,552,1646,95500,70.38,62483.69125782157,107.56870896545574,14,Mid_Season,1,6,Start,0,0,2W
+44,British Grand Prix,UK,Silverstone,2002,2002-07-07,1,1646,19,95500,76.86,62483.69125782157,117.47273332033146,14,Mid_Season,1,6,Middle,0,0,2W
+45,French Grand Prix,France,Magny Cours,2002,2002-07-21,20,19,906,95500,61.0371,62483.69125782157,93.2890316282384,7,Mid_Season,1,6,Middle,1,0,2W
+46,German Grand Prix,Germany,Hockenheim,2002,2002-07-28,13,906,566,95500,91.53,62483.69125782157,139.89434401261957,21,Mid_Season,1,6,Middle,1,0,1W
+47,Hungarian Grand Prix,Hungary,Budapest,2002,2002-08-18,2,566,67,95500,115.32329999999999,62483.69125782157,176.25999566120973,14,Mid_Season,1,6,Middle,0,0,3W+
+48,Belgian Grand Prix,Belgium,Spa,2002,2002-09-01,21,67,943,95500,71.4042,62483.69125782157,109.13409503710139,14,Late_Season,1,6,End,0,0,2W
+49,Italian Grand Prix,Italy,Monza,2002,2002-09-15,3,943,116,95500,7345.695115647774,62483.69125782157,11227.151748281973,14,Late_Season,0,0,Single,0,0,2W
+50,United States Grand Prix,USA,Indianapolis,2002,2002-09-29,23,116,1041,95500,10627.670529264316,62483.69125782157,16243.31909836863,14,Late_Season,0,0,Single,0,0,2W
+51,Japanese Grand Prix,Japan,Suzuka,2002,2002-10-13,7,1041,,95500,,62483.69125782157,,,Late_Season,0,0,Single,0,0,2W
+52,Australian Grand Prix,Australia,Melbourne,2003,2003-03-09,6,,243,90000,6334.527181443277,62409.61945782157,9134.92905873576,14,Early_Season,0,0,Single,0,0,3W+
+53,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2003,2003-03-23,9,243,380,90000,15901.039785490371,62409.61945782157,22930.657054579744,14,Early_Season,0,0,Single,0,0,2W
+54,Brazilian Grand Prix,Brazil,São Paulo,2003,2003-04-06,4,380,156,90000,9612.464690965093,62409.61945782157,13861.994828722445,14,Early_Season,0,0,Single,0,0,2W
+55,San Marino Grand Prix,Italy,Imola,2003,2003-04-20,16,156,715,90000,103.68539999999999,62409.61945782157,149.5231998058673,14,Early_Season,1,3,Start,0,0,2W
+56,Spanish Grand Prix,Spain,Montmeló,2003,2003-05-04,10,715,433,90000,143.6616,62409.61945782157,207.17229350738472,14,Early_Season,1,3,Middle,0,0,2W
+57,Austrian Grand Prix,Austria,Spielberg,2003,2003-05-18,11,433,501,90000,85.1184,62409.61945782157,122.74800049337453,14,Early_Season,1,3,End,0,0,2W
+58,Monaco Grand Prix,Monaco,Monte-Carlo,2003,2003-06-01,32,501,1469,90000,6121.731961204659,62409.61945782157,8828.060181984813,14,Mid_Season,0,0,Single,0,0,2W
+59,Canadian Grand Prix,Canada,Montreal,2003,2003-06-15,12,1469,552,90000,5721.561993806082,62409.61945782157,8250.980921147271,14,Mid_Season,0,0,Single,0,0,2W
+60,European Grand Prix,Germany,Nürburg,2003,2003-06-29,36,552,1665,90000,64.35,62409.61945782157,92.79819441799484,7,Mid_Season,1,5,Start,1,0,2W
+61,French Grand Prix,France,Magny Cours,2003,2003-07-06,20,1665,894,90000,76.86,62409.61945782157,110.83868256359104,14,Mid_Season,1,5,Middle,1,0,1W
+62,British Grand Prix,UK,Silverstone,2003,2003-07-20,1,894,12,90000,88.38,62409.61945782157,127.45150617967963,14,Mid_Season,1,5,Middle,0,0,2W
+63,German Grand Prix,Germany,Hockenheim,2003,2003-08-03,13,12,566,90000,91.53,62409.61945782157,131.99407513720385,21,Mid_Season,1,5,Middle,0,0,2W
+64,Hungarian Grand Prix,Hungary,Budapest,2003,2003-08-24,2,566,49,90000,91.3428,62409.61945782157,131.72411675344242,21,Mid_Season,1,5,End,0,0,3W+
+65,Italian Grand Prix,Italy,Monza,2003,2003-09-14,3,49,116,90000,7345.695115647774,62409.61945782157,10593.119556755202,14,Late_Season,0,0,Single,0,0,3W+
+66,United States Grand Prix,USA,Indianapolis,2003,2003-09-28,23,116,1041,90000,10627.670529264316,62409.61945782157,15326.008329216225,14,Late_Season,0,0,Single,0,0,2W
+67,Japanese Grand Prix,Japan,Suzuka,2003,2003-10-12,7,1041,,90000,,62409.61945782157,,,Late_Season,0,0,Single,0,0,2W
+68,Australian Grand Prix,Australia,Melbourne,2004,2004-03-07,6,,243,101000,6334.527181443277,59099.58897751522,10825.578593603785,14,Early_Season,0,0,Single,0,0,3W+
+69,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2004,2004-03-21,9,243,381,101000,6040.7507473382175,59099.58897751522,10323.520620647329,14,Early_Season,1,1,Start,0,0,2W
+70,Bahrain Grand Prix,Bahrain,Sakhir,2004,2004-04-04,5,381,203,101000,4018.262778933791,59099.58897751522,6867.129665262458,21,Early_Season,0,0,Single,0,0,2W
+71,San Marino Grand Prix,Italy,Imola,2004,2004-04-25,16,203,715,101000,103.68539999999999,59099.58897751522,177.1962475743142,14,Early_Season,1,3,Start,0,0,3W+
+72,Spanish Grand Prix,Spain,Montmeló,2004,2004-05-09,10,715,454,101000,59.5332,59099.58897751522,101.74103245096383,14,Early_Season,1,3,Middle,0,0,2W
+73,Monaco Grand Prix,Monaco,Monte-Carlo,2004,2004-05-23,32,454,1492,101000,102.3291,59099.58897751522,174.8783583576546,7,Early_Season,1,3,End,1,0,2W
+74,European Grand Prix,Germany,Nürburg,2004,2004-05-30,36,1492,1657,101000,5721.561993806082,59099.58897751522,9778.033508731698,14,Early_Season,0,0,Single,1,0,1W
+75,Canadian Grand Prix,Canada,Montreal,2004,2004-06-13,12,1657,539,101000,130.5171,59099.58897751522,223.05107917104561,7,Mid_Season,1,1,Start,1,0,2W
+76,United States Grand Prix,USA,Indianapolis,2004,2004-06-20,23,539,1054,101000,6871.626418233463,59099.58897751522,11743.47030578553,14,Mid_Season,0,0,Single,1,0,1W
+77,French Grand Prix,France,Magny Cours,2004,2004-07-04,20,1054,894,101000,76.86,59099.58897751522,131.35218254992307,7,Mid_Season,1,5,Start,1,0,2W
+78,British Grand Prix,UK,Silverstone,2004,2004-07-11,1,894,12,101000,88.38,59099.58897751522,151.03962911478274,14,Mid_Season,1,5,Middle,1,0,1W
+79,German Grand Prix,Germany,Hockenheim,2004,2004-07-25,13,12,566,101000,91.53,59099.58897751522,156.42291528486155,21,Mid_Season,1,5,Middle,0,0,2W
+80,Hungarian Grand Prix,Hungary,Budapest,2004,2004-08-15,2,566,67,101000,115.32329999999999,59099.58897751522,197.08518285011112,14,Mid_Season,1,5,Middle,0,0,3W+
+81,Belgian Grand Prix,Belgium,Spa,2004,2004-08-29,21,67,943,101000,71.4042,59099.58897751522,122.02833090334657,14,Mid_Season,1,5,End,0,0,2W
+82,Italian Grand Prix,Italy,Monza,2004,2004-09-12,3,943,101,101000,9057.99073231066,59099.58897751522,15479.922615222238,14,Late_Season,0,0,Single,0,0,2W
+83,Chinese Grand Prix,China,Shanghai,2004,2004-09-26,8,101,336,101000,1477.919226875703,59099.58897751522,2525.7340109630304,14,Late_Season,1,1,Start,0,0,2W
+84,Japanese Grand Prix,Japan,Suzuka,2004,2004-10-10,7,336,286,101000,18737.387598574023,59099.58897751522,32021.81572152693,14,Late_Season,0,0,Single,0,0,2W
+85,Brazilian Grand Prix,Brazil,São Paulo,2004,2004-10-24,4,286,,101000,,59099.58897751522,,,Late_Season,0,0,Single,0,0,2W
+86,Australian Grand Prix,Australia,Melbourne,2005,2005-03-06,6,,243,106500,6334.527181443277,62451.77808512033,10802.368891790524,14,Early_Season,0,0,Single,0,0,3W+
+87,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2005,2005-03-20,9,243,381,106500,6040.7507473382175,62451.77808512033,10301.38731542059,14,Early_Season,1,1,Start,0,0,2W
+88,Bahrain Grand Prix,Bahrain,Sakhir,2005,2005-04-03,5,381,203,106500,4018.262778933791,62451.77808512033,6852.406754106659,21,Early_Season,0,0,Single,0,0,2W
+89,San Marino Grand Prix,Italy,Imola,2005,2005-04-24,16,203,715,106500,103.68539999999999,62451.77808512033,176.81634436331555,14,Early_Season,1,3,Start,0,0,3W+
+90,Spanish Grand Prix,Spain,Montmeló,2005,2005-05-08,10,715,454,106500,59.5332,62451.77808512033,101.52290286048121,14,Early_Season,1,3,Middle,0,0,2W
+91,Monaco Grand Prix,Monaco,Monte-Carlo,2005,2005-05-22,32,454,1492,106500,102.3291,62451.77808512033,174.50342462861843,7,Early_Season,1,3,End,1,0,2W
+92,European Grand Prix,Germany,Nürburg,2005,2005-05-29,36,1492,1657,106500,5721.561993806082,62451.77808512033,9757.069710806676,14,Early_Season,0,0,Single,1,0,1W
+93,Canadian Grand Prix,Canada,Montreal,2005,2005-06-12,12,1657,539,106500,130.5171,62451.77808512033,222.57286463572783,7,Mid_Season,1,1,Start,1,0,2W
+94,United States Grand Prix,USA,Indianapolis,2005,2005-06-19,23,539,1054,106500,6871.626418233463,62451.77808512033,11718.292672858712,14,Mid_Season,0,0,Single,1,0,1W
+95,French Grand Prix,France,Magny Cours,2005,2005-07-03,20,1054,894,106500,76.86,62451.77808512033,131.07056758004921,7,Mid_Season,1,3,Start,1,0,2W
+96,British Grand Prix,UK,Silverstone,2005,2005-07-10,1,894,12,106500,88.38,62451.77808512033,150.71580487541956,14,Mid_Season,1,3,Middle,1,0,1W
+97,German Grand Prix,Germany,Hockenheim,2005,2005-07-24,13,12,566,106500,91.53,62451.77808512033,156.0875494483724,7,Mid_Season,1,3,End,1,0,2W
+98,Hungarian Grand Prix,Hungary,Budapest,2005,2005-07-31,2,566,65,106500,1092.4516228703753,62451.77808512033,1862.9749448785578,21,Mid_Season,0,0,Single,1,0,1W
+99,Turkish Grand Prix,Turkey,Istanbul,2005,2005-08-21,19,65,849,106500,1704.1727959885131,62451.77808512033,2906.1526883254464,14,Mid_Season,0,0,Single,0,0,3W+
+100,Italian Grand Prix,Italy,Monza,2005,2005-09-04,3,849,114,106500,71.3421,62451.77808512033,121.66080587239955,7,Late_Season,1,1,Start,1,0,2W
+101,Belgian Grand Prix,Belgium,Spa,2005,2005-09-11,21,114,944,106500,9728.940821056882,62451.77808512033,16590.915890822733,14,Late_Season,0,0,Single,1,0,1W
+102,Brazilian Grand Prix,Brazil,São Paulo,2005,2005-09-25,4,944,147,106500,18737.387598574023,62451.77808512033,31953.161950461523,14,Late_Season,0,0,Single,0,0,2W
+103,Japanese Grand Prix,Japan,Suzuka,2005,2005-10-09,7,147,289,106500,1477.919226875703,62451.77808512033,2520.318916264194,7,Late_Season,1,1,Start,1,0,2W
+104,Chinese Grand Prix,China,Shanghai,2005,2005-10-16,8,289,,106500,,62451.77808512033,,,Late_Season,0,0,Single,1,0,1W
+105,Bahrain Grand Prix,Bahrain,Sakhir,2006,2006-03-12,5,,196,101000,6040.7507473382175,73226.88599265063,8331.855399974183,7,Early_Season,1,1,Start,1,0,3W+
+106,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2006,2006-03-19,9,196,382,101000,6334.527181443277,73226.88599265063,8737.053838258025,14,Early_Season,0,0,Single,1,0,1W
+107,Australian Grand Prix,Australia,Melbourne,2006,2006-04-02,6,382,250,101000,16086.339359615404,73226.88599265063,22187.48282542316,21,Early_Season,0,0,Single,0,0,2W
+108,San Marino Grand Prix,Italy,Imola,2006,2006-04-23,16,250,740,101000,90.4554,73226.88599265063,124.76285555713689,14,Early_Season,1,4,Start,0,0,3W+
+109,European Grand Prix,Germany,Nürburg,2006,2006-05-07,36,740,1655,101000,113.2119,73226.88599265063,156.1503229995006,7,Early_Season,1,4,Middle,1,0,2W
+110,Spanish Grand Prix,Spain,Montmeló,2006,2006-05-14,10,1655,454,101000,59.5332,73226.88599265063,82.11264371672826,14,Early_Season,1,4,Middle,1,0,1W
+111,Monaco Grand Prix,Monaco,Monte-Carlo,2006,2006-05-28,32,454,1458,101000,140.22,73226.88599265063,193.4019152667694,14,Early_Season,1,4,End,0,0,2W
+112,British Grand Prix,UK,Silverstone,2006,2006-06-11,1,1458,11,101000,5137.2156094009915,73226.88599265063,7085.632135191097,14,Mid_Season,0,0,Single,0,0,2W
+113,Canadian Grand Prix,Canada,Montreal,2006,2006-06-25,12,11,539,101000,130.5171,73226.88599265063,180.01894961535066,7,Mid_Season,1,1,Start,1,0,2W
+114,United States Grand Prix,USA,Indianapolis,2006,2006-07-02,23,539,1054,101000,6871.626418233463,73226.88599265063,9477.861291428344,14,Mid_Season,0,0,Single,1,0,1W
+115,French Grand Prix,France,Magny Cours,2006,2006-07-16,20,1054,906,101000,61.0371,73226.88599265063,84.18693511859458,14,Mid_Season,1,2,Start,0,0,2W
+116,German Grand Prix,Germany,Hockenheim,2006,2006-07-30,13,906,566,101000,91.53,73226.88599265063,126.2450242787577,7,Mid_Season,1,2,End,1,0,2W
+117,Hungarian Grand Prix,Hungary,Budapest,2006,2006-08-06,2,566,65,101000,1092.4516228703753,73226.88599265063,1506.7910155428688,21,Mid_Season,0,0,Single,1,0,1W
+118,Turkish Grand Prix,Turkey,Istanbul,2006,2006-08-27,19,65,849,101000,1704.1727959885131,73226.88599265063,2350.5226265133642,14,Mid_Season,0,0,Single,0,0,3W+
+119,Italian Grand Prix,Italy,Monza,2006,2006-09-10,3,849,101,101000,9057.99073231066,73226.88599265063,12493.458537280907,21,Late_Season,0,0,Single,0,0,2W
+120,Chinese Grand Prix,China,Shanghai,2006,2006-10-01,8,101,336,101000,1477.919226875703,73226.88599265063,2038.456775690658,7,Late_Season,1,1,Start,1,0,3W+
+121,Japanese Grand Prix,Japan,Suzuka,2006,2006-10-08,7,336,286,101000,18737.387598574023,73226.88599265063,25844.00690814455,14,Late_Season,0,0,Single,1,0,1W
+122,Brazilian Grand Prix,Brazil,São Paulo,2006,2006-10-22,4,286,,101000,,73226.88599265063,,,Late_Season,0,0,Single,0,0,2W
+123,Australian Grand Prix,Australia,Melbourne,2007,2007-03-18,6,,243,95500,6334.527181443277,63066.36481921142,9592.234268805556,21,Early_Season,0,0,Single,0,0,3W+
+124,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2007,2007-04-08,9,243,381,95500,6040.7507473382175,63066.36481921142,9147.375118647487,7,Early_Season,1,1,Start,1,0,3W+
+125,Bahrain Grand Prix,Bahrain,Sakhir,2007,2007-04-15,5,381,197,95500,4710.924349220891,63066.36481921142,7133.648445415829,28,Early_Season,0,0,Single,1,0,1W
+126,Spanish Grand Prix,Spain,Montmeló,2007,2007-05-13,10,197,454,95500,59.5332,63066.36481921142,90.14980673609547,14,Early_Season,1,1,Start,0,0,3W+
+127,Monaco Grand Prix,Monaco,Monte-Carlo,2007,2007-05-27,32,454,1469,95500,6121.731961204659,63066.36481921142,9270.00317793733,14,Early_Season,0,0,Single,0,0,2W
+128,Canadian Grand Prix,Canada,Montreal,2007,2007-06-10,12,1469,539,95500,130.5171,63066.36481921142,197.63915497160653,7,Mid_Season,1,1,Start,1,0,2W
+129,United States Grand Prix,USA,Indianapolis,2007,2007-06-17,23,539,1054,95500,6871.626418233463,63066.36481921142,10405.551752071024,14,Mid_Season,0,0,Single,1,0,1W
+130,French Grand Prix,France,Magny Cours,2007,2007-07-01,20,1054,894,95500,76.86,63066.36481921142,116.38739637271804,7,Mid_Season,1,3,Start,1,0,2W
+131,British Grand Prix,UK,Silverstone,2007,2007-07-08,1,894,35,95500,70.38,63066.36481921142,106.5748758354397,14,Mid_Season,1,3,Middle,1,0,1W
+132,European Grand Prix,Germany,Nürburg,2007,2007-07-22,36,35,1647,95500,107.3286,63066.36481921142,162.52532279897093,14,Mid_Season,1,3,End,0,0,2W
+133,Hungarian Grand Prix,Hungary,Budapest,2007,2007-08-05,2,1647,65,95500,1092.4516228703753,63066.36481921142,1654.2753063886737,21,Mid_Season,0,0,Single,0,0,2W
+134,Turkish Grand Prix,Turkey,Istanbul,2007,2007-08-26,19,65,849,95500,1704.1727959885131,63066.36481921142,2580.5911357574582,14,Mid_Season,0,0,Single,0,0,3W+
+135,Italian Grand Prix,Italy,Monza,2007,2007-09-09,3,849,114,95500,71.3421,63066.36481921142,108.03176256521061,7,Late_Season,1,1,Start,1,0,2W
+136,Belgian Grand Prix,Belgium,Spa,2007,2007-09-16,21,114,974,95500,9418.261771312727,63066.36481921142,14261.865286492219,14,Late_Season,0,0,Single,1,0,1W
+137,Japanese Grand Prix,Japan,Oyama,2007,2007-09-30,35,974,1606,95500,1702.0503658207178,63066.36481921142,2577.377186743503,7,Late_Season,1,1,Start,1,0,2W
+138,Chinese Grand Prix,China,Shanghai,2007,2007-10-07,8,1606,333,95500,18553.906605778575,63066.36481921142,28095.770002460875,14,Late_Season,0,0,Single,1,0,1W
+139,Brazilian Grand Prix,Brazil,São Paulo,2007,2007-10-21,4,333,,95500,,63066.36481921142,,,Late_Season,0,0,Single,0,0,2W
+140,Australian Grand Prix,Australia,Melbourne,2008,2008-03-16,6,,243,101000,6334.527181443277,69397.30251656445,9219.194725516314,7,Early_Season,0,0,Single,1,0,3W+
+141,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2008,2008-03-23,9,243,381,101000,6040.7507473382175,69397.30251656445,8791.636034203653,14,Early_Season,1,1,Start,1,0,1W
+142,Bahrain Grand Prix,Bahrain,Sakhir,2008,2008-04-06,5,381,197,101000,4710.924349220891,69397.30251656445,6856.222677498745,21,Early_Season,0,0,Single,0,0,2W
+143,Spanish Grand Prix,Spain,Montmeló,2008,2008-04-27,10,197,441,101000,2260.548637464844,69397.30251656445,3289.9753175485835,14,Early_Season,0,0,Single,0,0,3W+
+144,Turkish Grand Prix,Turkey,Istanbul,2008,2008-05-11,19,441,877,101000,1827.5306615034126,69397.30251656445,2659.7661597550873,14,Early_Season,0,0,Single,0,0,2W
+145,Monaco Grand Prix,Monaco,Monte-Carlo,2008,2008-05-25,32,877,1469,101000,6121.731961204659,69397.30251656445,8909.495119555831,14,Early_Season,0,0,Single,0,0,2W
+146,Canadian Grand Prix,Canada,Montreal,2008,2008-06-08,12,1469,536,101000,5658.437269982127,69397.30251656445,8235.221594265611,14,Mid_Season,0,0,Single,0,0,2W
+147,French Grand Prix,France,Magny Cours,2008,2008-06-22,20,536,894,101000,76.86,69397.30251656445,111.86112022361506,14,Mid_Season,1,6,Start,0,0,2W
+148,British Grand Prix,UK,Silverstone,2008,2008-07-06,1,894,12,101000,88.38,69397.30251656445,128.62718976532784,14,Mid_Season,1,6,Middle,0,0,2W
+149,German Grand Prix,Germany,Hockenheim,2008,2008-07-20,13,12,566,101000,91.53,69397.30251656445,133.21166190563997,14,Mid_Season,1,6,Middle,0,0,2W
+150,Hungarian Grand Prix,Hungary,Budapest,2008,2008-08-03,2,566,72,101000,209.09609999999998,69397.30251656445,304.3159508247337,21,Mid_Season,1,6,Middle,0,0,2W
+151,European Grand Prix,Spain,Valencia,2008,2008-08-24,26,72,1196,101000,147.7818,69397.30251656445,215.07985553815038,14,Mid_Season,1,6,Middle,0,0,3W+
+152,Belgian Grand Prix,Belgium,Spa,2008,2008-09-07,21,1196,943,101000,71.4042,69397.30251656445,103.92081447659451,7,Late_Season,1,6,End,1,0,2W
+153,Italian Grand Prix,Italy,Monza,2008,2008-09-14,3,943,107,101000,10261.009678993587,69397.30251656445,14933.750160259944,14,Late_Season,0,0,Single,1,0,1W
+154,Singapore Grand Prix,Singapore,Marina Bay,2008,2008-09-28,14,107,645,101000,5240.832957814146,69397.30251656445,7627.44529750107,14,Late_Season,1,2,Start,0,0,2W
+155,Japanese Grand Prix,Japan,Oyama,2008,2008-10-12,35,645,1606,101000,1702.0503658207178,69397.30251656445,2477.14364555971,7,Late_Season,1,2,End,1,0,2W
+156,Chinese Grand Prix,China,Shanghai,2008,2008-10-19,8,1606,333,101000,18553.906605778575,69397.30251656445,27003.132675601388,14,Late_Season,0,0,Single,1,0,1W
+157,Brazilian Grand Prix,Brazil,São Paulo,2008,2008-11-02,4,333,,101000,,69397.30251656445,,,Late_Season,0,0,Single,0,0,2W
+158,Australian Grand Prix,Australia,Melbourne,2009,2009-03-29,6,,243,95500,6334.527181443277,72913.42553142406,8296.789533871428,7,Early_Season,0,0,Single,1,0,3W+
+159,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2009,2009-04-05,9,243,384,95500,3777.335634926772,72913.42553142406,4947.4503564509905,14,Early_Season,1,2,Start,1,0,1W
+160,Chinese Grand Prix,China,Shanghai,2009,2009-04-19,8,384,334,95500,6804.787455387189,72913.42553142406,8912.7235108355,7,Early_Season,1,2,End,1,0,2W
+161,Bahrain Grand Prix,Bahrain,Sakhir,2009,2009-04-26,5,334,197,95500,4710.924349220891,72913.42553142406,6170.239185329471,14,Early_Season,0,0,Single,1,0,1W
+162,Spanish Grand Prix,Spain,Montmeló,2009,2009-05-10,10,197,454,95500,59.5332,72913.42553142406,77.97494848942065,14,Early_Season,1,1,Start,0,0,2W
+163,Monaco Grand Prix,Monaco,Monte-Carlo,2009,2009-05-24,32,454,1476,95500,1827.5306615034126,72913.42553142406,2393.649412320612,14,Early_Season,0,0,Single,0,0,2W
+164,Turkish Grand Prix,Turkey,Istanbul,2009,2009-06-07,19,1476,847,95500,2609.3173680460604,72913.42553142406,3417.612145255794,14,Mid_Season,0,0,Single,0,0,2W
+165,British Grand Prix,UK,Silverstone,2009,2009-06-21,1,847,35,95500,70.38,72913.42553142406,92.18178889569896,21,Mid_Season,1,5,Start,0,0,2W
+166,German Grand Prix,Germany,Nürburg,2009,2009-07-12,36,35,1647,95500,107.3286,72913.42553142406,140.5760492706865,14,Mid_Season,1,5,Middle,0,0,3W+
+167,Hungarian Grand Prix,Hungary,Budapest,2009,2009-07-26,2,1647,72,95500,209.09609999999998,72913.42553142406,273.86832266430747,28,Mid_Season,1,5,Middle,0,0,2W
+168,European Grand Prix,Spain,Valencia,2009,2009-08-23,26,72,1196,95500,147.7818,72913.42553142406,193.56053836638827,7,Mid_Season,1,5,Middle,1,0,3W+
+169,Belgian Grand Prix,Belgium,Spa,2009,2009-08-30,21,1196,943,95500,71.4042,72913.42553142406,93.52325789522972,14,Mid_Season,1,5,End,1,0,1W
+170,Italian Grand Prix,Italy,Monza,2009,2009-09-13,3,943,107,95500,10261.009678993587,72913.42553142406,13439.5883501806,14,Late_Season,0,0,Single,0,0,2W
+171,Singapore Grand Prix,Singapore,Marina Bay,2009,2009-09-27,14,107,618,95500,5036.00644714359,72913.42553142406,6596.022779027699,7,Late_Season,1,1,Start,1,0,2W
+172,Japanese Grand Prix,Japan,Suzuka,2009,2009-10-04,7,618,286,95500,18737.387598574023,72913.42553142406,24541.71509048932,14,Late_Season,0,0,Single,1,0,1W
+173,Brazilian Grand Prix,Brazil,São Paulo,2009,2009-10-18,4,286,177,95500,12149.075256185264,72913.42553142406,15912.524730656862,14,Late_Season,0,0,Single,0,0,2W
+174,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2009,2009-11-01,37,177,,95500,,72913.42553142406,,,Late_Season,0,0,Single,0,0,2W
+175,Bahrain Grand Prix,Bahrain,Sakhir,2010,2010-03-14,5,,193,106500,12112.617739660875,94992.34908699458,13579.975668277231,14,Early_Season,0,0,Single,0,0,3W+
+176,Australian Grand Prix,Australia,Melbourne,2010,2010-03-28,6,193,243,106500,6334.527181443277,94992.34908699458,7101.9103254924385,7,Early_Season,0,0,Single,1,0,2W
+177,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2010,2010-04-04,9,243,384,106500,3777.335634926772,94992.34908699458,4234.933118153389,14,Early_Season,1,1,Start,1,0,1W
+178,Chinese Grand Prix,China,Shanghai,2010,2010-04-18,8,384,338,106500,9779.945564735917,94992.34908699458,10964.716765668194,21,Early_Season,0,0,Single,0,0,2W
+179,Spanish Grand Prix,Spain,Montmeló,2010,2010-05-09,10,338,454,106500,59.5332,94992.34908699458,66.7452259149158,7,Early_Season,1,1,Start,1,0,3W+
+180,Monaco Grand Prix,Monaco,Monte-Carlo,2010,2010-05-16,32,454,1476,106500,1827.5306615034126,94992.34908699458,2048.923069287067,14,Early_Season,0,0,Single,1,0,1W
+181,Turkish Grand Prix,Turkey,Istanbul,2010,2010-05-30,19,1476,858,106500,7735.930748596874,94992.34908699458,8673.084018282943,14,Early_Season,0,0,Single,0,0,2W
+182,Canadian Grand Prix,Canada,Montreal,2010,2010-06-13,12,858,542,106500,5829.544784485872,94992.34908699458,6535.752884468309,14,Mid_Season,0,0,Single,0,0,2W
+183,European Grand Prix,Spain,Valencia,2010,2010-06-27,26,542,1176,106500,178.82999999999998,94992.34908699458,200.49398907440542,14,Mid_Season,1,5,Start,0,0,2W
+184,British Grand Prix,UK,Silverstone,2010,2010-07-11,1,1176,12,106500,88.38,94992.34908699458,99.0866116110046,14,Mid_Season,1,5,Middle,0,0,2W
+185,German Grand Prix,Germany,Hockenheim,2010,2010-07-25,13,12,566,106500,91.53,94992.34908699458,102.61821182117279,7,Mid_Season,1,5,Middle,1,0,2W
+186,Hungarian Grand Prix,Hungary,Budapest,2010,2010-08-01,2,566,67,106500,115.32329999999999,94992.34908699458,129.2939017515203,28,Mid_Season,1,5,Middle,1,0,1W
+187,Belgian Grand Prix,Belgium,Spa,2010,2010-08-29,21,67,943,106500,71.4042,94992.34908699458,80.0543135640925,14,Mid_Season,1,5,End,0,0,3W+
+188,Italian Grand Prix,Italy,Monza,2010,2010-09-12,3,943,107,106500,10261.009678993587,94992.34908699458,11504.05839329256,14,Late_Season,0,0,Single,0,0,2W
+189,Singapore Grand Prix,Singapore,Marina Bay,2010,2010-09-26,14,107,618,106500,5036.00644714359,94992.34908699458,5646.082992743065,14,Late_Season,1,2,Start,0,0,2W
+190,Japanese Grand Prix,Japan,Suzuka,2010,2010-10-10,7,618,310,106500,924.3007900458139,94992.34908699458,1036.273290280768,14,Late_Season,1,2,End,0,0,2W
+191,Korean Grand Prix,Korea,Yeongam County,2010,2010-10-24,29,310,1320,106500,18619.523899273332,94992.34908699458,20875.147465366765,14,Late_Season,0,0,Single,0,0,2W
+192,Brazilian Grand Prix,Brazil,São Paulo,2010,2010-11-07,4,1320,177,106500,12149.075256185264,94992.34908699458,13620.849754950164,7,Late_Season,0,0,Single,1,0,2W
+193,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2010,2010-11-14,37,177,,106500,,94992.34908699458,,,Late_Season,0,0,Single,1,0,1W
+194,Australian Grand Prix,Australia,Melbourne,2011,2011-03-27,6,,243,106500,6334.527181443277,68187.96250227725,9893.639875237197,14,Early_Season,0,0,Single,0,0,3W+
+195,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2011,2011-04-10,9,243,384,106500,3777.335634926772,68187.96250227725,5899.6666032698395,7,Early_Season,1,2,Start,1,0,2W
+196,Chinese Grand Prix,China,Shanghai,2011,2011-04-17,8,384,347,106500,7929.247332381876,68187.96250227725,12384.368294777358,21,Early_Season,1,2,End,1,0,1W
+197,Turkish Grand Prix,Turkey,Istanbul,2011,2011-05-08,19,347,856,106500,2260.548637464844,68187.96250227725,3530.658800399934,14,Early_Season,0,0,Single,0,0,3W+
+198,Spanish Grand Prix,Spain,Montmeló,2011,2011-05-22,10,856,454,106500,59.5332,68187.96250227725,92.98247912581719,7,Early_Season,1,1,Start,1,0,2W
+199,Monaco Grand Prix,Monaco,Monte-Carlo,2011,2011-05-29,32,454,1469,106500,6121.731961204659,68187.96250227725,9561.283692066949,14,Early_Season,0,0,Single,1,0,1W
+200,Canadian Grand Prix,Canada,Montreal,2011,2011-06-12,12,1469,542,106500,5829.544784485872,68187.96250227725,9104.928447260923,14,Mid_Season,0,0,Single,0,0,2W
+201,European Grand Prix,Spain,Valencia,2011,2011-06-26,26,542,1176,106500,178.82999999999998,68187.96250227725,279.30728974874336,14,Mid_Season,1,5,Start,0,0,2W
+202,British Grand Prix,UK,Silverstone,2011,2011-07-10,1,1176,35,106500,70.38,68187.96250227725,109.9236540430384,14,Mid_Season,1,5,Middle,0,0,2W
+203,German Grand Prix,Germany,Nürburg,2011,2011-07-24,36,35,1647,106500,107.3286,68187.96250227725,167.63216674230821,7,Mid_Season,1,5,Middle,1,0,2W
+204,Hungarian Grand Prix,Hungary,Budapest,2011,2011-07-31,2,1647,67,106500,115.32329999999999,68187.96250227725,180.11876289146815,28,Mid_Season,1,5,Middle,1,0,1W
+205,Belgian Grand Prix,Belgium,Spa,2011,2011-08-28,21,67,943,106500,71.4042,68187.96250227725,111.52331028729643,14,Mid_Season,1,5,End,0,0,3W+
+206,Italian Grand Prix,Italy,Monza,2011,2011-09-11,3,943,107,106500,10261.009678993587,68187.96250227725,16026.252885563506,14,Late_Season,0,0,Single,0,0,2W
+207,Singapore Grand Prix,Singapore,Marina Bay,2011,2011-09-25,14,107,618,106500,5036.00644714359,68187.96250227725,7865.533254537127,14,Late_Season,1,4,Start,0,0,2W
+208,Japanese Grand Prix,Japan,Suzuka,2011,2011-10-09,7,618,310,106500,924.3007900458139,68187.96250227725,1443.6277390835908,7,Late_Season,1,4,Middle,1,0,2W
+209,Korean Grand Prix,Korea,Yeongam County,2011,2011-10-16,29,310,1346,106500,4641.319424418923,68187.96250227725,7249.087677082407,14,Late_Season,1,4,Middle,1,0,1W
+210,Indian Grand Prix,India,Uttar Pradesh,2011,2011-10-30,31,1346,1446,106500,2320.516073582768,68187.96250227725,3624.3194952233875,14,Late_Season,1,4,End,0,0,2W
+211,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2011,2011-11-13,37,1446,1696,106500,12149.075256185264,68187.96250227725,18975.145572659098,14,Late_Season,0,0,Single,0,0,2W
+212,Brazilian Grand Prix,Brazil,São Paulo,2011,2011-11-27,4,1696,,106500,,68187.96250227725,,,Late_Season,0,0,Single,0,0,2W
+213,Australian Grand Prix,Australia,Melbourne,2012,2012-03-18,6,,243,112000,6334.527181443277,78712.7928787392,9013.363881200541,7,Early_Season,0,0,Single,1,0,3W+
+214,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2012,2012-03-25,9,243,384,112000,3777.335634926772,78712.7928787392,5374.750096385793,21,Early_Season,1,2,Start,1,0,1W
+215,Chinese Grand Prix,China,Shanghai,2012,2012-04-15,8,384,334,112000,6804.787455387189,78712.7928787392,9682.494638164753,7,Early_Season,1,2,End,1,0,3W+
+216,Bahrain Grand Prix,Bahrain,Sakhir,2012,2012-04-22,5,334,197,112000,4710.924349220891,78712.7928787392,6703.148342424704,21,Early_Season,0,0,Single,1,0,1W
+217,Spanish Grand Prix,Spain,Montmeló,2012,2012-05-13,10,197,454,112000,59.5332,78712.7928787392,84.70946279687898,14,Early_Season,1,1,Start,0,0,3W+
+218,Monaco Grand Prix,Monaco,Monte-Carlo,2012,2012-05-27,32,454,1469,112000,6121.731961204659,78712.7928787392,8710.578732877304,14,Early_Season,0,0,Single,0,0,2W
+219,Canadian Grand Prix,Canada,Montreal,2012,2012-06-10,12,1469,542,112000,5829.544784485872,78712.7928787392,8294.82720640157,14,Mid_Season,0,0,Single,0,0,2W
+220,European Grand Prix,Spain,Valencia,2012,2012-06-24,26,542,1176,112000,178.82999999999998,78712.7928787392,254.45622328324143,14,Mid_Season,1,5,Start,0,0,2W
+221,British Grand Prix,UK,Silverstone,2012,2012-07-08,1,1176,12,112000,88.38,78712.7928787392,125.75541583499903,14,Mid_Season,1,5,Middle,0,0,2W
+222,German Grand Prix,Germany,Hockenheim,2012,2012-07-22,13,12,566,112000,91.53,78712.7928787392,130.23753350732588,7,Mid_Season,1,5,Middle,1,0,2W
+223,Hungarian Grand Prix,Hungary,Budapest,2012,2012-07-29,2,566,67,112000,115.32329999999999,78712.7928787392,164.09288919398443,35,Mid_Season,1,5,Middle,1,0,1W
+224,Belgian Grand Prix,Belgium,Spa,2012,2012-09-02,21,67,943,112000,71.4042,78712.7928787392,101.60064339630505,7,Late_Season,1,5,End,1,0,3W+
+225,Italian Grand Prix,Italy,Monza,2012,2012-09-09,3,943,107,112000,10261.009678993587,78712.7928787392,14600.33422797905,14,Late_Season,0,0,Single,1,0,1W
+226,Singapore Grand Prix,Singapore,Marina Bay,2012,2012-09-23,14,107,618,112000,5036.00644714359,78712.7928787392,7165.705871331505,14,Late_Season,1,4,Start,0,0,2W
+227,Japanese Grand Prix,Japan,Suzuka,2012,2012-10-07,7,618,310,112000,924.3007900458139,78712.7928787392,1315.182509717464,7,Late_Season,1,4,Middle,1,0,2W
+228,Korean Grand Prix,Korea,Yeongam County,2012,2012-10-14,29,310,1346,112000,4641.319424418923,78712.7928787392,6604.107877810138,14,Late_Season,1,4,Middle,1,0,1W
+229,Indian Grand Prix,India,Uttar Pradesh,2012,2012-10-28,31,1346,1446,112000,2320.516073582768,78712.7928787392,3301.8495562932817,7,Late_Season,1,4,End,1,0,2W
+230,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2012,2012-11-04,37,1446,1707,112000,13260.617962042194,78712.7928787392,18868.460353537834,14,Late_Season,0,0,Single,1,0,1W
+231,United States Grand Prix,USA,Austin,2012,2012-11-18,15,1707,662,112000,8085.170435843661,78712.7928787392,11504.344537863319,7,Late_Season,0,0,Single,1,0,2W
+232,Brazilian Grand Prix,Brazil,São Paulo,2012,2012-11-25,4,662,,112000,,78712.7928787392,,,Late_Season,0,0,Single,1,0,1W
+233,Australian Grand Prix,Australia,Melbourne,2013,2013-03-17,6,,243,106500,6334.527181443277,78110.46002493303,8636.834869598342,7,Early_Season,0,0,Single,1,0,3W+
+234,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2013,2013-03-24,9,243,384,106500,3777.335634926772,78110.46002493303,5150.222454089895,21,Early_Season,1,2,Start,1,0,1W
+235,Chinese Grand Prix,China,Shanghai,2013,2013-04-14,8,384,334,106500,6804.787455387189,78110.46002493303,9278.013005779338,7,Early_Season,1,2,End,1,0,3W+
+236,Bahrain Grand Prix,Bahrain,Sakhir,2013,2013-04-21,5,334,197,106500,4710.924349220891,78110.46002493303,6423.127491911799,21,Early_Season,0,0,Single,1,0,1W
+237,Spanish Grand Prix,Spain,Montmeló,2013,2013-05-12,10,197,454,106500,59.5332,78110.46002493303,81.17076506752319,14,Early_Season,1,1,Start,0,0,3W+
+238,Monaco Grand Prix,Monaco,Monte-Carlo,2013,2013-05-26,32,454,1469,106500,6121.731961204659,78110.46002493303,8346.698427588159,14,Early_Season,0,0,Single,0,0,2W
+239,Canadian Grand Prix,Canada,Montreal,2013,2013-06-09,12,1469,518,106500,5137.2156094009915,78110.46002493303,7004.355911187386,21,Mid_Season,0,0,Single,0,0,2W
+240,British Grand Prix,UK,Silverstone,2013,2013-06-30,1,518,35,106500,70.38,78110.46002493303,95.9598752536783,7,Mid_Season,1,4,Start,1,0,3W+
+241,German Grand Prix,Germany,Nürburg,2013,2013-07-07,36,35,1647,106500,107.3286,78110.46002493303,146.3375826534802,21,Mid_Season,1,4,Middle,1,0,1W
+242,Hungarian Grand Prix,Hungary,Budapest,2013,2013-07-28,2,1647,67,106500,115.32329999999999,78110.46002493303,157.2379863859409,28,Mid_Season,1,4,Middle,0,0,3W+
+243,Belgian Grand Prix,Belgium,Spa,2013,2013-08-25,21,67,943,106500,71.4042,78110.46002493303,97.3563245892114,14,Mid_Season,1,4,End,0,0,3W+
+244,Italian Grand Prix,Italy,Monza,2013,2013-09-08,3,943,107,106500,10261.009678993587,78110.46002493303,13990.41217352956,14,Late_Season,0,0,Single,0,0,2W
+245,Singapore Grand Prix,Singapore,Marina Bay,2013,2013-09-22,14,107,639,106500,4392.2879975207325,78110.46002493303,5988.681561811851,14,Late_Season,1,4,Start,0,0,2W
+246,Korean Grand Prix,Korea,Yeongam County,2013,2013-10-06,29,639,1323,106500,924.3007900458139,78110.46002493303,1260.241382632461,7,Late_Season,1,4,Middle,1,0,2W
+247,Japanese Grand Prix,Japan,Suzuka,2013,2013-10-13,7,1323,312,106500,5556.065595320492,78110.46002493303,7575.438497132828,14,Late_Season,1,4,Middle,1,0,1W
+248,Indian Grand Prix,India,Uttar Pradesh,2013,2013-10-27,31,312,1446,106500,2320.516073582768,78110.46002493303,3163.9163532986336,7,Late_Season,1,4,End,1,0,2W
+249,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2013,2013-11-03,37,1446,1707,106500,13260.617962042194,78110.46002493303,18080.23934959157,14,Late_Season,0,0,Single,1,0,1W
+250,United States Grand Prix,USA,Austin,2013,2013-11-17,15,1707,662,106500,8085.170435843661,78110.46002493303,11023.755987898347,7,Late_Season,0,0,Single,1,0,2W
+251,Brazilian Grand Prix,Brazil,São Paulo,2013,2013-11-24,4,662,,106500,,78110.46002493303,,,Late_Season,0,0,Single,1,0,1W
+252,Australian Grand Prix,Australia,Melbourne,2014,2014-03-16,6,,243,106500,6334.527181443277,96244.04233283203,7009.547068801487,14,Early_Season,0,0,Single,0,0,3W+
+253,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2014,2014-03-30,9,243,381,106500,6040.7507473382175,96244.04233283203,6684.465230239561,7,Early_Season,1,2,Start,1,0,2W
+254,Bahrain Grand Prix,Bahrain,Sakhir,2014,2014-04-06,5,381,195,106500,6804.787455387189,96244.04233283203,7529.919218194694,14,Early_Season,1,2,End,1,0,1W
+255,Chinese Grand Prix,China,Shanghai,2014,2014-04-20,8,195,338,106500,9779.945564735917,96244.04233283203,10822.116126860386,21,Early_Season,0,0,Single,0,0,2W
+256,Spanish Grand Prix,Spain,Montmeló,2014,2014-05-11,10,338,454,106500,59.5332,96244.04233283203,65.87717687577965,14,Early_Season,1,1,Start,0,0,3W+
+257,Monaco Grand Prix,Monaco,Monte-Carlo,2014,2014-05-25,32,454,1469,106500,6121.731961204659,96244.04233283203,6774.075964241679,14,Early_Season,0,0,Single,0,0,2W
+258,Canadian Grand Prix,Canada,Montreal,2014,2014-06-08,12,1469,528,106500,6390.504231099694,96244.04233283203,7071.489144839733,14,Mid_Season,0,0,Single,0,0,2W
+259,Austrian Grand Prix,Austria,Spielberg,2014,2014-06-22,11,528,471,106500,142.82999999999998,96244.04233283203,158.05025050169664,14,Mid_Season,1,5,Start,0,0,2W
+260,British Grand Prix,UK,Silverstone,2014,2014-07-06,1,471,12,106500,88.38,96244.04233283203,97.79794958580095,14,Mid_Season,1,5,Middle,0,0,2W
+261,German Grand Prix,Germany,Hockenheim,2014,2014-07-20,13,12,566,106500,91.53,96244.04233283203,101.28361988672054,7,Mid_Season,1,5,Middle,1,0,2W
+262,Hungarian Grand Prix,Hungary,Budapest,2014,2014-07-27,2,566,67,106500,115.32329999999999,96244.04233283203,127.61238152826657,28,Mid_Season,1,5,Middle,1,0,1W
+263,Belgian Grand Prix,Belgium,Spa,2014,2014-08-24,21,67,943,106500,71.4042,96244.04233283203,79.01317438124518,14,Mid_Season,1,5,End,0,0,3W+
+264,Italian Grand Prix,Italy,Monza,2014,2014-09-07,3,943,107,106500,10261.009678993587,96244.04233283203,11354.443395402019,14,Late_Season,0,0,Single,0,0,2W
+265,Singapore Grand Prix,Singapore,Marina Bay,2014,2014-09-21,14,107,618,106500,5036.00644714359,96244.04233283203,5572.653367634277,14,Late_Season,1,1,Start,0,0,2W
+266,Japanese Grand Prix,Japan,Suzuka,2014,2014-10-05,7,618,303,106500,7903.868117113208,96244.04233283203,8746.120113716419,7,Late_Season,0,0,Single,1,0,2W
+267,Russian Grand Prix,Russia,Sochi,2014,2014-10-12,22,303,1002,106500,10767.664556343774,96244.04233283203,11915.088429940306,21,Late_Season,0,0,Single,1,0,1W
+268,United States Grand Prix,USA,Austin,2014,2014-11-02,15,1002,662,106500,8085.170435843661,96244.04233283203,8946.742370188354,7,Late_Season,0,0,Single,1,0,3W+
+269,Brazilian Grand Prix,Brazil,São Paulo,2014,2014-11-09,4,662,177,106500,12149.075256185264,96244.04233283203,13443.705017181584,14,Late_Season,0,0,Single,1,0,1W
+270,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2014,2014-11-23,37,177,,106500,,96244.04233283203,,,Late_Season,0,0,Single,0,0,2W
+271,Australian Grand Prix,Australia,Melbourne,2015,2015-03-15,6,,243,106500,6334.527181443277,88382.81772298951,7633.012413545509,14,Early_Season,0,0,Single,0,0,3W+
+272,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2015,2015-03-29,9,243,384,106500,3777.335634926772,88382.81772298951,4551.634078702396,14,Early_Season,1,2,Start,0,0,2W
+273,Chinese Grand Prix,China,Shanghai,2015,2015-04-12,8,384,334,106500,6804.787455387189,88382.81772298951,8199.669151419566,7,Early_Season,1,2,End,1,0,2W
+274,Bahrain Grand Prix,Bahrain,Sakhir,2015,2015-04-19,5,334,197,106500,4710.924349220891,88382.81772298951,5676.594796564431,21,Early_Season,0,0,Single,1,0,1W
+275,Spanish Grand Prix,Spain,Montmeló,2015,2015-05-10,10,197,454,106500,59.5332,88382.81772298951,71.73663346954834,14,Early_Season,1,1,Start,0,0,3W+
+276,Monaco Grand Prix,Monaco,Monte-Carlo,2015,2015-05-24,32,454,1469,106500,6121.731961204659,88382.81772298951,7376.59729192716,14,Early_Season,0,0,Single,0,0,2W
+277,Canadian Grand Prix,Canada,Montreal,2015,2015-06-07,12,1469,528,106500,6390.504231099694,88382.81772298951,7700.463937970689,14,Mid_Season,0,0,Single,0,0,2W
+278,Austrian Grand Prix,Austria,Spielberg,2015,2015-06-21,11,528,471,106500,142.82999999999998,88382.81772298951,172.108056655036,14,Mid_Season,1,4,Start,0,0,2W
+279,British Grand Prix,UK,Silverstone,2015,2015-07-05,1,471,1,106500,169.56,88382.81772298951,204.3173148948254,21,Mid_Season,1,4,Middle,0,0,2W
+280,Hungarian Grand Prix,Hungary,Budapest,2015,2015-07-26,2,1,67,106500,115.32329999999999,88382.81772298951,138.96288629871674,28,Mid_Season,1,4,Middle,0,0,3W+
+281,Belgian Grand Prix,Belgium,Spa,2015,2015-08-23,21,67,943,106500,71.4042,88382.81772298951,86.04101448580496,14,Mid_Season,1,4,End,0,0,3W+
+282,Italian Grand Prix,Italy,Monza,2015,2015-09-06,3,943,107,106500,10261.009678993587,88382.81772298951,12364.366275783106,14,Late_Season,0,0,Single,0,0,2W
+283,Singapore Grand Prix,Singapore,Marina Bay,2015,2015-09-20,14,107,618,106500,5036.00644714359,88382.81772298951,6068.313960093227,7,Late_Season,1,1,Start,1,0,2W
+284,Japanese Grand Prix,Japan,Suzuka,2015,2015-09-27,7,618,303,106500,7903.868117113208,88382.81772298951,9524.045240454057,14,Late_Season,0,0,Single,1,0,1W
+285,Russian Grand Prix,Russia,Sochi,2015,2015-10-11,22,303,1002,106500,10767.664556343774,88382.81772298951,12974.87797735516,14,Late_Season,0,0,Single,0,0,2W
+286,United States Grand Prix,USA,Austin,2015,2015-10-25,15,1002,674,106500,135.7605,88382.81772298951,163.58941276703789,7,Late_Season,1,1,Start,1,0,2W
+287,Mexican Grand Prix,Mexico,Mexico City,2015,2015-11-01,17,674,756,106500,7430.971653927606,88382.81772298951,8954.211933180279,14,Late_Season,0,0,Single,1,0,1W
+288,Brazilian Grand Prix,Brazil,São Paulo,2015,2015-11-15,4,756,177,106500,12149.075256185264,88382.81772298951,14639.457624433451,14,Late_Season,0,0,Single,0,0,2W
+289,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2015,2015-11-29,37,177,,106500,,88382.81772298951,,,Late_Season,0,0,Single,0,0,2W
+290,Australian Grand Prix,Australia,Melbourne,2016,2016-03-20,6,,240,117500,12112.617739660875,93671.49205498135,15193.871189483918,14,Early_Season,0,0,Single,0,0,3W+
+291,Bahrain Grand Prix,Bahrain,Sakhir,2016,2016-04-03,5,240,195,117500,6804.787455387189,93671.49205498135,8535.81498988704,14,Early_Season,1,1,Start,0,0,2W
+292,Chinese Grand Prix,China,Shanghai,2016,2016-04-17,8,195,350,117500,7021.94454309097,93671.49205498135,8808.213317760557,14,Early_Season,0,0,Single,0,0,2W
+293,Russian Grand Prix,Russia,Sochi,2016,2016-05-01,22,350,997,117500,3071.377909725551,93671.49205498135,3852.686622958096,14,Early_Season,1,2,Start,0,0,2W
+294,Spanish Grand Prix,Spain,Montmeló,2016,2016-05-15,10,997,454,117500,59.5332,93671.49205498135,74.6774802721636,14,Early_Season,1,2,End,0,0,2W
+295,Monaco Grand Prix,Monaco,Monte-Carlo,2016,2016-05-29,32,454,1469,117500,6121.731961204659,93671.49205498135,7679.001259202165,14,Early_Season,0,0,Single,0,0,2W
+296,Canadian Grand Prix,Canada,Montreal,2016,2016-06-12,12,1469,534,117500,8930.516888272541,93671.49205498135,11202.295504763671,7,Mid_Season,0,0,Single,1,0,2W
+297,European Grand Prix,Azerbaijan,Baku,2016,2016-06-19,18,534,810,117500,2890.5259924221705,93671.49205498135,3625.828911855616,14,Mid_Season,0,0,Single,1,0,1W
+298,Austrian Grand Prix,Austria,Spielberg,2016,2016-07-03,11,810,471,117500,142.82999999999998,93671.49205498135,179.16363486715187,7,Mid_Season,1,5,Start,1,0,2W
+299,British Grand Prix,UK,Silverstone,2016,2016-07-10,1,471,1,117500,169.56,93671.49205498135,212.6933132260329,14,Mid_Season,1,5,Middle,1,0,1W
+300,Hungarian Grand Prix,Hungary,Budapest,2016,2016-07-24,2,1,59,117500,91.63529999999999,93671.49205498135,114.94583371940014,7,Mid_Season,1,5,Middle,1,0,2W
+301,German Grand Prix,Germany,Hockenheim,2016,2016-07-31,13,59,584,117500,28.302300000000002,93671.49205498135,35.50194597143873,28,Mid_Season,1,5,Middle,1,0,1W
+302,Belgian Grand Prix,Belgium,Spa,2016,2016-08-28,21,584,943,117500,71.4042,93671.49205498135,89.56827008878449,7,Mid_Season,1,5,End,1,0,3W+
+303,Italian Grand Prix,Italy,Monza,2016,2016-09-04,3,943,107,117500,10261.009678993587,93671.49205498135,12871.24407684323,14,Late_Season,0,0,Single,1,0,1W
+304,Singapore Grand Prix,Singapore,Marina Bay,2016,2016-09-18,14,107,620,117500,287.23371586751284,93671.49205498135,360.3013133881,14,Late_Season,1,2,Start,0,0,2W
+305,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2016,2016-10-02,9,620,383,117500,5061.746154047234,93671.49205498135,6349.372258866688,7,Late_Season,1,2,End,1,0,2W
+306,Japanese Grand Prix,Japan,Suzuka,2016,2016-10-09,7,383,296,117500,10828.927606196195,93671.49205498135,13583.631111386658,14,Late_Season,0,0,Single,1,0,1W
+307,United States Grand Prix,USA,Austin,2016,2016-10-23,15,296,674,117500,135.7605,93671.49205498135,170.2957687557374,7,Late_Season,1,1,Start,1,0,2W
+308,Mexican Grand Prix,Mexico,Mexico City,2016,2016-10-30,17,674,756,117500,7430.971653927606,93671.49205498135,9321.290289942179,14,Late_Season,0,0,Single,1,0,1W
+309,Brazilian Grand Prix,Brazil,São Paulo,2016,2016-11-13,4,756,177,117500,12149.075256185264,93671.49205498135,15239.602906761373,14,Late_Season,0,0,Single,0,0,2W
+310,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2016,2016-11-27,37,177,,117500,,93671.49205498135,,,Late_Season,0,0,Single,0,0,2W
+311,Australian Grand Prix,Australia,Melbourne,2017,2017-03-26,6,,242,112000,8078.463009388602,84765.72701835353,10673.982149125179,14,Early_Season,0,0,Single,0,0,3W+
+312,Chinese Grand Prix,China,Shanghai,2017,2017-04-09,8,242,334,112000,6804.787455387189,84765.72701835353,8991.088990935534,7,Early_Season,1,1,Start,1,0,2W
+313,Bahrain Grand Prix,Bahrain,Sakhir,2017,2017-04-16,5,334,209,112000,2154.94853673541,84765.72701835353,2847.3092204129593,14,Early_Season,0,0,Single,1,0,1W
+314,Russian Grand Prix,Russia,Sochi,2017,2017-04-30,22,209,997,112000,3071.377909725551,84765.72701835353,4058.177024952312,14,Early_Season,1,2,Start,0,0,2W
+315,Spanish Grand Prix,Spain,Montmeló,2017,2017-05-14,10,997,454,112000,59.5332,84765.72701835353,78.66054636157726,14,Early_Season,1,2,End,0,0,2W
+316,Monaco Grand Prix,Monaco,Monte-Carlo,2017,2017-05-28,32,454,1469,112000,6121.731961204659,84765.72701835353,8088.575462892778,14,Early_Season,0,0,Single,0,0,2W
+317,Canadian Grand Prix,Canada,Montreal,2017,2017-06-11,12,1469,534,112000,8930.516888272541,84765.72701835353,11799.791338661636,14,Mid_Season,0,0,Single,0,0,2W
+318,Azerbaijan Grand Prix,Azerbaijan,Baku,2017,2017-06-25,18,534,810,112000,2890.5259924221705,84765.72701835353,3819.2194243929143,14,Mid_Season,0,0,Single,0,0,2W
+319,Austrian Grand Prix,Austria,Spielberg,2017,2017-07-09,11,810,471,112000,142.82999999999998,84765.72701835353,188.71966964356156,7,Mid_Season,1,4,Start,1,0,2W
+320,British Grand Prix,UK,Silverstone,2017,2017-07-16,1,471,1,112000,169.56,84765.72701835353,224.03771745965344,14,Mid_Season,1,4,Middle,1,0,1W
+321,Hungarian Grand Prix,Hungary,Budapest,2017,2017-07-30,2,1,67,112000,115.32329999999999,84765.72701835353,152.37537686904253,28,Mid_Season,1,4,Middle,0,0,2W
+322,Belgian Grand Prix,Belgium,Spa,2017,2017-08-27,21,67,943,112000,71.4042,84765.72701835353,94.34556490347126,7,Mid_Season,1,4,End,1,0,3W+
+323,Italian Grand Prix,Italy,Monza,2017,2017-09-03,3,943,107,112000,10261.009678993587,84765.72701835353,13557.756471532994,14,Late_Season,0,0,Single,1,0,1W
+324,Singapore Grand Prix,Singapore,Marina Bay,2017,2017-09-17,14,107,620,112000,287.23371586751284,84765.72701835353,379.51867233081043,14,Late_Season,1,2,Start,0,0,2W
+325,Malaysian Grand Prix,Malaysia,Kuala Lumpur,2017,2017-10-01,9,620,383,112000,5061.746154047234,84765.72701835353,6688.0281594298285,7,Late_Season,1,2,End,1,0,2W
+326,Japanese Grand Prix,Japan,Suzuka,2017,2017-10-08,7,383,296,112000,10828.927606196195,84765.72701835353,14308.140029653367,14,Late_Season,0,0,Single,1,0,1W
+327,United States Grand Prix,USA,Austin,2017,2017-10-22,15,296,674,112000,135.7605,84765.72701835353,179.37881895011373,7,Late_Season,1,1,Start,1,0,2W
+328,Mexican Grand Prix,Mexico,Mexico City,2017,2017-10-29,17,674,756,112000,7430.971653927606,84765.72701835353,9818.45911685142,14,Late_Season,0,0,Single,1,0,1W
+329,Brazilian Grand Prix,Brazil,São Paulo,2017,2017-11-12,4,756,177,112000,12149.075256185264,84765.72701835353,16052.436244640841,14,Late_Season,0,0,Single,0,0,2W
+330,Abu Dhabi Grand Prix,UAE,Abu Dhabi,2017,2017-11-26,37,177,,112000,,84765.72701835353,,,Late_Season,0,0,Single,0,0,2W
+331,Australian Grand Prix,Australia,Melbourne,2018,2018-03-25,6,,240,115448,12112.617739660875,98574.6378664519,14185.976464888248,14,Early_Season,0,0,Single,0,0,3W+
+332,Bahrain Grand Prix,Bahrain,Sakhir,2018,2018-04-08,5,240,195,115448,6804.787455387189,98574.6378664519,7969.586489517347,7,Early_Season,1,2,Start,1,0,2W
+333,Chinese Grand Prix,China,Shanghai,2018,2018-04-15,8,195,346,115448,6336.85083871494,98574.6378664519,7421.551541676436,14,Early_Season,1,2,End,1,0,1W
+334,Azerbaijan Grand Prix,Azerbaijan,Baku,2018,2018-04-29,18,346,809,115448,3946.4967538767582,98574.6378664519,4622.032270195378,14,Early_Season,0,0,Single,0,0,2W
+335,Spanish Grand Prix,Spain,Barcelona,2018,2018-05-13,10,809,454,115448,59.5332,98574.6378664519,69.72370401108111,14,Early_Season,1,1,Start,0,0,2W
+336,Monaco Grand Prix,Monaco,Monte Carlo,2018,2018-05-27,32,454,1469,115448,6121.731961204659,98574.6378664519,7169.610020933003,14,Early_Season,0,0,Single,0,0,2W
+337,Canadian Grand Prix,Canada,Montréal,2018,2018-06-10,12,1469,543,115448,6039.251109754941,98574.6378664519,7073.0106365044485,14,Mid_Season,0,0,Single,0,0,2W
+338,French Grand Prix,France,Le Castellet,2018,2018-06-24,27,543,1233,115448,102.7593,98574.6378664519,120.3489652426862,7,Mid_Season,1,6,Start,1,1,2W
+339,Austrian Grand Prix,Austria,Spielberg,2018,2018-07-01,11,1233,471,115448,142.82999999999998,98574.6378664519,167.27870572894977,7,Mid_Season,1,6,Middle,1,1,1W
+340,British Grand Prix,Great Britain,Silverstone,2018,2018-07-08,1,471,12,115448,88.38,98574.6378664519,103.50831066529848,14,Mid_Season,1,6,Middle,1,1,1W
+341,German Grand Prix,Germany,Hockenheim,2018,2018-07-22,13,12,566,115448,91.53,98574.6378664519,107.19750707393948,7,Mid_Season,1,6,Middle,1,0,2W
+342,Hungarian Grand Prix,Hungary,Budapest,2018,2018-07-29,2,566,67,115448,115.32329999999999,98574.6378664519,135.06358863257995,28,Mid_Season,1,6,Middle,1,0,1W
+343,Belgian Grand Prix,Belgium,Spa-Francorchamps,2018,2018-08-26,21,67,943,115448,71.4042,98574.6378664519,83.62670419107386,7,Mid_Season,1,6,End,1,0,3W+
+344,Italian Grand Prix,Italy,Monza,2018,2018-09-02,3,943,107,115448,10261.009678993587,98574.6378664519,12017.422240245563,14,Late_Season,0,0,Single,1,0,1W
+345,Singapore Grand Prix,Singapore,Singapore,2018,2018-09-16,14,107,632,115448,7831.52919543667,98574.6378664519,9172.079168879996,14,Late_Season,0,0,Single,0,0,2W
+346,Russian Grand Prix,Russia,Sochi,2018,2018-09-30,22,632,994,115448,7903.868117113208,98574.6378664519,9256.800594293978,7,Late_Season,0,0,Single,1,0,2W
+347,Japanese Grand Prix,Japan,Suzuka,2018,2018-10-07,7,994,296,115448,10828.927606196195,98574.6378664519,12682.55264578166,14,Late_Season,0,0,Single,1,0,1W
+348,United States Grand Prix,United States,Austin,2018,2018-10-21,15,296,674,115448,135.7605,98574.6378664519,158.9990949318427,7,Late_Season,1,1,Start,1,0,2W
+349,Mexican Grand Prix,Mexico,Mexico City,2018,2018-10-28,17,674,756,115448,7430.971653927606,98574.6378664519,8702.956805835773,14,Late_Season,0,0,Single,1,0,1W
+350,Brazilian Grand Prix,Brazil,São Paulo,2018,2018-11-11,4,756,177,115448,12149.075256185264,98574.6378664519,14228.67454077071,14,Late_Season,0,0,Single,0,0,2W
+351,Abu Dhabi Grand Prix,United Arab Emirates,Yas Marina,2018,2018-11-25,37,177,,115448,,98574.6378664519,,,Late_Season,0,0,Single,0,0,2W
+352,Australian Grand Prix,Australia,Melbourne,2019,2019-03-17,6,,240,115448,12112.617739660875,99998.46771940778,13983.989202036246,14,Early_Season,0,0,Single,0,0,3W+
+353,Bahrain Grand Prix,Bahrain,Sakhir,2019,2019-03-31,5,240,195,115448,6804.787455387189,99998.46771940778,7856.111399165674,14,Early_Season,1,2,Start,0,0,2W
+354,Chinese Grand Prix,China,Shanghai,2019,2019-04-14,8,195,346,115448,6336.85083871494,99998.46771940778,7315.8796560837445,14,Early_Season,1,2,End,0,0,2W
+355,Azerbaijan Grand Prix,Azerbaijan,Baku,2019,2019-04-28,18,346,809,115448,3946.4967538767582,99998.46771940778,4556.221386511685,14,Early_Season,0,0,Single,0,0,2W
+356,Spanish Grand Prix,Spain,Barcelona,2019,2019-05-12,10,809,454,115448,59.5332,99998.46771940778,68.73094188688339,14,Early_Season,1,1,Start,0,0,2W
+357,Monaco Grand Prix,Monaco,Monte Carlo,2019,2019-05-26,32,454,1469,115448,6121.731961204659,99998.46771940778,7067.5254088917445,14,Early_Season,0,0,Single,0,0,2W
+358,Canadian Grand Prix,Canada,Montréal,2019,2019-06-09,12,1469,543,115448,6039.251109754941,99998.46771940778,6972.301456411932,14,Mid_Season,0,0,Single,0,0,2W
+359,French Grand Prix,France,Le Castellet,2019,2019-06-23,27,543,1233,115448,102.7593,99998.46771940778,118.63537449081882,7,Mid_Season,1,6,Start,1,0,2W
+360,Austrian Grand Prix,Austria,Spielberg,2019,2019-06-30,11,1233,471,115448,142.82999999999998,99998.46771940778,164.89690508327374,14,Mid_Season,1,6,Middle,1,0,1W
+361,British Grand Prix,Great Britain,Silverstone,2019,2019-07-14,1,471,12,115448,88.38,99998.46771940778,102.03450585493057,14,Mid_Season,1,6,Middle,0,0,2W
+362,German Grand Prix,Germany,Hockenheim,2019,2019-07-28,13,12,566,115448,91.53,99998.46771940778,105.67117357888432,7,Mid_Season,1,6,Middle,1,0,2W
+363,Hungarian Grand Prix,Hungary,Budapest,2019,2019-08-04,2,566,67,115448,115.32329999999999,99998.46771940778,133.1404834697886,28,Mid_Season,1,6,Middle,1,0,1W
+364,Belgian Grand Prix,Belgium,Spa-Francorchamps,2019,2019-09-01,21,67,943,115448,71.4042,99998.46771940778,82.43598396658334,7,Late_Season,1,6,End,1,0,3W+
+365,Italian Grand Prix,Italy,Monza,2019,2019-09-08,3,943,107,115448,10261.009678993587,99998.46771940778,11846.311972943771,14,Late_Season,0,0,Single,1,0,1W
+366,Singapore Grand Prix,Singapore,Singapore,2019,2019-09-22,14,107,632,115448,7831.52919543667,99998.46771940778,9041.482366427277,7,Late_Season,0,0,Single,1,0,2W
+367,Russian Grand Prix,Russia,Sochi,2019,2019-09-29,22,632,994,115448,7903.868117113208,99998.46771940778,9124.99748441035,14,Late_Season,0,0,Single,1,0,1W
+368,Japanese Grand Prix,Japan,Suzuka,2019,2019-10-13,7,994,298,115448,11598.720677236035,99998.46771940778,13390.696230494961,14,Late_Season,0,0,Single,0,0,2W
+369,Mexican Grand Prix,Mexico,Mexico City,2019,2019-10-27,17,298,767,115448,135.5985,99998.46771940778,156.5481550369971,7,Late_Season,1,1,Start,1,0,2W
+370,United States Grand Prix,United States,Austin,2019,2019-11-03,15,767,662,115448,8085.170435843661,99998.46771940778,9334.310592602416,14,Late_Season,0,0,Single,1,0,1W
+371,Brazilian Grand Prix,Brazil,São Paulo,2019,2019-11-17,4,662,177,115448,12149.075256185264,99998.46771940778,14026.079320652043,14,Late_Season,0,0,Single,0,0,2W
+372,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2019,2019-12-01,37,177,,115448,,99998.46771940778,,,Late_Season,0,0,Single,0,0,2W
+373,Pre-Season Test 1,Spain,Barcelona,2020,2020-02-21,10,,,65000,,10152.521070936536,,7,Early_Season,0,0,Single,1,0,3W+
+374,Pre-Season Test 2,Spain,Barcelona,2020,2020-02-28,10,,433,65000,143.6616,10152.521070936536,919.7719398713447,128,Early_Season,1,1,Start,1,0,1W
+375,Austrian Grand Prix,Austria,Spielberg,2020,2020-07-05,11,433,,65000,,10152.521070936536,,7,Mid_Season,0,0,Single,1,1,3W+
+376,Styrian Grand Prix,Austria,Spielberg,2020,2020-07-12,11,,472,65000,41.6763,10152.521070936536,266.8262868968473,7,Mid_Season,1,2,Start,1,1,1W
+377,Hungarian Grand Prix,Hungary,Budapest,2020,2020-07-19,2,472,48,65000,169.56,10152.521070936536,1085.5825782574134,14,Mid_Season,1,2,End,1,1,1W
+378,British Grand Prix,Great Britain,Silverstone,2020,2020-08-02,1,48,,65000,,10152.521070936536,,7,Mid_Season,0,0,Single,1,1,2W
+379,70th Anniversary Grand Prix,Great Britain,Silverstone,2020,2020-08-09,1,,9,65000,145.07999999999998,10152.521070936536,928.8530340503982,7,Mid_Season,1,8,Start,1,1,1W
+380,Spanish Grand Prix,Spain,Barcelona,2020,2020-08-16,10,9,443,65000,114.9066,10152.521070936536,735.6723465840605,14,Mid_Season,1,8,Middle,1,1,1W
+381,Belgian Grand Prix,Belgium,Spa-Francorchamps,2020,2020-08-30,21,443,943,65000,71.4042,10152.521070936536,457.1547271432413,7,Mid_Season,1,8,Middle,1,1,2W
+382,Italian Grand Prix,Italy,Monza,2020,2020-09-06,3,943,131,65000,27.103499999999997,10152.521070936536,173.52611116890657,7,Late_Season,1,8,Middle,1,1,1W
+383,Tuscan Grand Prix,Italy,Mugello,2020,2020-09-13,38,131,1761,65000,2287.31925659821,10152.521070936536,14644.219956804167,14,Late_Season,1,8,Middle,1,1,1W
+384,Russian Grand Prix,Russia,Sochi,2020,2020-09-27,22,1761,1022,65000,2600.6365476722126,10152.521070936536,16650.18712274392,14,Late_Season,1,8,Middle,0,0,2W
+385,Eifel Grand Prix,Germany,Nürburgring,2020,2020-10-11,36,1022,1679,65000,220.45499999999998,10152.521070936536,1411.4302152025125,14,Late_Season,1,8,Middle,0,0,2W
+386,Portuguese Grand Prix,Portugal,Portimão,2020,2020-10-25,34,1679,1567,65000,218.13569999999999,10152.521070936536,1396.581243312017,7,Late_Season,1,8,End,1,0,2W
+387,Emilia Romagna Grand Prix,Italy,Imola,2020,2020-11-01,16,1567,723,65000,1491.7563227709586,10152.521070936536,9550.747080711813,14,Late_Season,0,0,Single,1,0,1W
+388,Turkish Grand Prix,Turkey,Istanbul,2020,2020-11-15,19,723,851,65000,2553.2261438951555,10152.521070936536,16346.64909273376,14,Late_Season,1,1,Start,0,0,2W
+389,Bahrain Grand Prix,Bahrain,Sakhir,2020,2020-11-29,5,851,,65000,,10152.521070936536,,7,Late_Season,0,0,Single,1,1,2W
+390,Sakhir Grand Prix,Bahrain,Sakhir,2020,2020-12-06,5,,224,65000,67.5999,10152.521070936536,432.7982645195996,7,Late_Season,1,1,Start,1,1,1W
+391,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2020,2020-12-13,37,224,,65000,,10152.521070936536,,,Late_Season,0,0,Single,1,1,1W
+392,Pre-Season Test,Bahrain,Bahrain,2021,2021-03-14,5,,,105000,,45695.131845969605,,14,Early_Season,0,0,Single,0,0,3W+
+393,Bahrain Grand Prix,Bahrain,Sakhir,2021,2021-03-28,5,,203,105000,4018.262778933791,45695.131845969605,9233.315995460072,21,Early_Season,0,0,Single,0,0,2W
+394,Emilia Romagna Grand Prix,Italy,Imola,2021,2021-04-18,16,203,738,105000,218.2968,45695.131845969605,501.6106327751342,14,Early_Season,1,3,Start,0,0,3W+
+395,Portuguese Grand Prix,Portugal,Portimão,2021,2021-05-02,34,738,1561,105000,115.0884,45695.131845969605,264.45447275946213,7,Early_Season,1,3,Middle,1,0,2W
+396,Spanish Grand Prix,Spain,Barcelona,2021,2021-05-09,10,1561,454,105000,59.5332,45695.131845969605,136.79763571032018,14,Early_Season,1,3,End,1,0,1W
+397,Monaco Grand Prix,Monaco,Monte Carlo,2021,2021-05-23,32,454,1475,105000,3484.8785383277677,45695.131845969605,8007.685539847934,14,Early_Season,0,0,Single,0,0,2W
+398,Azerbaijan Grand Prix,Azerbaijan,Baku,2021,2021-06-06,18,1475,825,105000,3623.40233180535,45695.131845969605,8325.990744966388,14,Mid_Season,0,0,Single,0,0,2W
+399,French Grand Prix,France,Le Castellet,2021,2021-06-20,27,825,1233,105000,102.7593,45695.131845969605,236.124201071797,7,Mid_Season,1,1,Start,1,1,2W
+400,Styrian Grand Prix,Austria,Spielberg,2021,2021-06-27,11,1233,,105000,,45695.131845969605,,7,Mid_Season,0,0,Single,1,1,1W
+401,Austrian Grand Prix,Austria,Spielberg,2021,2021-07-04,11,,471,105000,142.82999999999998,45695.131845969605,328.2001691242034,14,Mid_Season,1,6,Start,1,1,1W
+402,British Grand Prix,Great Britain,Silverstone,2021,2021-07-18,1,471,1,105000,169.56,45695.131845969605,389.62137279773117,14,Mid_Season,1,6,Middle,0,0,2W
+403,Hungarian Grand Prix,Hungary,Budapest,2021,2021-08-01,2,1,67,105000,115.32329999999999,45695.131845969605,264.9942348523507,28,Mid_Season,1,6,Middle,0,0,2W
+404,Belgian Grand Prix,Belgium,Spa-Francorchamps,2021,2021-08-29,21,67,964,105000,26.8794,45695.131845969605,61.76450063682079,7,Mid_Season,1,6,Middle,1,1,3W+
+405,Dutch Grand Prix,Netherlands,Zandvoort,2021,2021-09-05,25,964,1131,105000,100.5723,45695.131845969605,231.0988298621447,7,Late_Season,1,6,Middle,1,1,1W
+406,Italian Grand Prix,Italy,Monza,2021,2021-09-12,3,1131,115,105000,2429.9226558030105,45695.131845969605,5583.568064085148,14,Late_Season,1,6,End,1,1,1W
+407,Russian Grand Prix,Russia,Sochi,2021,2021-09-26,22,115,1006,105000,910.6259078874543,45695.131845969605,2092.470608258376,14,Late_Season,0,0,Single,0,0,2W
+408,Turkish Grand Prix,Turkey,Istanbul,2021,2021-10-10,19,1006,861,105000,10418.750557039844,45695.131845969605,23940.598577913366,14,Late_Season,0,0,Single,0,0,2W
+409,United States Grand Prix,United States,Austin,2021,2021-10-24,15,861,674,105000,135.7605,45695.131845969605,311.95560498765263,14,Late_Season,1,1,Start,0,0,2W
+410,Mexico City Grand Prix,Mexico,Mexico City,2021,2021-11-07,17,674,756,105000,7430.971653927606,45695.131845969605,17075.16735683121,7,Late_Season,0,0,Single,1,1,2W
+411,São Paulo Grand Prix,Brazil,São Paulo,2021,2021-11-14,4,756,168,105000,11883.64602224478,45695.131845969605,27306.690711425505,7,Late_Season,0,0,Single,1,1,1W
+412,Qatar Grand Prix,Qatar,Lusail,2021,2021-11-21,28,168,1293,105000,140.8932,45695.131845969605,323.7497169253674,14,Late_Season,1,2,Start,1,1,1W
+413,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2021,2021-12-05,24,1293,1117,105000,167.17499999999998,45695.131845969605,384.14102970901564,7,Late_Season,1,2,End,1,0,2W
+414,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2021,2021-12-12,37,1117,,105000,,45695.131845969605,,,Late_Season,0,0,Single,1,0,1W
+415,Pre-Season Track Session,Spain,Spain,2022,2022-02-25,10,,428,109285,4710.924349220891,113530.30353365318,4534.766062278657,15,Early_Season,0,0,Single,0,0,3W+
+416,Pre-Season Test,Bahrain,Bahrain,2022,2022-03-12,5,428,,109285,,113530.30353365318,,8,Early_Season,0,0,Single,1,1,2W
+417,Bahrain Grand Prix,Bahrain,Sakhir,2022,2022-03-20,5,,211,109285,129.29760000000002,113530.30353365318,124.46270093703605,7,Early_Season,1,1,Start,1,1,1W
+418,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2022,2022-03-27,24,211,1087,109285,12817.101720568111,113530.30353365318,12337.824509709682,14,Early_Season,0,0,Single,1,1,1W
+419,Australian Grand Prix,Australia,Melbourne,2022,2022-04-10,6,1087,250,109285,16086.339359615404,113530.30353365318,15484.81367703255,14,Early_Season,0,0,Single,0,0,2W
+420,Emilia Romagna Grand Prix,Italy,Imola,2022,2022-04-24,16,250,734,109285,8172.907608720932,113530.30353365318,7867.293402895798,14,Early_Season,0,0,Single,0,0,2W
+421,Miami Grand Prix,United States,Miami,2022,2022-05-08,30,734,1373,109285,7536.275217080305,113530.30353365318,7254.466970173168,14,Early_Season,0,0,Single,0,0,2W
+422,Spanish Grand Prix,Spain,Barcelona,2022,2022-05-22,10,1373,454,109285,59.5332,113530.30353365318,57.30704102338135,7,Early_Season,1,1,Start,1,0,2W
+423,Monaco Grand Prix,Monaco,Monaco,2022,2022-05-29,32,454,1475,109285,3484.8785383277677,113530.30353365318,3354.566483196782,14,Early_Season,0,0,Single,1,0,1W
+424,Azerbaijan Grand Prix,Azerbaijan,Baku,2022,2022-06-12,18,1475,811,109285,8930.516888272541,113530.30353365318,8596.572965609685,7,Mid_Season,0,0,Single,1,0,2W
+425,Canadian Grand Prix,Canada,Montréal,2022,2022-06-19,12,811,518,109285,5137.2156094009915,113530.30353365318,4945.116769699893,14,Mid_Season,0,0,Single,1,0,1W
+426,British Grand Prix,Great Britain,Silverstone,2022,2022-07-03,1,518,10,109285,142.82999999999998,113530.30353365318,137.48907616875218,7,Mid_Season,1,6,Start,1,0,2W
+427,Austrian Grand Prix,Austria,Spielberg,2022,2022-07-10,11,10,496,109285,102.9555,113530.30353365318,99.10562613941028,14,Mid_Season,1,6,Middle,1,0,1W
+428,French Grand Prix,France,Le Castellet,2022,2022-07-24,27,496,1224,109285,135.0018,113530.30353365318,129.9536005259305,7,Mid_Season,1,6,Middle,1,0,2W
+429,Hungarian Grand Prix,Hungary,Budapest,2022,2022-07-31,2,1224,67,109285,115.32329999999999,113530.30353365318,111.0109499246087,28,Mid_Season,1,6,Middle,1,0,1W
+430,Belgian Grand Prix,Belgium,Spa-Francorchamps,2022,2022-08-28,21,67,964,109285,26.8794,113530.30353365318,25.874283231606512,7,Mid_Season,1,6,Middle,1,1,3W+
+431,Dutch Grand Prix,Netherlands,Zandvoort,2022,2022-09-04,25,964,1131,109285,100.5723,113530.30353365318,96.81154249924104,7,Late_Season,1,6,End,1,1,1W
+432,Italian Grand Prix,Italy,Monza,2022,2022-09-11,3,1131,107,109285,10261.009678993587,113530.30353365318,9877.313878901161,21,Late_Season,0,0,Single,1,1,1W
+433,Singapore Grand Prix,Singapore,Marina Bay,2022,2022-10-02,14,107,618,109285,5036.00644714359,113530.30353365318,4847.69217949767,7,Late_Season,1,1,Start,1,0,3W+
+434,Japanese Grand Prix,Japan,Suzuka,2022,2022-10-09,7,618,296,109285,10828.927606196195,113530.30353365318,10423.995326431508,14,Late_Season,0,0,Single,1,0,1W
+435,United States Grand Prix,United States,Austin,2022,2022-10-23,15,296,674,109285,135.7605,113530.30353365318,130.68393002315958,7,Late_Season,1,1,Start,1,0,2W
+436,Mexico City Grand Prix,Mexico,Mexico City,2022,2022-10-30,17,674,756,109285,7430.971653927606,113530.30353365318,7153.101083348674,14,Late_Season,0,0,Single,1,0,1W
+437,São Paulo Grand Prix,Brazil,São Paulo,2022,2022-11-13,4,756,177,109285,12149.075256185264,113530.30353365318,11694.777940751652,7,Late_Season,0,0,Single,1,0,2W
+438,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2022,2022-11-20,37,177,,109285,,113530.30353365318,,,Late_Season,0,0,Single,1,0,1W
+439,Pre-Season Testing,Bahrain,Sakhir,2023,2023-02-25,5,,,108000,,124570.36398128852,,8,Early_Season,0,0,Single,1,0,3W+
+440,Bahrain Grand Prix,Bahrain,Sakhir,2023,2023-03-05,5,,211,108000,129.29760000000002,124570.36398128852,112.0984185459836,14,Early_Season,1,1,Start,1,0,1W
+441,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2023,2023-03-19,24,211,1087,108000,12817.101720568111,124570.36398128852,11112.169392306512,14,Early_Season,0,0,Single,0,0,2W
+442,Australian Grand Prix,Australia,Melbourne,2023,2023-04-02,6,1087,252,108000,12989.064134066295,124570.36398128852,11261.257346007873,28,Early_Season,0,0,Single,0,0,2W
+443,Azerbaijan Grand Prix,Azerbaijan,Baku,2023,2023-04-30,18,252,828,108000,11015.918065507856,124570.36398128852,9550.579391849204,7,Early_Season,0,0,Single,1,0,3W+
+444,Miami Grand Prix,United States,Miami,2023,2023-05-07,30,828,1394,108000,7870.817753456996,124570.36398128852,6823.840680926642,21,Early_Season,0,0,Single,1,0,1W
+445,Monaco Grand Prix,Monaco,Monaco,2023,2023-05-28,32,1394,1467,108000,59.3883,124570.36398128852,51.48846158114642,7,Early_Season,1,1,Start,1,0,3W+
+446,Spanish Grand Prix,Spain,Barcelona,2023,2023-06-04,10,1467,434,108000,5891.5042642945555,124570.36398128852,5107.815697153994,14,Mid_Season,0,0,Single,1,0,1W
+447,Canadian Grand Prix,Canada,Montréal,2023,2023-06-18,12,434,528,108000,6390.504231099694,124570.36398128852,5540.438631635023,14,Mid_Season,0,0,Single,0,0,2W
+448,Austrian Grand Prix,Austria,Spielberg,2023,2023-07-02,11,528,471,108000,142.82999999999998,124570.36398128852,123.83073715925767,7,Mid_Season,1,5,Start,1,0,2W
+449,British Grand Prix,Great Britain,Silverstone,2023,2023-07-09,1,471,1,108000,169.56,124570.36398128852,147.0051095198749,14,Mid_Season,1,5,Middle,1,0,1W
+450,Hungarian Grand Prix,Hungary,Budapest,2023,2023-07-23,2,1,67,108000,115.32329999999999,124570.36398128852,99.98298152095653,7,Mid_Season,1,5,Middle,1,0,2W
+451,Belgian Grand Prix,Belgium,Spa-Francorchamps,2023,2023-07-30,21,67,964,108000,26.8794,124570.36398128852,23.303899155629427,28,Mid_Season,1,5,Middle,1,0,1W
+452,Dutch Grand Prix,Netherlands,Zandvoort,2023,2023-08-27,25,964,1131,108000,100.5723,124570.36398128852,87.19416121824555,7,Mid_Season,1,5,End,1,0,3W+
+453,Italian Grand Prix,Italy,Monza,2023,2023-09-03,3,1131,107,108000,10261.009678993587,124570.36398128852,8896.089004747279,14,Late_Season,0,0,Single,1,0,1W
+454,Singapore Grand Prix,Singapore,Marina Bay,2023,2023-09-17,14,107,618,108000,5036.00644714359,124570.36398128852,4366.11629691637,7,Late_Season,1,2,Start,1,0,2W
+455,Japanese Grand Prix,Japan,Suzuka,2023,2023-09-24,7,618,309,108000,8003.976616040871,124570.36398128852,6939.286736468542,14,Late_Season,1,2,End,1,0,1W
+456,Qatar Grand Prix,Qatar,Lusail,2023,2023-10-08,28,309,1284,108000,13008.309612270412,124570.36398128852,11277.942788512935,14,Late_Season,0,0,Single,0,0,2W
+457,United States Grand Prix,United States,Austin,2023,2023-10-22,15,1284,674,108000,135.7605,124570.36398128852,117.7016228531079,7,Late_Season,1,1,Start,1,1,2W
+458,Mexico City Grand Prix,Mexico,Mexico City,2023,2023-10-29,17,674,756,108000,7430.971653927606,124570.36398128852,6442.502959570144,7,Late_Season,0,0,Single,1,1,1W
+459,São Paulo Grand Prix,Brazil,São Paulo,2023,2023-11-05,4,756,173,108000,9788.539872738023,124570.36398128852,8486.467185842861,13,Late_Season,0,0,Single,1,1,1W
+460,Las Vegas Grand Prix,United States,Las Vegas,2023,2023-11-18,33,173,1540,108000,13187.028531180924,124570.36398128852,11432.888496508416,8,Late_Season,0,0,Single,1,0,2W
+461,Abu Dhabi Grand Prix,Abu Dhabi,Yas Island,2023,2023-11-26,37,1540,,108000,,124570.36398128852,,,Late_Season,0,0,Single,1,0,1W
+462,Pre-Season Testing,Bahrain,Sakhir,2024,2024-02-23,5,,,115000,,113263.78791026419,,8,Early_Season,0,0,Single,1,1,3W+
+463,Bahrain Grand Prix,Bahrain,Sakhir,2024,2024-03-02,5,,211,115000,129.29760000000002,113263.78791026419,131.2795931898418,7,Early_Season,1,1,Start,1,1,1W
+464,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2024,2024-03-09,24,211,1087,115000,12817.101720568111,113263.78791026419,13013.574109256495,15,Early_Season,0,0,Single,1,1,1W
+465,Australian Grand Prix,Australia,Melbourne,2024,2024-03-24,6,1087,241,115000,8129.698770757164,113263.78791026419,8254.318312025569,14,Early_Season,0,0,Single,0,0,2W
+466,Japanese Grand Prix,Japan,Suzuka,2024,2024-04-07,7,241,289,115000,1477.919226875703,113263.78791026419,1500.5741395949171,14,Early_Season,1,1,Start,0,0,2W
+467,Chinese Grand Prix,China,Shanghai,2024,2024-04-21,8,289,358,115000,13248.545775544215,113263.78791026419,13451.63173771548,14,Early_Season,0,0,Single,0,0,2W
+468,Miami Grand Prix,United States,Miami,2024,2024-05-05,30,358,1379,115000,8172.907608720932,113263.78791026419,8298.189495018056,14,Early_Season,0,0,Single,0,0,2W
+469,Emilia Romagna Grand Prix,Italy,Imola,2024,2024-05-19,16,1379,736,115000,45.001799999999996,113263.78791026419,45.69162920897696,7,Early_Season,1,1,Start,1,0,2W
+470,Monaco Grand Prix,Monaco,Monaco,2024,2024-05-26,32,736,1469,115000,6121.731961204659,113263.78791026419,6215.571530207828,14,Early_Season,0,0,Single,1,0,1W
+471,Canadian Grand Prix,Canada,Montréal,2024,2024-06-09,12,1469,527,115000,5891.5042642945555,113263.78791026419,5981.814690240246,14,Mid_Season,0,0,Single,0,0,2W
+472,Spanish Grand Prix,Spain,Barcelona,2024,2024-06-23,10,527,433,115000,143.6616,113263.78791026419,145.86377786596017,7,Mid_Season,1,6,Start,1,1,2W
+473,Austrian Grand Prix,Austria,Spielberg,2024,2024-06-30,11,433,471,115000,142.82999999999998,113263.78791026419,145.01943033207962,7,Mid_Season,1,6,Middle,1,1,1W
+474,British Grand Prix,United Kingdom,Silverstone,2024,2024-07-07,1,471,1,115000,169.56,113263.78791026419,172.15917249252553,14,Mid_Season,1,6,Middle,1,1,1W
+475,Hungarian Grand Prix,Hungary,Budapest,2024,2024-07-21,2,1,67,115000,115.32329999999999,113263.78791026419,117.0910821957258,7,Mid_Season,1,6,Middle,1,0,2W
+476,Belgian Grand Prix,Belgium,Spa-Francorchamps,2024,2024-07-28,21,67,964,115000,26.8794,113263.78791026419,27.29143230181405,28,Mid_Season,1,6,Middle,1,0,1W
+477,Dutch Grand Prix,Netherlands,Zandvoort,2024,2024-08-25,25,964,1131,115000,100.5723,113263.78791026419,102.11396522570196,7,Mid_Season,1,6,End,1,0,3W+
+478,Italian Grand Prix,Italy,Monza,2024,2024-09-01,3,1131,111,115000,3314.418444175227,113263.78791026419,3365.224915328916,14,Late_Season,0,0,Single,1,0,1W
+479,Azerbaijan Grand Prix,Azerbaijan,Baku,2024,2024-09-15,18,111,813,115000,6946.668871529601,113263.78791026419,7053.153836412611,7,Late_Season,1,1,Start,1,0,2W
+480,Singapore Grand Prix,Singapore,Marina Bay,2024,2024-09-22,14,813,625,115000,15842.99900571761,113263.78791026419,16085.855146403916,28,Late_Season,0,0,Single,1,0,1W
+481,United States Grand Prix,United States,Austin,2024,2024-10-20,15,625,674,115000,135.7605,113263.78791026419,137.84156249806273,7,Late_Season,1,1,Start,1,1,3W+
+482,Mexico City Grand Prix,Mexico,Mexico City,2024,2024-10-27,17,674,756,115000,7430.971653927606,113263.78791026419,7544.880459752243,7,Late_Season,0,0,Single,1,1,1W
+483,São Paulo Grand Prix,Brazil,São Paulo,2024,2024-11-03,4,756,173,115000,9788.539872738023,113263.78791026419,9938.587664547471,20,Late_Season,0,0,Single,1,1,1W
+484,Las Vegas Grand Prix,United States,Las Vegas,2024,2024-11-23,33,173,1532,115000,13015.79183421079,113263.78791026419,13215.309928713734,8,Late_Season,0,0,Single,1,1,3W+
+485,Qatar Grand Prix,Qatar,Lusail,2024,2024-12-01,28,1532,1305,115000,56.102399999999996,113263.78791026419,56.962389471836886,7,Late_Season,1,1,Start,1,1,1W
+486,Abu Dhabi Grand Prix,United Arab Emirates,Yas Island,2024,2024-12-08,37,1305,,115000,,113263.78791026419,,,Late_Season,0,0,Single,1,1,1W
+487,Pre-Season Testing,Bahrain,Sakhir,2025,2025-02-28,5,,193,,12112.617739660875,119100.6231613447,,16,Early_Season,0,0,Single,0,0,3W+
+488,Australian Grand Prix,Australia,Melbourne,2025,2025-03-16,6,193,242,,8078.463009388602,119100.6231613447,,7,Early_Season,0,0,Single,1,0,2W
+489,Chinese Grand Prix,China,Shanghai,2025,2025-03-23,8,242,336,,1477.919226875703,119100.6231613447,,14,Early_Season,1,3,Start,1,0,1W
+490,Japanese Grand Prix,Japan,Suzuka,2025,2025-04-06,7,336,287,,8054.410983471301,119100.6231613447,,7,Early_Season,1,3,Middle,1,1,2W
+491,Bahrain Grand Prix,Bahrain,Sakhir,2025,2025-04-13,5,287,211,,129.29760000000002,119100.6231613447,,7,Early_Season,1,3,End,1,1,1W
+492,Saudi Arabian Grand Prix,Saudi Arabia,Jeddah,2025,2025-04-20,24,211,1110,,11605.609915534185,119100.6231613447,,14,Early_Season,0,0,Single,1,1,1W
+493,Miami Grand Prix,United States,Miami,2025,2025-05-04,30,1110,1379,,8172.907608720932,119100.6231613447,,14,Early_Season,0,0,Single,0,0,2W
+494,Emilia Romagna Grand Prix,Italy,Imola,2025,2025-05-18,16,1379,736,,45.001799999999996,119100.6231613447,,7,Early_Season,1,2,Start,1,1,2W
+495,Monaco Grand Prix,Monaco,Monaco,2025,2025-05-25,32,736,1467,,59.3883,119100.6231613447,,7,Early_Season,1,2,End,1,1,1W
+496,Spanish Grand Prix,Spain,Barcelona,2025,2025-06-01,10,1467,434,,5891.5042642945555,119100.6231613447,,14,Mid_Season,0,0,Single,1,1,1W
+497,Canadian Grand Prix,Canada,Montréal,2025,2025-06-15,12,434,528,,6390.504231099694,119100.6231613447,,14,Mid_Season,0,0,Single,0,0,2W
+498,Austrian Grand Prix,Austria,Spielberg,2025,2025-06-29,11,528,471,,142.82999999999998,119100.6231613447,,7,Mid_Season,1,5,Start,1,0,2W
+499,British Grand Prix,United Kingdom,Silverstone,2025,2025-07-06,1,471,20,,58.68,119100.6231613447,,21,Mid_Season,1,5,Middle,1,0,1W
+500,Belgian Grand Prix,Belgium,Spa-Francorchamps,2025,2025-07-27,21,20,942,,115.1595,119100.6231613447,,7,Mid_Season,1,5,Middle,1,0,3W+
+501,Hungarian Grand Prix,Hungary,Budapest,2025,2025-08-03,2,942,71,,134.5041,119100.6231613447,,28,Mid_Season,1,5,Middle,1,0,1W
+502,Dutch Grand Prix,Netherlands,Zandvoort,2025,2025-08-31,25,71,1131,,100.5723,119100.6231613447,,7,Mid_Season,1,5,End,1,0,3W+
+503,Italian Grand Prix,Italy,Monza,2025,2025-09-07,3,1131,111,,3314.418444175227,119100.6231613447,,14,Late_Season,0,0,Single,1,0,1W
+504,Azerbaijan Grand Prix,Azerbaijan,Baku,2025,2025-09-21,18,111,813,,6946.668871529601,119100.6231613447,,14,Late_Season,1,1,Start,0,0,2W
+505,Singapore Grand Prix,Singapore,Marina Bay,2025,2025-10-05,14,813,625,,15842.99900571761,119100.6231613447,,14,Late_Season,0,0,Single,0,0,2W
+506,United States Grand Prix,United States,Austin,2025,2025-10-19,15,625,674,,135.7605,119100.6231613447,,7,Late_Season,1,1,Start,1,0,2W
+507,Mexico City Grand Prix,Mexico,Mexico City,2025,2025-10-26,17,674,756,,7430.971653927606,119100.6231613447,,14,Late_Season,0,0,Single,1,0,1W
+508,São Paulo Grand Prix,Brazil,São Paulo,2025,2025-11-09,4,756,173,,9788.539872738023,119100.6231613447,,13,Late_Season,0,0,Single,0,0,2W
+509,Las Vegas Grand Prix,United States,Las Vegas,2025,2025-11-22,33,173,1532,,13015.79183421079,119100.6231613447,,8,Late_Season,0,0,Single,1,1,2W
+510,Qatar Grand Prix,Qatar,Lusail,2025,2025-11-30,28,1532,1305,,56.102399999999996,119100.6231613447,,7,Late_Season,1,1,Start,1,1,1W
+511,Abu Dhabi Grand Prix,United Arab Emirates,Yas Island,2025,2025-12-07,37,1305,,,,119100.6231613447,,,Late_Season,0,0,Single,1,1,1W
