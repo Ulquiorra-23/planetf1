@@ -87,7 +87,7 @@ poetry shell
 
 ## File Structure
 
-```text```
+```text
 📦 
 ├─ .gitignore
 ├─ data
@@ -140,7 +140,6 @@ poetry shell
    ├─ logs.py
    ├─ sql.py
    └─ utilities.py
-```
 ```
 ## Data
 
